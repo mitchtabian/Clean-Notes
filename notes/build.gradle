@@ -1,0 +1,6 @@
+apply from: "$rootDir/common-android-library.gradle"
+
+dependencies {
+    implementation Dependencies.kotlin_standard_library
+    implementation Dependencies.ktx
+}
