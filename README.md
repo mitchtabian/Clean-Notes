@@ -1,5 +1,5 @@
 # Clean-Notes
-Clean Architecture with Modularization by feature
+Clean Architecture with Modularization by feature (dynamic feature modules)
 
 **Work in progress**
 
@@ -10,3 +10,7 @@ Clean Architecture with Modularization by feature
 4. https://proandroiddev.com/kotlin-clean-architecture-1ad42fcd97fa
 5. https://www.raywenderlich.com/3595916-clean-architecture-tutorial-for-android-getting-started
 6. http://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
+7. https://developer.android.com/guide/navigation/navigation-dynamic
+8. https://proandroiddev.com/navigation-with-dynamic-feature-modules-48ee7645488
+9. https://medium.com/androiddevelopers/patterns-for-accessing-code-from-dynamic-feature-modules-7e5dca6f9123
+10. https://hackernoon.com/android-components-architecture-in-a-modular-word-d0k32i6
