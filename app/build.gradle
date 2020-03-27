@@ -38,6 +38,7 @@ dependencies {
     kapt Dependencies.dagger_compiler
     implementation Dependencies.navigation_fragment
     implementation Dependencies.navigation_runtime
+    implementation Dependencies.navigation_dynamic
     implementation Dependencies.material_dialogs
     implementation Dependencies.play_core
 

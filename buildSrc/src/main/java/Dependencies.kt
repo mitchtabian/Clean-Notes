@@ -41,8 +41,11 @@ object Dependencies {
 
     val dagger = "com.google.dagger:dagger:${Versions.dagger}"
     val dagger_compiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"
+
     val navigation_fragment = "androidx.navigation:navigation-fragment-ktx:${Versions.nav_components}"
     val navigation_runtime = "androidx.navigation:navigation-runtime:${Versions.nav_components}"
+    val navigation_dynamic = "androidx.navigation:navigation-dynamic-features-fragment:${Versions.nav_components}"
+
     val material_dialogs = "com.afollestad.material-dialogs:core:${Versions.material_dialogs}"
     val room_runtime = "androidx.room:room-runtime:${Versions.room}"
     val room_compiler = "androidx.room:room-compiler:${Versions.room}"

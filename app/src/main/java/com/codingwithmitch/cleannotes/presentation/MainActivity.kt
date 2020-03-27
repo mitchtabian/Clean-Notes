@@ -27,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     var notesModule: NotesFeature? = null
     private var sessionId = 0
 
+    var startTime: Long = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
 //        (application as BaseApplication).appComponent
 //            .inject(this)
@@ -34,7 +36,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         splitInstallManager.registerListener(listener)
-        saveCounter()
+
+        getNoteListFragment()
     }
 
     override fun onDestroy() {
@@ -51,14 +54,14 @@ class MainActivity : AppCompatActivity() {
                 }
                 SplitInstallSessionStatus.INSTALLED -> {
                     Toast.makeText(application, "Notes module installed successfully", Toast.LENGTH_SHORT).show()
-                    saveCounter()
+                    getNoteListFragment()
                 }
                 else -> Log.d(TAG, "Status: ${state.status()}")
             }
 //        }
     }
 
-    fun saveCounter() {
+    fun getNoteListFragment() {
         if (notesModule == null) {
             if (isNotesInstalled()) {
                 initializeNotesFeature()
