@@ -2,6 +2,11 @@ object ApplicationId {
     val id = "com.codingwithmitch.cleannotes"
 }
 
+object Modules {
+    val app = ":app"
+    val notes = ":notes"
+}
+
 object Versions {
     val gradle = "3.5.3"
 
@@ -15,6 +20,7 @@ object Versions {
     val nav_components = "2.3.0-alpha04"
     val recyclerview = "1.2.0-alpha01"
     val material_dialogs = "3.1.0"
+    val room = "2.1.0"
 
     val appcompat = "1.1.0"
     val constraintlayout = "1.1.3"
@@ -35,6 +41,9 @@ object Dependencies {
     val navigation_fragment = "androidx.navigation:navigation-fragment-ktx:${Versions.nav_components}"
     val navigation_runtime = "androidx.navigation:navigation-runtime:${Versions.nav_components}"
     val material_dialogs = "com.afollestad.material-dialogs:core:${Versions.material_dialogs}"
+    val room_runtime = "androidx.room:room-runtime:${Versions.room}"
+    val room_compiler = "androidx.room:room-compiler:${Versions.room}"
+    val room_ktx = "androidx.room:room-ktx:${Versions.room}"
 }
 
 object SupportDependencies {

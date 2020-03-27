@@ -1,6 +1,17 @@
-apply from: "$rootDir/common-android-library.gradle"
+apply from: "$rootDir/android-dynamic-feature.gradle"
 
 dependencies {
+
     implementation Dependencies.kotlin_standard_library
     implementation Dependencies.ktx
+    implementation Dependencies.room_runtime
+    kapt Dependencies.room_compiler
+    implementation Dependencies.room_ktx
+    implementation Dependencies.dagger
+    kapt Dependencies.dagger_compiler
+
+    implementation SupportDependencies.appcompat
+    implementation SupportDependencies.constraintlayout
+    implementation SupportDependencies.recyclerview
+    implementation SupportDependencies.material_design
 }
