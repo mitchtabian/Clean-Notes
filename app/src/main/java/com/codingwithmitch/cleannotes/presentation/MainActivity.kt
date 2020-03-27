@@ -5,15 +5,13 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.codingwithmitch.cleannotes.BuildConfig
 import com.codingwithmitch.cleannotes.R
-import com.codingwithmitch.cleannotes.service_loader.NotesFeature
+import com.codingwithmitch.cleannotes.NotesFeature
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.google.android.play.core.splitinstall.SplitInstallRequest
 import com.google.android.play.core.splitinstall.SplitInstallStateUpdatedListener
 import com.google.android.play.core.splitinstall.model.SplitInstallSessionStatus
 import java.util.*
-import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity() {
@@ -77,31 +75,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun initializeNotesFeature()  {
-
-        // We will need this to pass in dependencies to the StorageFeature.Provider
-        val dependencies: NotesFeature.Dependencies = object : NotesFeature.Dependencies {
-            override fun noteListFragment(): Fragment = noteListFragment()
+    fun initializeNotesFeature() {
+        // try to obtain the storageFeature from the Dagger component:
+        notesModule = (application as BaseApplication).appComponent.notesFeature()
+        if (notesModule != null) {
+            Log.d(TAG, "Loaded notes feature through dagger")
         }
-
-        // Ask ServiceLoader for concrete implementations of StorageFeature.Provider
-        // Explicitly use the 2-argument version of load to enable R8 optimization.
-        val serviceLoader = ServiceLoader.load(
-            NotesFeature.Provider::class.java,
-            NotesFeature.Provider::class.java.classLoader
-        )
-
-        // Explicitly ONLY use the .iterator() method on the returned ServiceLoader to enable R8 optimization.
-        // When these two conditions are met, R8 replaces ServiceLoader calls with direct object instantiation.
-        notesModule = serviceLoader.iterator().next().get(dependencies)
-        Log.d(TAG, "Loaded notes feature through ServiceLoader")
     }
 
     private fun isNotesInstalled(): Boolean{
-//        if (BuildConfig.DEBUG) true
-//        else splitInstallManager.installedModules.contains(getString(R.string.module_notes_name))
-//        return splitInstallManager.installedModules.contains(getString(R.string.module_notes_name))
-        return false
+        return splitInstallManager
+            .installedModules
+            .contains(getString(R.string.module_notes_name))
     }
 
     private fun requestNotesInstall() {

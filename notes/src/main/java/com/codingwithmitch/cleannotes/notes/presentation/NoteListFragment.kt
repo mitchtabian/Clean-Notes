@@ -7,6 +7,7 @@ import javax.inject.Inject
 
 
 class NoteListFragment
+@Inject
 constructor(
 
 ): Fragment(R.layout.fragment_note_list) {

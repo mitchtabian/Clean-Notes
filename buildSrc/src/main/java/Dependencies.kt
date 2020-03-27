@@ -34,10 +34,11 @@ object Releases {
     val version_code = 1
     val version_name = "1.0"
 }
-
 object Dependencies {
     val kotlin_standard_library = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}"
+    val kotlin_reflect = "org.jetbrains.kotlin:kotlin-reflect:${Versions.kotlin}"
     val ktx = "androidx.core:core-ktx:${Versions.ktx}"
+
     val dagger = "com.google.dagger:dagger:${Versions.dagger}"
     val dagger_compiler = "com.google.dagger:dagger-compiler:${Versions.dagger}"
     val navigation_fragment = "androidx.navigation:navigation-fragment-ktx:${Versions.nav_components}"
@@ -46,6 +47,7 @@ object Dependencies {
     val room_runtime = "androidx.room:room-runtime:${Versions.room}"
     val room_compiler = "androidx.room:room-compiler:${Versions.room}"
     val room_ktx = "androidx.room:room-ktx:${Versions.room}"
+
 
     val play_core = "com.google.android.play:core:${Versions.play_core}"
 }

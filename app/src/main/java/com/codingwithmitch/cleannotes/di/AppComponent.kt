@@ -1,24 +1,26 @@
 package com.codingwithmitch.cleannotes.di
 
-import android.app.Application
+import com.codingwithmitch.cleannotes.NotesFeature
+import com.codingwithmitch.cleannotes.di.scopes.FeatureModule
 import com.codingwithmitch.cleannotes.presentation.BaseApplication
 import com.codingwithmitch.cleannotes.presentation.MainActivity
-import com.codingwithmitch.cleannotes.util.DateUtil
 import dagger.BindsInstance
 import dagger.Component
-import javax.inject.Singleton
 
-@Singleton
+
 @Component(
     modules = [
-        AppModule::class
+        AppModule::class,
+        FeatureModule::class
     ]
 )
-interface AppComponent {
+interface AppComponent: NotesFeature.Dependencies {
 
 //    fun application(): Application
 
 //    fun dateUtil(): DateUtil
+
+    fun notesFeature(): NotesFeature?
 
     @Component.Factory
     interface Factory{

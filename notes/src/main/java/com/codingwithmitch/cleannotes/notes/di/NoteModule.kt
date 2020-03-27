@@ -1,6 +1,7 @@
 package com.codingwithmitch.notes.di
 
-import android.app.Application
+import com.codingwithmitch.cleannotes.NotesFeature
+import com.codingwithmitch.cleannotes.notes.NotesFeatureImpl
 //import androidx.room.Room
 import com.codingwithmitch.cleannotes.util.DateUtil
 //import com.codingwithmitch.notes.data.datasource.NoteCacheDataSource
@@ -16,6 +17,15 @@ import dagger.Provides
 
 @Module
 object NoteModule {
+
+    @Provides
+    internal fun provideNoteFeatureImpl(notesModule: NotesFeatureImpl): NotesFeature {
+        return notesModule
+    }
+
+//    @Provides
+//    internal fun bindNoteListFragment(): Fragment = NoteListFragment()
+
 
 //    @JvmStatic
 //    @FeatureScope
