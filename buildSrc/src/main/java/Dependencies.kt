@@ -26,6 +26,8 @@ object Versions {
     val constraintlayout = "1.1.3"
     val material_design = "1.2.0-alpha05"
 
+    val play_core = "1.7.1"
+
 }
 
 object Releases {
@@ -44,6 +46,8 @@ object Dependencies {
     val room_runtime = "androidx.room:room-runtime:${Versions.room}"
     val room_compiler = "androidx.room:room-compiler:${Versions.room}"
     val room_ktx = "androidx.room:room-ktx:${Versions.room}"
+
+    val play_core = "com.google.android.play:core:${Versions.play_core}"
 }
 
 object SupportDependencies {

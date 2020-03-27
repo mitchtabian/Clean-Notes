@@ -1,17 +1,27 @@
-apply from: "$rootDir/android-dynamic-feature.gradle"
+apply plugin: 'com.android.dynamic-feature'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+android {
+    compileSdkVersion 29
+
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+    }
+
+
+}
 
 dependencies {
-
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(Modules.app)
     implementation Dependencies.kotlin_standard_library
     implementation Dependencies.ktx
-    implementation Dependencies.room_runtime
-    kapt Dependencies.room_compiler
-    implementation Dependencies.room_ktx
+    implementation Dependencies.navigation_fragment
     implementation Dependencies.dagger
     kapt Dependencies.dagger_compiler
-
-    implementation SupportDependencies.appcompat
-    implementation SupportDependencies.constraintlayout
-    implementation SupportDependencies.recyclerview
-    implementation SupportDependencies.material_design
 }

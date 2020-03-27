@@ -17,14 +17,20 @@ android {
         versionName Releases.version_name
     }
     buildTypes {
+        debug{
+            minifyEnabled false
+        }
         release {
             minifyEnabled false
         }
     }
     dynamicFeatures = [Modules.notes]
+
+
 }
 
 dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation Dependencies.kotlin_standard_library
     implementation Dependencies.ktx
     implementation Dependencies.dagger
@@ -32,22 +38,11 @@ dependencies {
     implementation Dependencies.navigation_fragment
     implementation Dependencies.navigation_runtime
     implementation Dependencies.material_dialogs
+    implementation Dependencies.play_core
 
     implementation SupportDependencies.appcompat
     implementation SupportDependencies.constraintlayout
     implementation SupportDependencies.material_design
+
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

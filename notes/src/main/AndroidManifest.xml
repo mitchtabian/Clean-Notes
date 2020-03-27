@@ -1,16 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.codingwithmitch.notes">
+    package="com.codingwithmitch.notes"
+    >
 
     <dist:module
-        dist:instant="false"
-        dist:onDemand="true"
-        dist:title="Notes">
+        dist:instant="true"
+        dist:title="@string/title_notes">
+        <dist:delivery>
+            <dist:install-time />
+        </dist:delivery>
         <dist:fusing dist:include="true" />
     </dist:module>
-
-    <application tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name="com.codingwithmitch.notes.presentation.ListActivity"/>
-    </application>
 </manifest>
+

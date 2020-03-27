@@ -1,10 +1,9 @@
 package com.codingwithmitch.notes.di
 
 import com.codingwithmitch.cleannotes.di.AppComponent
-import com.codingwithmitch.notes.presentation.ListActivity
 import dagger.Component
 
-@NoteScope
+@FeatureScope
 @Component(
     dependencies = [AppComponent::class],
     modules = [
@@ -19,5 +18,4 @@ interface NoteComponent {
         fun create(appComponent: AppComponent): NoteComponent
     }
 
-    fun inject(listActivity: ListActivity)
 }

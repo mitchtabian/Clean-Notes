@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Clean Notes</string>
+    <string name="title_dynamicfeature">DynamicFeature</string>
+
+    <string name="title_notes">Notes module</string>
+    <string name="module_notes_name">notes</string>
 </resources>
