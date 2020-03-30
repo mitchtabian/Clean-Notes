@@ -17,14 +17,17 @@ android {
         versionName Releases.version_name
     }
     buildTypes {
-        debug{
+        debug {
             minifyEnabled false
         }
         release {
             minifyEnabled false
         }
     }
-    dynamicFeatures = [Modules.notes]
+    dynamicFeatures = [Modules.notes, Modules.settings]
+
+
+
 
 
 }

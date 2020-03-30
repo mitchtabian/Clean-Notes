@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@id/settings_fragment"
+    >
+
+    <fragment
+        app:moduleName="@string/module_settings_name"
+        android:id="@+id/settings_fragment"
+        android:name="com.codingwithmitch.cleannotes.settings.presentation.SettingsFragment"
+        android:label="SettingsFragment"
+        />
+
+</navigation>

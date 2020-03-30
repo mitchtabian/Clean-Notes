@@ -5,6 +5,7 @@ object ApplicationId {
 object Modules {
     val app = ":app"
     val notes = ":notes"
+    val settings = ":settings"
 }
 
 object Versions {
