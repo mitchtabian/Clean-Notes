@@ -2,14 +2,13 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_app_graph"
-    app:startDestination="@id/note_list_fragment"
+    app:startDestination="@id/nav_notes_graph"
     >
 
-    <fragment
+    <include-dynamic
+        android:id="@+id/nav_notes_graph"
         app:moduleName="@string/module_notes_name"
-        android:id="@+id/note_list_fragment"
-        android:name="com.codingwithmitch.cleannotes.notes.presentation.NoteListFragment"
-        android:label="NoteListFragment"
-        />
+        app:graphResName="nav_notes_graph"
+        app:graphPackage="com.codingwithmitch.cleannotes.notes" />
 
 </navigation>

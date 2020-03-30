@@ -9,16 +9,27 @@ package com.codingwithmitch.notes.di
 //import com.codingwithmitch.notes.datasource.cache.repository.NoteCacheDataSourceImpl
 //import com.codingwithmitch.notes.datasource.mappers.NoteEntityMapper
 //import com.codingwithmitch.notes.domain.repository.NoteRepository
+import androidx.fragment.app.FragmentFactory
+import com.codingwithmitch.cleannotes.notes.presentation.NotesFragmentFactory
 import dagger.Module
 import dagger.Provides
 
 @Module
 object NoteModule {
 
-
+//    @JvmStatic
+//    @FeatureScope
 //    @Provides
-//    internal fun bindNoteListFragment(): Fragment = NoteListFragment()
+//    fun provideNoteFragmentFactory(someString: String): FragmentFactory{
+//        return NotesFragmentFactory(someString)
+//    }
 
+    @JvmStatic
+    @FeatureScope
+    @Provides
+    fun provideSomeString(): String{
+        return "Some sting value"
+    }
 
 //    @JvmStatic
 //    @FeatureScope

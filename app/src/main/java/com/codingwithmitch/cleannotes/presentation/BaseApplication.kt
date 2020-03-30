@@ -1,10 +1,10 @@
 package com.codingwithmitch.cleannotes.presentation
 
+import android.app.Application
 import com.codingwithmitch.cleannotes.di.AppComponent
 import com.codingwithmitch.cleannotes.di.DaggerAppComponent
-import com.google.android.play.core.splitcompat.SplitCompatApplication
 
-class BaseApplication : SplitCompatApplication(){
+class BaseApplication : Application(){
 
     lateinit var appComponent: AppComponent
 
