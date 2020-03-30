@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@id/reminders_list_fragment"
+    >
+
+    <fragment
+        app:moduleName="@string/module_reminders_name"
+        android:id="@+id/reminders_list_fragment"
+        android:name="com.codingwithmitch.cleannotes.reminders.presentation.ReminderListFragment"
+        android:label="ReminderListFragment"
+        >
+        <action
+            android:id="@+id/action_reminders_list_fragment_to_reminderDetailFragment"
+            app:destination="@id/reminderDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/reminderDetailFragment"
+        android:name="com.codingwithmitch.cleannotes.reminders.presentation.ReminderDetailFragment"
+        android:label="ReminderDetailFragment" />
+
+</navigation>

@@ -24,9 +24,7 @@ android {
             minifyEnabled false
         }
     }
-    dynamicFeatures = [Modules.notes, Modules.settings]
-
-
+    dynamicFeatures = [Modules.notes, Modules.settings, Modules.reminders]
 
 
 

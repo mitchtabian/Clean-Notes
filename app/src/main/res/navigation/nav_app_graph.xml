@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_app_graph"
-    app:startDestination="@id/nav_settings_graph"
+    app:startDestination="@id/nav_notes_graph"
     >
 
     <include-dynamic
@@ -10,6 +10,12 @@
         app:moduleName="@string/module_notes_name"
         app:graphResName="nav_notes_graph"
         app:graphPackage="com.codingwithmitch.cleannotes.notes" />
+
+    <include-dynamic
+        android:id="@+id/nav_reminders_graph"
+        app:moduleName="@string/module_reminders_name"
+        app:graphResName="nav_reminders_graph"
+        app:graphPackage="com.codingwithmitch.cleannotes.reminders" />
 
 
     <include-dynamic

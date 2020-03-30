@@ -4,5 +4,7 @@ interface MyNavController {
 
     fun navNotesGraph()
 
+    fun navRemindersGraph()
+
     fun navSettingsGraph()
 }

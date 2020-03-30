@@ -25,6 +25,10 @@ class MainActivity : AppCompatActivity(),
     override fun navSettingsGraph() {
         findNavController(R.id.nav_host_fragment).navigate(R.id.nav_settings_graph)
     }
+
+    override fun navRemindersGraph() {
+        findNavController(R.id.nav_host_fragment).navigate(R.id.nav_reminders_graph)
+    }
 }
 
 

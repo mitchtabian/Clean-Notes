@@ -3,10 +3,12 @@
     <string name="title_dynamicfeature">DynamicFeature</string>
 
     <string name="title_notes">Notes module</string>
-
+    <string name="title_reminders">Reminders module</string>
     <string name="title_settings">Settings module</string>
 
 
     <string name="module_notes_name">notes</string>
     <string name="module_settings_name">settings</string>
+    <string name="module_reminders_name">reminders</string>
+
 </resources>
