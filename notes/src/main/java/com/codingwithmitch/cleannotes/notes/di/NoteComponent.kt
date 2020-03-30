@@ -1,18 +1,16 @@
 package com.codingwithmitch.notes.di
 
-import com.codingwithmitch.cleannotes.NotesFeature
+import com.codingwithmitch.cleannotes.di.AppComponent
 import dagger.Component
 
 @FeatureScope
 @Component(
-    dependencies = [NotesFeature.Dependencies::class],
+    dependencies = [AppComponent::class],
     modules = [
         NoteModule::class
     ]
 )
 interface NoteComponent {
-
-    fun notesFeature(): NotesFeature
 
 
 }

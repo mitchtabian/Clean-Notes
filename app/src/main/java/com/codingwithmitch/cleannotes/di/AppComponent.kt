@@ -1,7 +1,5 @@
 package com.codingwithmitch.cleannotes.di
 
-import com.codingwithmitch.cleannotes.NotesFeature
-import com.codingwithmitch.cleannotes.di.scopes.FeatureModule
 import com.codingwithmitch.cleannotes.presentation.BaseApplication
 import com.codingwithmitch.cleannotes.presentation.MainActivity
 import dagger.BindsInstance
@@ -10,17 +8,10 @@ import dagger.Component
 
 @Component(
     modules = [
-        AppModule::class,
-        FeatureModule::class
+        AppModule::class
     ]
 )
-interface AppComponent: NotesFeature.Dependencies {
-
-//    fun application(): Application
-
-//    fun dateUtil(): DateUtil
-
-    fun notesFeature(): NotesFeature?
+interface AppComponent{
 
     @Component.Factory
     interface Factory{
