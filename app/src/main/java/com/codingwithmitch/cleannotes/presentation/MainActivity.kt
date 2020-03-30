@@ -18,20 +18,14 @@ class MainActivity : AppCompatActivity() {
 
     private val TAG: String = "AppDebug"
 
-//    @Inject
-//    lateinit var app: BaseApplication
-
     private val splitInstallManager by lazy{
         SplitInstallManagerFactory.create(application)
     }
     var notesModule: NotesFeature? = null
     private var sessionId = 0
 
-    var startTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
-//        (application as BaseApplication).appComponent
-//            .inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -46,19 +40,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val listener = SplitInstallStateUpdatedListener { state ->
-//        if (state.sessionId() == sessionId) {
-            when (state.status()) {
-                SplitInstallSessionStatus.FAILED -> {
-                    Log.d(TAG, "Module install failed with ${state.errorCode()}")
-                    Toast.makeText(application, "Module install failed with ${state.errorCode()}", Toast.LENGTH_SHORT).show()
-                }
-                SplitInstallSessionStatus.INSTALLED -> {
-                    Toast.makeText(application, "Notes module installed successfully", Toast.LENGTH_SHORT).show()
-                    getNoteListFragment()
-                }
-                else -> Log.d(TAG, "Status: ${state.status()}")
+        when (state.status()) {
+            SplitInstallSessionStatus.FAILED -> {
+                Log.d(TAG, "Module install failed with ${state.errorCode()}")
+                Toast.makeText(application, "Module install failed with ${state.errorCode()}", Toast.LENGTH_SHORT).show()
             }
-//        }
+            SplitInstallSessionStatus.INSTALLED -> {
+                Toast.makeText(application, "Notes module installed successfully", Toast.LENGTH_SHORT).show()
+                getNoteListFragment()
+            }
+            else -> Log.d(TAG, "Status: ${state.status()}")
+        }
     }
 
     fun getNoteListFragment() {
