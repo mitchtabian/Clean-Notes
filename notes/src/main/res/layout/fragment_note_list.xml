@@ -26,5 +26,6 @@
         android:text="TEST TEST TEST"
         android:textSize="25sp"
         android:textColor="#000"
+        android:id="@+id/notes_title"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>
