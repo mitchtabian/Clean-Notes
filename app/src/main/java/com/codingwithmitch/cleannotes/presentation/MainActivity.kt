@@ -38,27 +38,28 @@ class MainActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        initializeNotesFeature()
-        initializeRemindersFeature()
-
+        retrieveTopLevelFragmentIds()
         setupActionBar()
         setupBottomNavigation()
     }
 
+    private fun retrieveTopLevelFragmentIds(){
+        initializeNotesFeature()
+        initializeRemindersFeature()
+    }
+
     fun initializeRemindersFeature() {
-        val remindersModule = (application as BaseApplication).appComponent.remindersFeature()
+        val remindersModule = (application as BaseApplication).appComponent
+            .remindersFeature()
         if (remindersModule != null) {
-            Log.d(TAG, "Loaded reminders feature through dagger: " +
-                    "${remindersModule.provideTopLevelFragmentId()}")
             topLevelFragmentIds.add(remindersModule.provideTopLevelFragmentId())
         }
     }
 
     fun initializeNotesFeature() {
-        val notesModule = (application as BaseApplication).appComponent.notesFeature()
+        val notesModule = (application as BaseApplication).appComponent
+            .notesFeature()
         if (notesModule != null) {
-            Log.d(TAG, "Loaded notes feature through dagger: " +
-                    "${notesModule.provideTopLevelFragmentId()}")
             topLevelFragmentIds.add(notesModule.provideTopLevelFragmentId())
         }
     }
