@@ -12,6 +12,7 @@ import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
+import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.codingwithmitch.cleannotes.R
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity(),
     private val bottomNavView: BottomNavigationView by lazy {
         findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
     }
+    private var appBarConfiguration: AppBarConfiguration? = null
 
     private val topLevelFragmentIds = ArrayList<Int>()
 
@@ -64,10 +66,13 @@ class MainActivity : AppCompatActivity(),
     private fun setupBottomNavigation(){
         val navController = findNavController(R.id.nav_host_fragment)
         bottomNavView.setupWithNavController(navController)
-        val appBarConfiguration = AppBarConfiguration(
+        appBarConfiguration = AppBarConfiguration(
             topLevelDestinationIds = topLevelFragmentIds.toSet()
         )
-        setupActionBarWithNavController(navController, appBarConfiguration)
+        setupActionBarWithNavController(
+            navController,
+            appBarConfiguration as AppBarConfiguration
+        )
 
         bottomNavView.setOnNavigationItemSelectedListener { menuItem ->
             onNavigationItemSelected(menuItem.itemId)
@@ -90,6 +95,7 @@ class MainActivity : AppCompatActivity(),
 
     private fun setupActionBar(){
         setSupportActionBar(tool_bar)
+        getSupportActionBar()?.setTitle("")
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -112,6 +118,7 @@ class MainActivity : AppCompatActivity(),
         else
             bottom_navigation_view.visibility = View.GONE
     }
+
 
     override fun displayProgressBar(isDisplayed: Boolean) {
         if(isDisplayed)
@@ -144,6 +151,13 @@ class MainActivity : AppCompatActivity(),
             }
         }
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return findNavController(R.id.nav_host_fragment)
+            .navigateUp(appBarConfiguration as AppBarConfiguration)
+                || super.onSupportNavigateUp()
+    }
+
 }
 
 
