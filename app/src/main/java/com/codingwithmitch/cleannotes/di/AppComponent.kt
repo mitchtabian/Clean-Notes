@@ -2,6 +2,8 @@ package com.codingwithmitch.cleannotes.di
 
 import com.codingwithmitch.cleannotes.di.features.notes.NotesFeature
 import com.codingwithmitch.cleannotes.di.features.notes.NotesFeatureModule
+import com.codingwithmitch.cleannotes.di.features.reminders.RemindersFeature
+import com.codingwithmitch.cleannotes.di.features.reminders.RemindersFeatureModule
 import com.codingwithmitch.cleannotes.presentation.BaseApplication
 import com.codingwithmitch.cleannotes.presentation.MainActivity
 import dagger.BindsInstance
@@ -12,12 +14,18 @@ import javax.inject.Singleton
 @Component(
     modules = [
         AppModule::class,
-        NotesFeatureModule::class
+        NotesFeatureModule::class,
+        RemindersFeatureModule::class
     ]
 )
-interface AppComponent: NotesFeature.Dependencies {
+interface AppComponent :
+    NotesFeature.Dependencies,
+    RemindersFeature.Dependencies
+{
 
     fun notesFeature(): NotesFeature?
+
+    fun remindersFeature(): RemindersFeature?
 
     @Component.Factory
     interface Factory{

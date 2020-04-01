@@ -33,6 +33,8 @@ dependencies {
     implementation Dependencies.ktx
     implementation Dependencies.navigation_fragment
     implementation Dependencies.navigation_ui
+    implementation Dependencies.dagger
+    kapt Dependencies.dagger_compiler
 
     implementation SupportDependencies.appcompat
     implementation SupportDependencies.constraintlayout

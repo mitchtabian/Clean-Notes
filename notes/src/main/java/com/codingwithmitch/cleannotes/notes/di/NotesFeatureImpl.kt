@@ -19,7 +19,9 @@ constructor(
 
     companion object Provider: NotesFeature.Provider {
 
-        override fun getNotesFeature(dependencies: NotesFeature.Dependencies): NotesFeature {
+        override fun getNotesFeature(
+            dependencies: NotesFeature.Dependencies
+        ): NotesFeature {
             return DaggerNoteComponent
                 .builder()
                 .dependencies(dependencies)

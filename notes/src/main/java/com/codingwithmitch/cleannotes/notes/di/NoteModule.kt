@@ -18,16 +18,11 @@ import dagger.Provides
 @Module
 object NoteModule {
 
+    @FeatureScope
     @Provides
     @JvmStatic
-    fun provideTopLevelFragmentId(): Int{
-        return R.id.note_list_fragment
-    }
-
-    @Provides
-    @JvmStatic
-    internal fun provideNoteFeatureImpl(notesModule: NotesFeatureImpl): NotesFeature {
-        return notesModule
+    internal fun provideFeatureImpl(featureImpl: NotesFeatureImpl): NotesFeature {
+        return featureImpl
     }
 
 //    @JvmStatic

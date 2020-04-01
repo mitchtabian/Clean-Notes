@@ -37,9 +37,19 @@ class MainActivity : AppCompatActivity(),
         setContentView(R.layout.activity_main)
 
         initializeNotesFeature()
+        initializeRemindersFeature()
 
         setupActionBar()
         setupBottomNavigation()
+    }
+
+    fun initializeRemindersFeature() {
+        val remindersModule = (application as BaseApplication).appComponent.remindersFeature()
+        if (remindersModule != null) {
+            Log.d(TAG, "Loaded reminders feature through dagger: " +
+                    "${remindersModule.provideTopLevelFragmentId()}")
+            topLevelFragmentIds.add(remindersModule.provideTopLevelFragmentId())
+        }
     }
 
     fun initializeNotesFeature() {
