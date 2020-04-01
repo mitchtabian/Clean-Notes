@@ -9,13 +9,26 @@ package com.codingwithmitch.notes.di
 //import com.codingwithmitch.notes.datasource.cache.repository.NoteCacheDataSourceImpl
 //import com.codingwithmitch.notes.datasource.mappers.NoteEntityMapper
 //import com.codingwithmitch.notes.domain.repository.NoteRepository
-import androidx.fragment.app.FragmentFactory
-import com.codingwithmitch.cleannotes.notes.presentation.NotesFragmentFactory
+import com.codingwithmitch.cleannotes.di.features.notes.NotesFeature
+import com.codingwithmitch.cleannotes.notes.di.NotesFeatureImpl
+import com.codingwithmitch.notes.R
 import dagger.Module
 import dagger.Provides
 
 @Module
 object NoteModule {
+
+    @Provides
+    @JvmStatic
+    fun provideTopLevelFragmentId(): Int{
+        return R.id.note_list_fragment
+    }
+
+    @Provides
+    @JvmStatic
+    internal fun provideNoteFeatureImpl(notesModule: NotesFeatureImpl): NotesFeature {
+        return notesModule
+    }
 
 //    @JvmStatic
 //    @FeatureScope

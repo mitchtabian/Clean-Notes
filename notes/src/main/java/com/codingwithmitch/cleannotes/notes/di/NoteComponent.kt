@@ -1,24 +1,17 @@
 package com.codingwithmitch.notes.di
 
-import com.codingwithmitch.cleannotes.di.AppComponent
-import com.codingwithmitch.cleannotes.notes.presentation.NoteListFragment
+import com.codingwithmitch.cleannotes.di.features.notes.NotesFeature
 import dagger.Component
 
 @FeatureScope
 @Component(
-    dependencies = [AppComponent::class],
+    dependencies = [NotesFeature.Dependencies::class],
     modules = [
         NoteModule::class
     ]
 )
 interface NoteComponent {
 
-    @Component.Factory
-    interface Factory {
+    fun notesFeature(): NotesFeature
 
-        fun create(appComponent: AppComponent): NoteComponent
-
-    }
-
-    fun inject(noteListFragment: NoteListFragment)
 }

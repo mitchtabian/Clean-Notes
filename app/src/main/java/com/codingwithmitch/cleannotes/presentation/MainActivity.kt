@@ -30,23 +30,32 @@ class MainActivity : AppCompatActivity(),
         findViewById<BottomNavigationView>(R.id.bottom_navigation_view)
     }
 
+    private val topLevelFragmentIds = ArrayList<Int>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        initializeNotesFeature()
+
         setupActionBar()
         setupBottomNavigation()
+    }
+
+    fun initializeNotesFeature() {
+        val notesModule = (application as BaseApplication).appComponent.notesFeature()
+        if (notesModule != null) {
+            Log.d(TAG, "Loaded notes feature through dagger: " +
+                    "${notesModule.provideTopLevelFragmentId()}")
+            topLevelFragmentIds.add(notesModule.provideTopLevelFragmentId())
+        }
     }
 
     private fun setupBottomNavigation(){
         val navController = findNavController(R.id.nav_host_fragment)
         bottomNavView.setupWithNavController(navController)
         val appBarConfiguration = AppBarConfiguration(
-            topLevelDestinationIds = setOf (
-                R.id.nav_notes_graph,
-                R.id.nav_reminders_graph,
-                R.id.nav_settings_graph
-            )
+            topLevelDestinationIds = topLevelFragmentIds.toSet()
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
 
