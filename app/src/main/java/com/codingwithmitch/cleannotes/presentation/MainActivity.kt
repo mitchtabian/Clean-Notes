@@ -2,17 +2,25 @@ package com.codingwithmitch.cleannotes.presentation
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.widget.Toolbar
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.codingwithmitch.cleannotes.R
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity(),
-    MyNavController,
     UIController
 {
 
@@ -31,6 +39,16 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun setupBottomNavigation(){
+        val navController = findNavController(R.id.nav_host_fragment)
+        bottomNavView.setupWithNavController(navController)
+        val appBarConfiguration = AppBarConfiguration(
+            topLevelDestinationIds = setOf (
+                R.id.nav_notes_graph,
+                R.id.nav_reminders_graph,
+                R.id.nav_settings_graph
+            )
+        )
+        setupActionBarWithNavController(navController, appBarConfiguration)
 
         bottomNavView.setOnNavigationItemSelectedListener { menuItem ->
             onNavigationItemSelected(menuItem.itemId)

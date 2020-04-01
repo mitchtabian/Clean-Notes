@@ -8,15 +8,15 @@
         app:moduleName="@string/module_notes_name"
         android:id="@+id/note_list_fragment"
         android:name="com.codingwithmitch.cleannotes.notes.presentation.NoteListFragment"
-        android:label="NoteListFragment"
         >
         <action
             android:id="@+id/action_note_list_fragment_to_noteDetailFragment"
             app:destination="@id/noteDetailFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/noteDetailFragment"
         android:name="com.codingwithmitch.cleannotes.notes.presentation.NoteDetailFragment"
-        android:label="NoteDetailFragment" />
+        />
 
 </navigation>

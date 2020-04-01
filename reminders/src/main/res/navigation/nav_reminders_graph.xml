@@ -8,7 +8,6 @@
         app:moduleName="@string/module_reminders_name"
         android:id="@+id/reminders_list_fragment"
         android:name="com.codingwithmitch.cleannotes.reminders.presentation.ReminderListFragment"
-        android:label="ReminderListFragment"
         >
         <action
             android:id="@+id/action_reminders_list_fragment_to_reminderDetailFragment"
@@ -18,6 +17,6 @@
     <fragment
         android:id="@+id/reminderDetailFragment"
         android:name="com.codingwithmitch.cleannotes.reminders.presentation.ReminderDetailFragment"
-        android:label="ReminderDetailFragment" />
+        />
 
 </navigation>

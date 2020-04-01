@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.codingwithmitch.cleannotes.presentation.MainActivity
-import com.codingwithmitch.cleannotes.presentation.MyNavController
+import com.codingwithmitch.cleannotes.presentation.UIController
 import com.codingwithmitch.settings.R
 import kotlinx.android.synthetic.main.fragment_settings.*
 import java.lang.ClassCastException
@@ -13,19 +13,24 @@ import java.lang.ClassCastException
 
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
-    lateinit var navController: MyNavController
+    lateinit var uiController: UIController
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         settings_title.setOnClickListener {
-            navController.navNotesGraph()
+            uiController.navNotesGraph()
         }
+        setupUI()
+    }
+
+    private fun setupUI(){
+        uiController.displayBottomNav(false)
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         try{
-            navController = context as MainActivity
+            uiController = context as MainActivity
         }catch (e: ClassCastException){
             e.printStackTrace()
         }
