@@ -21,6 +21,7 @@ class ReminderListFragment : Fragment(R.layout.fragment_reminder_list){
         reminders_title.setOnClickListener {
             findNavController().navigate(R.id.action_reminders_list_fragment_to_reminderDetailFragment)
         }
+        navController.checkBottomNav(getString(R.string.module_reminders_name))
     }
 
     override fun onAttach(context: Context) {

@@ -7,4 +7,6 @@ interface MyNavController {
     fun navRemindersGraph()
 
     fun navSettingsGraph()
+
+    fun checkBottomNav(moduleName: String)
 }
