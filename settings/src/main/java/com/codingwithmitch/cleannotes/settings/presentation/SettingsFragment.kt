@@ -8,7 +8,6 @@ import androidx.fragment.app.Fragment
 import com.codingwithmitch.cleannotes.presentation.MainActivity
 import com.codingwithmitch.cleannotes.presentation.UIController
 import com.codingwithmitch.settings.R
-import kotlinx.android.synthetic.main.fragment_settings.*
 
 
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
@@ -22,9 +21,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        settings_title.setOnClickListener {
-            uiController.navNotesGraph()
-        }
         setupUI()
     }
 
