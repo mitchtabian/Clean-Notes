@@ -14,8 +14,8 @@ class InsertNewNote(
     private val noteRepository: NoteRepository
 ){
 
-    suspend fun insertNewNote(note: Note): Long {
-        return noteRepository.insert(note)
+    suspend fun insertNewNote(title: String, body: String): Long {
+        return noteRepository.insertNewNote(title, body)
     }
 }
 
@@ -23,8 +23,8 @@ class DeleteNote(
     private val noteRepository: NoteRepository
 ){
 
-    suspend fun deleteNote(note: Note): Int {
-        return noteRepository.delete(note)
+    suspend fun deleteNote(primaryKey: Int): Int {
+        return noteRepository.deleteNote(primaryKey)
     }
 }
 
@@ -32,8 +32,8 @@ class UpdateNote(
     private val noteRepository: NoteRepository
 ){
 
-    suspend fun updateNote(note: Note): Int {
-        return noteRepository.update(note)
+    suspend fun updateNote(note: Note, newTitle: String?, newBody: String?): Int {
+        return noteRepository.updateNote(note, newTitle, newBody)
     }
 }
 

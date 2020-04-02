@@ -4,6 +4,7 @@ import com.codingwithmitch.cleannotes.notes.datasource.model.NoteEntity
 import com.codingwithmitch.cleannotes.notes.domain.model.Note
 import com.codingwithmitch.cleannotes.util.DateUtil
 import com.codingwithmitch.notes.di.FeatureScope
+import java.lang.Exception
 import javax.inject.Inject
 
 @FeatureScope
@@ -25,8 +26,11 @@ constructor(
     }
 
     fun entityToNote(noteEntity: NoteEntity): Note{
+        if(noteEntity.id == null){
+            throw Exception(NoteEntity.nullIdError())
+        }
         return Note(
-            id = noteEntity.id,
+            id = noteEntity.id!!,
             title = noteEntity.title,
             body = noteEntity.body,
             updated_at = dateUtil.convertLongToStringDate(noteEntity.updated_at),

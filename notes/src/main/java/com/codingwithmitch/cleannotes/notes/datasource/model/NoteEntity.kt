@@ -9,7 +9,7 @@ data class NoteEntity(
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    var id: Int,
+    var id: Int?,
 
     @ColumnInfo(name = "title")
     var title: String,
@@ -23,6 +23,15 @@ data class NoteEntity(
     @ColumnInfo(name = "created_at")
     var created_at: Long
 
-)
+){
+
+    companion object{
+
+        fun nullIdError(): String{
+            return "NoteEntity object has a null id. This should not be possible. Check local database."
+        }
+    }
+}
+
 
 

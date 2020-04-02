@@ -9,8 +9,8 @@ interface NoteDao {
     @Insert
     suspend fun insertNote(note: NoteEntity): Long
 
-    @Delete
-    suspend fun deleteNote(note: NoteEntity): Int
+    @Query("DELETE FROM notes WHERE id = :primaryKey")
+    suspend fun deleteNote(primaryKey: Int): Int
 
     @Update
     suspend fun updateNote(note: NoteEntity): Int

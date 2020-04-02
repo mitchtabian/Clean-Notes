@@ -3,6 +3,7 @@ import dependencies.Dependencies
 import dependencies.Modules
 import dependencies.Releases
 import dependencies.SupportDependencies
+import dependencies.TestDependencies
 import dependencies.Versions
 import dependencies.AnnotationProcessorsDependencies
 import dependencies.JavaVersion
@@ -74,6 +75,13 @@ dependencies {
     kapt AnnotationProcessorsDependencies.room_compiler
     kapt AnnotationProcessorsDependencies.dagger_compiler
 
+    androidTestImplementation TestDependencies.kotlin_test
+    androidTestImplementation TestDependencies.espresso_core
+    androidTestImplementation TestDependencies.idling_resource
+    androidTestImplementation TestDependencies.mockk
+    androidTestImplementation TestDependencies.test_runner
+    androidTestImplementation TestDependencies.test_rules
+    androidTestImplementation TestDependencies.text_core_ktx
 
 }
 apply plugin: 'com.google.gms.google-services'

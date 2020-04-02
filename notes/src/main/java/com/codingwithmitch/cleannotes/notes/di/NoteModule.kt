@@ -39,7 +39,8 @@ object NoteModule {
     @Provides
     fun provideNoteDb(app: BaseApplication): NoteDatabase {
         return Room
-            .databaseBuilder(app, NoteDatabase::class.java, DATABASE_NAME)
+            .inMemoryDatabaseBuilder(app, NoteDatabase::class.java)
+//            .databaseBuilder(app, NoteDatabase::class.java, DATABASE_NAME)
             .fallbackToDestructiveMigration()
             .build()
     }
@@ -63,9 +64,10 @@ object NoteModule {
     @Provides
     fun provideNoteCacheDataSource(
         noteDao: NoteDao,
-        noteEntityMapper: NoteEntityMapper
+        noteEntityMapper: NoteEntityMapper,
+        dateUtil: DateUtil
     ): NoteCacheDataSource {
-        return NoteCacheDataSourceImpl(noteDao, noteEntityMapper)
+        return NoteCacheDataSourceImpl(noteDao, noteEntityMapper, dateUtil)
     }
 
     @JvmStatic

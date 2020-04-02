@@ -1,6 +1,7 @@
 import dependencies.Dependencies
 import dependencies.Modules
 import dependencies.SupportDependencies
+import dependencies.TestDependencies
 import dependencies.Versions
 import dependencies.AnnotationProcessorsDependencies
 
@@ -17,6 +18,7 @@ android {
         minSdkVersion Versions.minsdk
         targetSdkVersion Versions.targetsdk
 
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     compileOptions {
@@ -35,11 +37,19 @@ dependencies {
     implementation project(Modules.app)
     implementation project(Modules.core)
 
+    androidTestImplementation project(Modules.app)
+    androidTestImplementation TestDependencies.kotlin_test
+    androidTestImplementation TestDependencies.espresso_core
+    androidTestImplementation TestDependencies.idling_resource
+    androidTestImplementation TestDependencies.mockk
+    androidTestImplementation TestDependencies.test_runner
+    androidTestImplementation TestDependencies.test_rules
+    androidTestImplementation TestDependencies.text_core_ktx
+
     implementation Dependencies.navigation_fragment
     implementation Dependencies.dagger
     implementation Dependencies.room_runtime
     implementation Dependencies.room_ktx
-
 
     implementation SupportDependencies.appcompat
     implementation SupportDependencies.constraintlayout

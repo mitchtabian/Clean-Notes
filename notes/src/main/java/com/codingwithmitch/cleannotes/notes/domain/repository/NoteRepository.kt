@@ -5,11 +5,11 @@ import com.codingwithmitch.cleannotes.notes.domain.model.Note
 
 interface NoteRepository {
 
-    suspend fun insert(note: Note): Long
+    suspend fun insertNewNote(title: String, body: String): Long
 
-    suspend fun delete(note: Note): Int
+    suspend fun deleteNote(primaryKey: Int): Int
 
-    suspend fun update(note: Note): Int
+    suspend fun updateNote(note: Note, newTitle: String?, newBody: String?): Int
 
     suspend fun get(): List<Note>
 

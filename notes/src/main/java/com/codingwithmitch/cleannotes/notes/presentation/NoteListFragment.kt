@@ -2,6 +2,7 @@ package com.codingwithmitch.cleannotes.notes.presentation
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -36,6 +37,8 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list) {
             findNavController().navigate(R.id.action_note_list_fragment_to_noteDetailFragment)
         }
         setupUI()
+
+        Log.d(TAG, "viewmodel: ${viewModel}")
     }
 
     private fun setupUI(){

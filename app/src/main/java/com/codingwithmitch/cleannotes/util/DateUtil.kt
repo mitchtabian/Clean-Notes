@@ -9,10 +9,9 @@ class DateUtil {
 
     // dates from server look like this: "2019-07-23T03:28:01.406944Z"
     fun convertServerStringDateToLong(sd: String): Long{
-        var stringDate = sd.removeRange(sd.indexOf("T") until sd.length)
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
         try {
-            val time = sdf.parse(stringDate).time
+            val time = sdf.parse(sd).time
             return time
         } catch (e: Exception) {
             throw Exception(e)
@@ -29,5 +28,24 @@ class DateUtil {
         }
     }
 
+    // dates format looks like this: "2019-07-23"
+    fun getCurrentTimestamp(): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+        return dateFormat.format(Date())
+    }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -17,6 +17,17 @@ object Dependencies {
     val firestore = "com.google.firebase:firebase-firestore-ktx:${Versions.firestore}"
 }
 
+object TestDependencies{
+
+    val kotlin_test = "org.jetbrains.kotlin:kotlin-test-junit:${Versions.kotlin}"
+    val espresso_core = "androidx.test.espresso:espresso-core:${Versions.espresso_core}"
+    val idling_resource = "androidx.test.espresso:espresso-idling-resource:${Versions.espresso_idling_resource}"
+    val mockk = "io.mockk:mockk-android:${Versions.mockk_version}"
+    val test_runner = "androidx.test:runner:${Versions.test_runner}"
+    val test_rules = "androidx.test:rules:${Versions.test_runner}"
+    val text_core_ktx = "androidx.test:core-ktx:${Versions.test_core}"
+}
+
 object ApplicationId {
     val id = "com.codingwithmitch.cleannotes"
 }
@@ -50,6 +61,11 @@ object Versions {
     val leak_canary = "2.0-alpha-3"
     val swipe_refresh_layout = "1.1.0-alpha03"
     val firestore = "21.4.2"
+    val espresso_core = "3.1.1"
+    val espresso_idling_resource = "3.2.0"
+    val mockk_version = "1.9.2"
+    val test_runner = "1.2.0"
+    val test_core = "1.2.0"
 }
 
 object Build {
