@@ -1,5 +1,9 @@
 package com.codingwithmitch.cleannotes.di.features.notes
 
+import com.codingwithmitch.cleannotes.presentation.BaseApplication
+import com.codingwithmitch.cleannotes.util.DateUtil
+
+
 interface NotesFeature{
 
     // From notes module required by app
@@ -12,6 +16,10 @@ interface NotesFeature{
 
     // From app required by notes module
     interface Dependencies{
+
+        fun application(): BaseApplication
+
+        fun dateUtil(): DateUtil
 
     }
 }

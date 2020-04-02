@@ -25,7 +25,7 @@ class ReminderListFragment : Fragment(R.layout.fragment_reminder_list){
     }
 
     private fun setupUI(){
-        uiController.checkBottomNav(getString(R.string.module_reminders_name))
+        uiController.checkBottomNav(getString(com.codingwithmitch.cleannotes.R.string.module_reminders_name))
         uiController.displayBottomNav(true)
     }
 
