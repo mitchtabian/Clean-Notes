@@ -2,6 +2,7 @@ package com.codingwithmitch.cleannotes.notes.framework.presentation
 
 import com.codingwithmitch.cleannotes.core.business.state.*
 import com.codingwithmitch.cleannotes.core.framework.BaseViewModel
+import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.notes.business.interactors.NoteInteractors
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_FILTER_DATE_UPDATED
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_ORDER_DESC
@@ -23,6 +24,13 @@ constructor(
 
     override fun handleNewData(data: NoteViewState) {
 
+        data.noteListViewState.let { viewState ->
+            handleIncomingNotesListData(data)
+
+            viewState.isQueryExhausted?.let {
+                setQueryExhausted(it)
+            }
+        }
     }
 
     override fun setStateEvent(stateEvent: StateEvent) {
@@ -96,6 +104,24 @@ constructor(
     private fun getPage(): Int{
         return getCurrentViewStateOrNew().noteListViewState.page
             ?: return 1
+    }
+
+    private fun handleIncomingNotesListData(viewState: NoteViewState){
+        viewState.noteListViewState.let { noteListViewState ->
+            noteListViewState.noteList?.let { setNoteListData(it) }
+        }
+    }
+
+    private fun setNoteListData(notesList: List<Note>){
+        val update = getCurrentViewStateOrNew()
+        update.noteListViewState.noteList = notesList
+        setViewState(update)
+    }
+
+    private fun setQueryExhausted(isExhausted: Boolean){
+        val update = getCurrentViewStateOrNew()
+        update.noteListViewState.isQueryExhausted = isExhausted
+        setViewState(update)
     }
 
     private fun clearLayoutManagerState(){

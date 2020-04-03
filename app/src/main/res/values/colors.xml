@@ -10,6 +10,7 @@
     <color name="tealDark">#0094DE</color>
     <color name="tealLight">#9FDAF7</color>
     <color name="link_blue">#0000EE</color>
+    <color name="app_background_color">#f2f2f2</color>
 
     <!-- other -->
     <color name="red">#e22b2b</color>

@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment
 import com.codingwithmitch.cleannotes.presentation.MainActivity
 import com.codingwithmitch.cleannotes.presentation.UIController
 import com.codingwithmitch.notes.R
-import kotlinx.android.synthetic.main.fragment_note_detail.*
 import java.lang.ClassCastException
 
 
@@ -17,9 +16,6 @@ class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        notes_detail_title.setOnClickListener {
-            uiController.navRemindersGraph()
-        }
         setupUI()
     }
 

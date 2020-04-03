@@ -11,6 +11,10 @@ import com.codingwithmitch.cleannotes.notes.business.domain.repository.NoteRepos
 import com.codingwithmitch.cleannotes.notes.business.interactors.*
 import com.codingwithmitch.cleannotes.presentation.BaseApplication
 import com.codingwithmitch.cleannotes.core.business.DateUtil
+import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.DeleteNote
+import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.InsertNewNote
+import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.SearchNotes
+import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.UpdateNote
 import com.codingwithmitch.notes.datasource.cache.db.NoteDao
 import com.codingwithmitch.notes.datasource.cache.db.NoteDatabase
 import com.codingwithmitch.notes.datasource.cache.repository.NoteCacheDataSourceImpl
@@ -89,7 +93,7 @@ object NoteModule {
             InsertNewNote(noteRepository),
             DeleteNote(noteRepository),
             UpdateNote(noteRepository),
-            GetNotes(noteRepository)
+            SearchNotes(noteRepository)
         )
     }
 }

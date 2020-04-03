@@ -7,7 +7,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.framework.presentation.NoteViewModel
+import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteStateEvent
+import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteStateEvent.*
 import com.codingwithmitch.cleannotes.presentation.BaseApplication
 import com.codingwithmitch.cleannotes.presentation.MainActivity
 import com.codingwithmitch.cleannotes.presentation.UIController
@@ -24,7 +27,6 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 class NoteListFragment : Fragment(R.layout.fragment_note_list) {
 
-    private val TAG: String = "AppDebug"
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -42,6 +44,9 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list) {
         }
         setupUI()
 
+        add_new_note_fab.setOnClickListener {
+
+        }
     }
 
     private fun setupUI(){
@@ -52,7 +57,6 @@ class NoteListFragment : Fragment(R.layout.fragment_note_list) {
 
     override fun onAttach(context: Context) {
         val appComponent = (activity?.application as BaseApplication).appComponent
-
         val noteComponent = DaggerNoteComponent.factory()
             .create(appComponent)
         noteComponent.inject(this)
