@@ -1,8 +1,9 @@
 package com.codingwithmitch.notes.di
 
+import com.codingwithmitch.cleannotes.core.di.scopes.FeatureScope
 import com.codingwithmitch.cleannotes.di.features.notes.NotesFeature
 import com.codingwithmitch.cleannotes.notes.di.NoteViewModelModule
-import com.codingwithmitch.cleannotes.notes.presentation.NoteListFragment
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.NoteListFragment
 import dagger.Component
 
 @FeatureScope

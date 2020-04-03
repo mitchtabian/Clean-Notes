@@ -1,18 +1,18 @@
 package com.codingwithmitch.notes.di
 
-import android.app.Application
 import androidx.room.Room
+import com.codingwithmitch.cleannotes.core.di.scopes.FeatureScope
 import com.codingwithmitch.cleannotes.di.features.notes.NotesFeature
-import com.codingwithmitch.cleannotes.notes.data.datasource.NoteCacheDataSource
-import com.codingwithmitch.cleannotes.notes.data.repository.NoteRepositoryImpl
-import com.codingwithmitch.cleannotes.notes.datasource.mappers.NoteEntityMapper
+import com.codingwithmitch.cleannotes.notes.business.data.datasource.NoteCacheDataSource
+import com.codingwithmitch.cleannotes.notes.business.data.repository.NoteRepositoryImpl
+import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteEntityMapper
 import com.codingwithmitch.cleannotes.notes.di.NotesFeatureImpl
-import com.codingwithmitch.cleannotes.notes.domain.repository.NoteRepository
+import com.codingwithmitch.cleannotes.notes.business.domain.repository.NoteRepository
+import com.codingwithmitch.cleannotes.notes.business.interactors.*
 import com.codingwithmitch.cleannotes.presentation.BaseApplication
-import com.codingwithmitch.cleannotes.util.DateUtil
+import com.codingwithmitch.cleannotes.core.business.DateUtil
 import com.codingwithmitch.notes.datasource.cache.db.NoteDao
 import com.codingwithmitch.notes.datasource.cache.db.NoteDatabase
-import com.codingwithmitch.notes.datasource.cache.db.NoteDatabase.Companion.DATABASE_NAME
 import com.codingwithmitch.notes.datasource.cache.repository.NoteCacheDataSourceImpl
 import dagger.Module
 import dagger.Provides
@@ -77,6 +77,20 @@ object NoteModule {
         noteCacheDataSource: NoteCacheDataSource
     ): NoteRepository {
         return NoteRepositoryImpl(noteCacheDataSource)
+    }
+
+    @JvmStatic
+    @FeatureScope
+    @Provides
+    fun provideNoteInteractors(
+        noteRepository: NoteRepository
+    ): NoteInteractors{
+        return NoteInteractors(
+            InsertNewNote(noteRepository),
+            DeleteNote(noteRepository),
+            UpdateNote(noteRepository),
+            GetNotes(noteRepository)
+        )
     }
 }
 

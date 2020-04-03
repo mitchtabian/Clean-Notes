@@ -4,14 +4,12 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.codingwithmitch.cleannotes.notes.data.datasource.NoteCacheDataSource
-import com.codingwithmitch.cleannotes.notes.data.repository.NoteRepositoryImpl
-import com.codingwithmitch.cleannotes.notes.datasource.mappers.NoteEntityMapper
-import com.codingwithmitch.cleannotes.notes.domain.model.Note
-import com.codingwithmitch.cleannotes.notes.domain.repository.NoteRepository
-import com.codingwithmitch.cleannotes.notes.interactors.*
-import com.codingwithmitch.cleannotes.util.DateUtil
-import com.codingwithmitch.notes.datasource.cache.db.NoteDao
+import com.codingwithmitch.cleannotes.notes.business.data.repository.NoteRepositoryImpl
+import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteEntityMapper
+import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
+import com.codingwithmitch.cleannotes.notes.business.domain.repository.NoteRepository
+import com.codingwithmitch.cleannotes.notes.business.interactors.*
+import com.codingwithmitch.cleannotes.core.business.DateUtil
 import com.codingwithmitch.notes.datasource.cache.db.NoteDatabase
 import com.codingwithmitch.notes.datasource.cache.repository.NoteCacheDataSourceImpl
 import kotlinx.coroutines.runBlocking
@@ -30,7 +28,8 @@ import kotlin.test.assertEquals
 class BasicDbTests {
 
 
-    private val dateUtil: DateUtil = DateUtil()
+    private val dateUtil: DateUtil =
+        DateUtil()
     private lateinit var db: NoteDatabase
     private lateinit var noteRepository: NoteRepository
     private lateinit var interactors: NoteInteractors
@@ -80,7 +79,7 @@ class BasicDbTests {
             notes = interactors.getNotes.getNotes()
         }
         assertEquals(newTitle, notes?.get(0)?.title)
-        assertEquals(newBody, notes?.get(0)?.title)
+        assertEquals(newBody, notes?.get(0)?.body)
 
         val updatedTitle = "new title baby"
         val updatedBody = "and some new content"
@@ -96,7 +95,7 @@ class BasicDbTests {
             notes = interactors.getNotes.getNotes()
         }
         assertEquals(updatedTitle, notes?.get(0)?.title)
-        assertEquals(updatedBody, notes?.get(0)?.title)
+        assertEquals(updatedBody, notes?.get(0)?.body)
 
         runBlocking {
             interactors

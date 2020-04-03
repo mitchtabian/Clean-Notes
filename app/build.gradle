@@ -27,6 +27,8 @@ android {
         targetSdkVersion Versions.targetsdk
         versionCode Releases.version_code
         versionName Releases.version_name
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         debug {

@@ -7,7 +7,7 @@
     <fragment
         app:moduleName="@string/module_notes_name"
         android:id="@+id/note_list_fragment"
-        android:name="com.codingwithmitch.cleannotes.notes.presentation.NoteListFragment"
+        android:name="com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.NoteListFragment"
         >
         <action
             android:id="@+id/action_note_list_fragment_to_noteDetailFragment"
@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/noteDetailFragment"
-        android:name="com.codingwithmitch.cleannotes.notes.presentation.NoteDetailFragment"
+        android:name="com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.NoteDetailFragment"
         />
 
 </navigation>

@@ -1,4 +1,4 @@
-package com.codingwithmitch.notes.di
+package com.codingwithmitch.cleannotes.core.di.scopes
 
 import javax.inject.Scope
 

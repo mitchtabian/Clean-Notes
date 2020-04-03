@@ -1,5 +1,8 @@
 package com.codingwithmitch.cleannotes.presentation
 
+import com.codingwithmitch.cleannotes.core.business.state.Response
+import com.codingwithmitch.cleannotes.core.business.state.StateMessageCallback
+
 interface UIController {
 
     fun navNotesGraph()
@@ -14,4 +17,29 @@ interface UIController {
 
     fun displayProgressBar(isDisplayed: Boolean)
 
+    fun hideSoftKeyboard()
+
+    fun onResponseReceived(
+        response: Response,
+        stateMessageCallback: StateMessageCallback
+    )
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

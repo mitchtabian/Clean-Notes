@@ -36,7 +36,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(Modules.app)
     implementation project(Modules.core)
-
+    testImplementation 'junit:junit:4.12'
     androidTestImplementation project(Modules.app)
     androidTestImplementation TestDependencies.kotlin_test
     androidTestImplementation TestDependencies.espresso_core

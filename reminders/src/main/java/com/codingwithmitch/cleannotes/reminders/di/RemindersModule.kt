@@ -1,7 +1,7 @@
 package com.codingwithmitch.cleannotes.reminders.di
 
 import com.codingwithmitch.cleannotes.di.features.reminders.RemindersFeature
-import com.codingwithmitch.notes.di.FeatureScope
+import com.codingwithmitch.cleannotes.core.di.scopes.FeatureScope
 import dagger.Module
 import dagger.Provides
 

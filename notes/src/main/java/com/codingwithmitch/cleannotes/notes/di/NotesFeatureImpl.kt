@@ -3,7 +3,7 @@ package com.codingwithmitch.cleannotes.notes.di
 import com.codingwithmitch.cleannotes.di.features.notes.NotesFeature
 import com.codingwithmitch.notes.R
 import com.codingwithmitch.notes.di.DaggerNoteComponent
-import com.codingwithmitch.notes.di.FeatureScope
+import com.codingwithmitch.cleannotes.core.di.scopes.FeatureScope
 import javax.inject.Inject
 
 @FeatureScope

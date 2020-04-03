@@ -41,8 +41,14 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation Dependencies.dagger
+    implementation Dependencies.kotlin_coroutines
+    implementation Dependencies.kotlin_coroutines_android
+    implementation Dependencies.retrofit
+    implementation Dependencies.retrofit_gson
 
+    implementation SupportDependencies.appcompat
     implementation SupportDependencies.swipe_refresh_layout
+    implementation SupportDependencies.recyclerview
 
     kapt AnnotationProcessorsDependencies.dagger_compiler
 }

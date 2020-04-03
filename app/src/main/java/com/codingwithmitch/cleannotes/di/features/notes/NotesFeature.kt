@@ -1,7 +1,7 @@
 package com.codingwithmitch.cleannotes.di.features.notes
 
 import com.codingwithmitch.cleannotes.presentation.BaseApplication
-import com.codingwithmitch.cleannotes.util.DateUtil
+import com.codingwithmitch.cleannotes.core.business.DateUtil
 
 
 interface NotesFeature{
