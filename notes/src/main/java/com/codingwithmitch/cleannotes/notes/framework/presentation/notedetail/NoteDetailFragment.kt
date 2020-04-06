@@ -20,6 +20,10 @@ class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
+
+        container_due_date.setOnClickListener {
+            // TODO("handle click of due date")
+        }
     }
 
     private fun setupUI(){
