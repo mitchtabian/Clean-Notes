@@ -15,12 +15,17 @@ import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.Delet
 import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.InsertNewNote
 import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.SearchNotes
 import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.UpdateNote
+import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteFactory
 import com.codingwithmitch.notes.datasource.cache.db.NoteDao
 import com.codingwithmitch.notes.datasource.cache.db.NoteDatabase
 import com.codingwithmitch.notes.datasource.cache.repository.NoteCacheDataSourceImpl
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
+@ExperimentalCoroutinesApi
+@FlowPreview
 @Module
 object NoteModule {
 
@@ -29,6 +34,13 @@ object NoteModule {
     @JvmStatic
     internal fun provideFeatureImpl(featureImpl: NotesFeatureImpl): NotesFeature {
         return featureImpl
+    }
+
+    @JvmStatic
+    @FeatureScope
+    @Provides
+    fun provideNoteFactory(dateUtil: DateUtil): NoteFactory{
+        return NoteFactory(dateUtil)
     }
 
 //    @JvmStatic

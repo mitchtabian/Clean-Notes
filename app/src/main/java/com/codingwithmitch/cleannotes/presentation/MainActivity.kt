@@ -16,12 +16,14 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
+import com.afollestad.materialdialogs.input.input
 import com.codingwithmitch.cleannotes.R
 import com.codingwithmitch.cleannotes.core.business.state.AreYouSureCallback
 import com.codingwithmitch.cleannotes.core.business.state.MessageType
 import com.codingwithmitch.cleannotes.core.business.state.Response
 import com.codingwithmitch.cleannotes.core.business.state.StateMessageCallback
 import com.codingwithmitch.cleannotes.core.business.state.UIComponentType.*
+import com.codingwithmitch.cleannotes.core.framework.DialogInputCaptureCallback
 import com.codingwithmitch.cleannotes.core.framework.displayToast
 import com.codingwithmitch.cleannotes.core.framework.fadeIn
 import com.codingwithmitch.cleannotes.core.framework.fadeOut
@@ -171,6 +173,23 @@ class MainActivity : AppCompatActivity(),
         return findNavController(R.id.nav_host_fragment)
             .navigateUp(appBarConfiguration as AppBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+    override fun displayInputCaptureDialog(
+        title: String,
+        callback: DialogInputCaptureCallback
+    ) {
+        MaterialDialog(this).show {
+            title(text = title)
+            input(waitForPositiveButton = true){ _, text ->
+                callback.onTextCaptured(text.toString())
+            }
+            positiveButton(R.string.text_ok)
+            onDismiss {
+                dialogInView = null
+            }
+            cancelable(true)
+        }
     }
 
     override fun onResponseReceived(

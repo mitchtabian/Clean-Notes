@@ -6,6 +6,7 @@ import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.notes.business.interactors.NoteInteractors
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_FILTER_DATE_UPDATED
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_ORDER_DESC
+import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteFactory
 import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteStateEvent.*
 import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteViewState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -18,7 +19,8 @@ import javax.inject.Inject
 class NoteViewModel
 @Inject
 constructor(
-    private val noteInteractors: NoteInteractors
+    private val noteInteractors: NoteInteractors,
+    private val noteFactory: NoteFactory
 ): BaseViewModel<NoteViewState>(){
 
 
@@ -129,6 +131,18 @@ constructor(
         update.noteListViewState.layoutManagerState = null
         setViewState(update)
     }
+
+    fun setNote(note: Note){
+        val update = getCurrentViewStateOrNew()
+        update.noteDetailViewState.note = note
+        setViewState(update)
+    }
+
+    fun createNewNote(
+        id: Int = -1,
+        title: String,
+        body: String? = null
+    ) = noteFactory.create(id, title, body)
 
 }
 

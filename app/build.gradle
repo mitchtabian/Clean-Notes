@@ -65,6 +65,7 @@ dependencies {
     implementation Dependencies.navigation_fragment
     implementation Dependencies.navigation_dynamic
     implementation Dependencies.material_dialogs
+    implementation Dependencies.material_dialogs_input
     implementation Dependencies.play_core
     implementation Dependencies.leak_canary
     implementation Dependencies.dagger

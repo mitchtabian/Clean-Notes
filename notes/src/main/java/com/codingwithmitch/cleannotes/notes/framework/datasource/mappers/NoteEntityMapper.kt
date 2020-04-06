@@ -19,8 +19,12 @@ constructor(
 {
 
     fun noteToEntity(note: Note): NoteEntity {
+        var id: Int? = null
+        if(note.id > 0){
+            id = note.id
+        }
         return NoteEntity(
-            id = note.id,
+            id = id,
             title = note.title,
             body = note.body,
             updated_at = dateUtil.convertServerStringDateToLong(note.updated_at),
