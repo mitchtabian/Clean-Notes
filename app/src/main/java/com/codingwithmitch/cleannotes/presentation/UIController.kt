@@ -1,5 +1,6 @@
 package com.codingwithmitch.cleannotes.presentation
 
+import android.view.View
 import com.codingwithmitch.cleannotes.core.business.state.Response
 import com.codingwithmitch.cleannotes.core.business.state.StateMessageCallback
 
@@ -12,6 +13,8 @@ interface UIController {
     fun navSettingsGraph()
 
     fun checkBottomNav(moduleName: String)
+
+    fun displayToolbarTitle(title: String?, useAnimation: Boolean)
 
     fun displayBottomNav(isDisplayed: Boolean)
 

@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -22,6 +23,10 @@ import com.codingwithmitch.cleannotes.core.business.state.Response
 import com.codingwithmitch.cleannotes.core.business.state.StateMessageCallback
 import com.codingwithmitch.cleannotes.core.business.state.UIComponentType.*
 import com.codingwithmitch.cleannotes.core.framework.displayToast
+import com.codingwithmitch.cleannotes.core.framework.fadeIn
+import com.codingwithmitch.cleannotes.core.framework.fadeOut
+import com.codingwithmitch.cleannotes.core.util.TodoCallback
+import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -256,6 +261,51 @@ class MainActivity : AppCompatActivity(),
                 Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager
                 .hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
+        }
+    }
+
+    override fun displayToolbarTitle(title: String?, useAnimation: Boolean) {
+        if(title != null){
+            showToolbarTitle(title, useAnimation)
+        }
+        else{
+            hideToolbarTitle(useAnimation)
+        }
+    }
+
+    private fun hideToolbarTitle(animation: Boolean){
+        for(i in 0..tool_bar.childCount){
+            val child = tool_bar.getChildAt(i)
+            if(child is TextView){
+                val title_tv: TextView = child
+                if(animation){
+                    title_tv.fadeOut(
+                        object: TodoCallback{
+                            override fun execute() {
+                                supportActionBar?.title = ""
+                            }
+                        }
+                    )
+                }
+                else{
+                    supportActionBar?.title = ""
+                }
+                break
+            }
+        }
+    }
+
+    private fun showToolbarTitle(title: String, animation: Boolean){
+        supportActionBar?.title = title
+        for(i in 0..tool_bar.childCount){
+            val child = tool_bar.getChildAt(i)
+            if(child is TextView){
+                val title_tv: TextView = child
+                if(animation){
+                    title_tv.fadeIn()
+                }
+                break
+            }
         }
     }
 

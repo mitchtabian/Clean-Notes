@@ -2,6 +2,8 @@
 <resources>
 
     <dimen name="toolbar_height">55dp</dimen>
+    <dimen name="toolbar_height_tall">80dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="title_container_height">100dp</dimen>
+    <dimen name="default_view_margin">16dp</dimen>
 </resources>
