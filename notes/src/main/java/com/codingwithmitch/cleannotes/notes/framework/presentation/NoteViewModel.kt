@@ -76,6 +76,13 @@ constructor(
                     )
                 }
 
+                is CreateStateMessageEvent -> {
+                    emitStateMessageEvent(
+                        stateMessage = stateEvent.stateMessage,
+                        stateEvent = stateEvent
+                    )
+                }
+
                 else -> {
                     emitInvalidStateEvent(stateEvent)
                 }

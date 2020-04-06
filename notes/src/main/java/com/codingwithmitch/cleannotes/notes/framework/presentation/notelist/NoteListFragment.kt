@@ -45,8 +45,6 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
 
-        printLogD("NoteListFragment", "viewmodel: $viewModel")
-
         add_new_note_fab.setOnClickListener {
             uiController.displayInputCaptureDialog(
                 getString(com.codingwithmitch.cleannotes.R.string.text_enter_a_title),

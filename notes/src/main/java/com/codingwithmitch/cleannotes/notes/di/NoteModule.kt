@@ -18,6 +18,7 @@ import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.Updat
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteFactory
 import com.codingwithmitch.notes.datasource.cache.db.NoteDao
 import com.codingwithmitch.notes.datasource.cache.db.NoteDatabase
+import com.codingwithmitch.notes.datasource.cache.db.NoteDatabase.Companion.DATABASE_NAME
 import com.codingwithmitch.notes.datasource.cache.repository.NoteCacheDataSourceImpl
 import dagger.Module
 import dagger.Provides
@@ -32,7 +33,7 @@ object NoteModule {
     @FeatureScope
     @Provides
     @JvmStatic
-    internal fun provideFeatureImpl(featureImpl: NotesFeatureImpl): NotesFeature {
+    fun provideFeatureImpl(featureImpl: NotesFeatureImpl): NotesFeature {
         return featureImpl
     }
 

@@ -1,6 +1,7 @@
 package com.codingwithmitch.cleannotes.notes.framework.presentation.state
 
 import com.codingwithmitch.cleannotes.core.business.state.StateEvent
+import com.codingwithmitch.cleannotes.core.business.state.StateMessage
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 
 sealed class NoteStateEvent: StateEvent {
@@ -51,6 +52,19 @@ sealed class NoteStateEvent: StateEvent {
 
     class SearchNotesEvent(
         val clearLayoutManagerState: Boolean = true
+    ): NoteStateEvent(){
+
+        override fun errorInfo(): String {
+            return "Error getting list of notes."
+        }
+
+        override fun EventName(): String {
+            return "GetNotesEvent"
+        }
+    }
+
+    class CreateStateMessageEvent(
+        val stateMessage: StateMessage
     ): NoteStateEvent(){
 
         override fun errorInfo(): String {

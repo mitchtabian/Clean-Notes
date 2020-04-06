@@ -18,7 +18,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:background="@color/colorPrimary"
             >
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/view_between_spacing"
+                android:background="@color/app_background_color"
+                android:layout_gravity="bottom"
+                >
+
+            </View>
 
             <com.codingwithmitch.cleannotes.core.framework.LinedEditText
                 android:layout_width="match_parent"
@@ -35,12 +44,14 @@
                 android:paddingStart="@dimen/default_view_margin"
                 android:paddingEnd="@dimen/default_view_margin"
                 android:hint="@string/text_notes_go_here"
+                android:layout_marginTop="@dimen/default_view_margin"
                 />
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/grey4"
+                android:layout_height="@dimen/view_between_spacing"
+                android:background="@color/app_background_color"
+                android:layout_gravity="bottom"
                 >
 
             </View>
@@ -81,9 +92,10 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/note_detail_app_bar"
+        android:layout_height="@dimen/toolbar_height_tall"
+        android:id="@+id/app_bar"
         >
+
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
@@ -92,12 +104,14 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             >
 
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="@dimen/title_container_height"
                 app:layout_collapseMode="parallax"
-                android:layout_margin="@dimen/default_view_margin"
+                android:layout_marginTop="@dimen/toolbar_title_offset_height"
+                android:paddingStart="@dimen/default_view_margin"
+                android:paddingEnd="@dimen/default_view_margin"
                 >
 
                 <EditText
@@ -112,14 +126,16 @@
 
             </RelativeLayout>
 
-            <View
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/tool_bar"
                 android:layout_width="match_parent"
-                android:layout_height="5dp"
-                android:background="@color/app_background_color"
-                android:layout_gravity="bottom"
-                >
+                android:layout_height="@dimen/toolbar_height"
+                app:layout_collapseMode="pin"
+                android:background="@color/colorPrimary">
 
-            </View>
+                <include layout="@layout/layout_note_detail_toolbar"/>
+
+            </androidx.appcompat.widget.Toolbar>
 
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>

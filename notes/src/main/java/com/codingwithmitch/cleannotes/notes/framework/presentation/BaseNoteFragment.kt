@@ -5,8 +5,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
+import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
+import com.codingwithmitch.cleannotes.core.framework.fadeIn
+import com.codingwithmitch.cleannotes.core.framework.fadeOut
+import com.codingwithmitch.cleannotes.core.framework.gone
+import com.codingwithmitch.cleannotes.core.framework.visible
+import com.codingwithmitch.cleannotes.core.util.TodoCallback
 import com.codingwithmitch.cleannotes.notes.di.NotesFeatureImpl
 import com.codingwithmitch.cleannotes.presentation.BaseApplication
 import com.codingwithmitch.cleannotes.presentation.MainActivity
@@ -31,6 +39,45 @@ constructor(
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(layoutRes, container, false)
+    }
+
+    fun displayToolbarTitle(textView: TextView, title: String?, useAnimation: Boolean) {
+        if(title != null){
+            showToolbarTitle(textView, title, useAnimation)
+        }
+        else{
+            hideToolbarTitle(textView, useAnimation)
+        }
+    }
+
+    private fun hideToolbarTitle(textView: TextView, animation: Boolean){
+        if(animation){
+            textView.fadeOut(
+                object: TodoCallback {
+                    override fun execute() {
+                        textView.text = ""
+                    }
+                }
+            )
+        }
+        else{
+            textView.text = ""
+            textView.gone()
+        }
+    }
+
+    private fun showToolbarTitle(
+        textView: TextView,
+        title: String,
+        animation: Boolean
+    ){
+        textView.text = title
+        if(animation){
+            textView.fadeIn()
+        }
+        else{
+            textView.visible()
+        }
     }
 
     fun getNoteComponent(): NoteComponent? {

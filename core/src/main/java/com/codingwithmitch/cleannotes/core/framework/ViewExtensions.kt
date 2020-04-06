@@ -28,7 +28,7 @@ fun View.gone() {
 
 fun View.fadeIn() {
     if(visibility != View.VISIBLE){
-        val animationDuration = resources.getInteger(android.R.integer.config_mediumAnimTime)
+        val animationDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
         apply {
             visible()
             alpha = 0f
@@ -42,7 +42,7 @@ fun View.fadeIn() {
 
 fun View.fadeOut(todoCallback: TodoCallback? = null){
     if(alpha == 1f){
-        val animationDuration = resources.getInteger(android.R.integer.config_mediumAnimTime)
+        val animationDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
         apply {
             animate()
                 .alpha(0f)

@@ -6,13 +6,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
@@ -23,12 +20,7 @@ import com.codingwithmitch.cleannotes.core.business.state.MessageType
 import com.codingwithmitch.cleannotes.core.business.state.Response
 import com.codingwithmitch.cleannotes.core.business.state.StateMessageCallback
 import com.codingwithmitch.cleannotes.core.business.state.UIComponentType.*
-import com.codingwithmitch.cleannotes.core.framework.DialogInputCaptureCallback
-import com.codingwithmitch.cleannotes.core.framework.displayToast
-import com.codingwithmitch.cleannotes.core.framework.fadeIn
-import com.codingwithmitch.cleannotes.core.framework.fadeOut
-import com.codingwithmitch.cleannotes.core.util.TodoCallback
-import com.codingwithmitch.cleannotes.core.util.printLogD
+import com.codingwithmitch.cleannotes.core.framework.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -53,7 +45,6 @@ class MainActivity : AppCompatActivity(),
         setContentView(R.layout.activity_main)
 
         retrieveTopLevelFragmentIds()
-        setupActionBar()
         setupBottomNavigation()
 
     }
@@ -82,14 +73,6 @@ class MainActivity : AppCompatActivity(),
     private fun setupBottomNavigation(){
         val navController = findNavController(R.id.nav_host_fragment)
         bottomNavView.setupWithNavController(navController)
-        appBarConfiguration = AppBarConfiguration(
-            topLevelDestinationIds = topLevelFragmentIds.toSet()
-        )
-        setupActionBarWithNavController(
-            navController,
-            appBarConfiguration as AppBarConfiguration
-        )
-
         bottomNavView.setOnNavigationItemSelectedListener { menuItem ->
             onNavigationItemSelected(menuItem.itemId)
         }
@@ -109,11 +92,6 @@ class MainActivity : AppCompatActivity(),
         return true
     }
 
-    private fun setupActionBar(){
-        setSupportActionBar(tool_bar)
-        getSupportActionBar()?.setTitle("")
-    }
-
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
         return super.onCreateOptionsMenu(menu)
@@ -130,17 +108,17 @@ class MainActivity : AppCompatActivity(),
 
     override fun displayBottomNav(isDisplayed: Boolean) {
         if(isDisplayed)
-            bottom_navigation_view.visibility = View.VISIBLE
+            bottom_navigation_view.visible()
         else
-            bottom_navigation_view.visibility = View.GONE
+            bottom_navigation_view.gone()
     }
 
 
     override fun displayProgressBar(isDisplayed: Boolean) {
         if(isDisplayed)
-            main_progress_bar.visibility = View.VISIBLE
+            main_progress_bar.visible()
         else
-            main_progress_bar.visibility = View.GONE
+            main_progress_bar.gone()
     }
 
     override fun navNotesGraph() {
@@ -280,51 +258,6 @@ class MainActivity : AppCompatActivity(),
                 Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager
                 .hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
-        }
-    }
-
-    override fun displayToolbarTitle(title: String?, useAnimation: Boolean) {
-        if(title != null){
-            showToolbarTitle(title, useAnimation)
-        }
-        else{
-            hideToolbarTitle(useAnimation)
-        }
-    }
-
-    private fun hideToolbarTitle(animation: Boolean){
-        for(i in 0..tool_bar.childCount){
-            val child = tool_bar.getChildAt(i)
-            if(child is TextView){
-                val title_tv: TextView = child
-                if(animation){
-                    title_tv.fadeOut(
-                        object: TodoCallback{
-                            override fun execute() {
-                                supportActionBar?.title = ""
-                            }
-                        }
-                    )
-                }
-                else{
-                    supportActionBar?.title = ""
-                }
-                break
-            }
-        }
-    }
-
-    private fun showToolbarTitle(title: String, animation: Boolean){
-        supportActionBar?.title = title
-        for(i in 0..tool_bar.childCount){
-            val child = tool_bar.getChildAt(i)
-            if(child is TextView){
-                val title_tv: TextView = child
-                if(animation){
-                    title_tv.fadeIn()
-                }
-                break
-            }
         }
     }
 

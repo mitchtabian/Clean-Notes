@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Core</string>
+    <string name="text_Done">Done</string>
+    <string name="text_Close">Close</string>
 </resources>

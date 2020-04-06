@@ -43,6 +43,18 @@ abstract class BaseViewModel<ViewState> : ViewModel()
 
     abstract fun setStateEvent(stateEvent: StateEvent)
 
+    fun emitStateMessageEvent(
+        stateMessage: StateMessage,
+        stateEvent: StateEvent
+    ) = flow{
+        emit(
+            DataState.error<ViewState>(
+                response = stateMessage.response,
+                stateEvent = stateEvent
+            )
+        )
+    }
+
     fun emitInvalidStateEvent(stateEvent: StateEvent) = flow {
         emit(
             DataState.error<ViewState>(

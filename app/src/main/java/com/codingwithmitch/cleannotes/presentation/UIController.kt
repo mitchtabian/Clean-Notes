@@ -15,8 +15,6 @@ interface UIController {
 
     fun checkBottomNav(moduleName: String)
 
-    fun displayToolbarTitle(title: String?, useAnimation: Boolean)
-
     fun displayBottomNav(isDisplayed: Boolean)
 
     fun displayProgressBar(isDisplayed: Boolean)
