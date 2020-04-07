@@ -1,7 +1,12 @@
 package com.codingwithmitch.cleannotes.notes.framework.presentation
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.codingwithmitch.cleannotes.core.business.state.*
 import com.codingwithmitch.cleannotes.core.framework.BaseViewModel
+import com.codingwithmitch.cleannotes.core.framework.CollapsingToolbarState
+import com.codingwithmitch.cleannotes.core.framework.CollapsingToolbarState.*
+import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.notes.business.interactors.NoteInteractors
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_FILTER_DATE_UPDATED
@@ -22,7 +27,6 @@ constructor(
     private val noteInteractors: NoteInteractors,
     private val noteFactory: NoteFactory
 ): BaseViewModel<NoteViewState>(){
-
 
     override fun handleNewData(data: NoteViewState) {
 
@@ -151,6 +155,15 @@ constructor(
         body: String? = null
     ) = noteFactory.create(id, title, body)
 
+    fun setCollapsingToolbarState(state: CollapsingToolbarState){
+        val update = getCurrentViewStateOrNew()
+        if(!(state.toString())
+                .equals(update.noteDetailViewState.collapsingToolbarState.toString())){
+            printLogD("NoteViewModel", "setCollapsingToolbarState" )
+            update.noteDetailViewState.collapsingToolbarState = state
+            setViewState(update)
+        }
+    }
 }
 
 

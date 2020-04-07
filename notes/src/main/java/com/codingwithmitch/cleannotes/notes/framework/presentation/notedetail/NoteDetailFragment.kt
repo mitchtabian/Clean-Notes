@@ -2,21 +2,24 @@ package com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail
 
 import android.os.Bundle
 import android.view.View
+import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.codingwithmitch.cleannotes.core.business.state.MessageType
 import com.codingwithmitch.cleannotes.core.business.state.Response
 import com.codingwithmitch.cleannotes.core.business.state.StateMessage
 import com.codingwithmitch.cleannotes.core.business.state.UIComponentType
-import com.codingwithmitch.cleannotes.core.framework.*
+import com.codingwithmitch.cleannotes.core.framework.COLLAPSING_TOOLBAR_VISIBILITY_THRESHOLD
+import com.codingwithmitch.cleannotes.core.framework.CollapsingToolbarState.*
+import com.codingwithmitch.cleannotes.core.framework.fadeIn
+import com.codingwithmitch.cleannotes.core.framework.fadeOut
 import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.framework.presentation.BaseNoteFragment
 import com.codingwithmitch.cleannotes.notes.framework.presentation.NoteViewModel
-import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.NoteDetailFragment.CollapsingToolbarState.*
-import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteStateEvent.*
+import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteStateEvent.CreateStateMessageEvent
+import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteStateEvent.InsertNewNoteEvent
 import com.codingwithmitch.notes.R
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_note_detail.*
@@ -37,11 +40,9 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         viewModelFactory
     }
 
-    private var collapsingToolbarState: MutableLiveData<CollapsingToolbarState>
-            = MutableLiveData(Expanded())
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        onRestoreInstanceState(savedInstanceState)
         setupUI()
         setupOnBackPressDispatcher()
 
@@ -60,9 +61,24 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
                     noteDetailViewState.note?.let { note ->
                         setNoteTitle(note.title)
                     }
+
+                    noteDetailViewState.collapsingToolbarState.let { state ->
+
+                        when(state){
+
+                            is Expanded -> {
+                                transitionToExpandedMode()
+                            }
+
+                            is Collapsed -> {
+                                transitionToCollapsedMode()
+                            }
+                        }
+                    }
                 }
             }
         })
+
     }
 
     private fun setNoteTitle(title: String){
@@ -77,6 +93,18 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         note_body.setText(body)
     }
 
+    private fun onRestoreInstanceState(savedInstanceState: Bundle?){
+        // One time check for after rotation
+        if(viewModel.viewState.value
+                ?.noteDetailViewState
+                ?.collapsingToolbarState.toString().equals(Collapsed().toString())){
+            app_bar.setExpanded(false)
+        }
+        else{
+            app_bar.setExpanded(true)
+        }
+    }
+
     private fun setupUI(){
         uiController.displayBottomNav(false)
 
@@ -84,10 +112,10 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
             AppBarLayout.OnOffsetChangedListener{appBar, offset ->
 
                 if(offset < COLLAPSING_TOOLBAR_VISIBILITY_THRESHOLD){
-                    setCollapsingToolbarState(Collapsed())
+                    viewModel.setCollapsingToolbarState(Collapsed())
                 }
                 else{
-                    setCollapsingToolbarState(Expanded())
+                    viewModel.setCollapsingToolbarState(Expanded())
                 }
             })
 
@@ -95,28 +123,8 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
             onBackPressed()
         }
 
-        collapsingToolbarState.observe(viewLifecycleOwner, Observer { state ->
-
-            printLogD("NoteDetailFragment", "Toolbar state change: ${state}")
-
-            when(state){
-
-                is Expanded -> {
-                    transitionToExpandedMode()
-                }
-
-                is Collapsed -> {
-                    transitionToCollapsedMode()
-                }
-            }
-        })
     }
 
-    private fun setCollapsingToolbarState(state: CollapsingToolbarState){
-        if(!state.toString().equals(collapsingToolbarState.value.toString())){
-            collapsingToolbarState.value = state
-        }
-    }
 
     private fun onBackPressed(){
 //        saveNote()
@@ -181,22 +189,23 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         printLogD("NoteDetailFragment", "injecting into component: ${getNoteComponent()}")
     }
 
-    internal sealed class CollapsingToolbarState{
-
-        class Collapsed: CollapsingToolbarState(){
-
-            override fun toString(): String {
-                return "Collapsed"
-            }
-        }
-
-        class Expanded: CollapsingToolbarState(){
-
-            override fun toString(): String {
-                return "Expanded"
-            }
-        }
+    private fun disableContentInteraction(view: EditText) {
+        view.setKeyListener(null)
+        view.setFocusable(false)
+        view.setFocusableInTouchMode(false)
+        view.setCursorVisible(false)
+        view.clearFocus()
     }
+
+    private fun enableContentInteraction(view: EditText) {
+        view.setKeyListener(EditText(context).keyListener)
+        view.setFocusable(true)
+        view.setFocusableInTouchMode(true)
+        view.setCursorVisible(true)
+        view.requestFocus()
+    }
+
+
 
 }
 
