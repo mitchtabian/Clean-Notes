@@ -67,6 +67,7 @@
         android:id="@+id/add_new_note_fab"
         android:layout_margin="@dimen/fab_margin"
         app:fabSize="normal"
+        app:borderWidth="0dp"
         />
 
 

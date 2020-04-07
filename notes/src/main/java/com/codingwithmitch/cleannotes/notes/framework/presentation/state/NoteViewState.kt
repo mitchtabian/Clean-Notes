@@ -4,7 +4,6 @@ import android.os.Parcelable
 import com.codingwithmitch.cleannotes.core.framework.CollapsingToolbarState
 import com.codingwithmitch.cleannotes.core.framework.CollapsingToolbarState.*
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
-import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.NoteDetailFragment
 import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
 

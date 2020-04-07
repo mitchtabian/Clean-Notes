@@ -159,7 +159,6 @@ constructor(
         val update = getCurrentViewStateOrNew()
         if(!(state.toString())
                 .equals(update.noteDetailViewState.collapsingToolbarState.toString())){
-            printLogD("NoteViewModel", "setCollapsingToolbarState" )
             update.noteDetailViewState.collapsingToolbarState = state
             setViewState(update)
         }
