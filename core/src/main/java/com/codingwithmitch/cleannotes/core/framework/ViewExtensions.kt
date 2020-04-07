@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.app.Activity
 import android.view.View
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.StringRes
@@ -54,6 +55,28 @@ fun View.fadeOut(todoCallback: TodoCallback? = null){
                     }
                 })
         }
+    }
+}
+
+
+fun EditText.disableContentInteraction() {
+    keyListener = null
+    isFocusable = false
+    isFocusableInTouchMode = false
+    isCursorVisible = false
+    setBackgroundResource(android.R.color.transparent)
+    clearFocus()
+}
+
+fun EditText.enableContentInteraction() {
+    keyListener = EditText(context).keyListener
+    isFocusable = true
+    isFocusableInTouchMode = true
+    isCursorVisible = true
+    setBackgroundResource(android.R.color.white)
+    requestFocus()
+    if(text != null){
+        setSelection(text.length)
     }
 }
 

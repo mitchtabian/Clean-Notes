@@ -1,4 +1,4 @@
-package com.codingwithmitch.cleannotes.core.framework
+package com.codingwithmitch.cleannotes.notes.framework.presentation.state
 
 
 sealed class CollapsingToolbarState{

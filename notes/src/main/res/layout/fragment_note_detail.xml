@@ -5,7 +5,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_background_color">
+    android:background="@color/app_background_color"
+    >
 
 
     <androidx.core.widget.NestedScrollView
@@ -19,6 +20,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@color/colorPrimary"
+
             >
             <View
                 android:layout_width="match_parent"
@@ -64,6 +66,7 @@
                 android:padding="@dimen/default_view_margin"
                 android:gravity="center_vertical"
                 android:id="@+id/container_due_date"
+
                 >
 
                 <ImageView
@@ -81,7 +84,17 @@
                     android:layout_marginStart="@dimen/default_view_margin"
                     />
 
+
             </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/scrollview_bottom_margin"
+                android:background="@color/app_background_color"
+                android:layout_gravity="bottom"
+                >
+
+            </View>
 
 
         </LinearLayout>

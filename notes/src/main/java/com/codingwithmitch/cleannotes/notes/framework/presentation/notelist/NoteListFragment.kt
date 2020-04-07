@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.codingwithmitch.cleannotes.core.business.state.Response
 import com.codingwithmitch.cleannotes.core.framework.DialogInputCaptureCallback
+import com.codingwithmitch.cleannotes.core.framework.hideKeyboard
 import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.notes.di.NotesFeatureImpl
@@ -43,6 +44,9 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        view.hideKeyboard()
+
         setupUI()
 
         add_new_note_fab.setOnClickListener {

@@ -1,8 +1,7 @@
 package com.codingwithmitch.cleannotes.notes.framework.presentation.state
 
 import android.os.Parcelable
-import com.codingwithmitch.cleannotes.core.framework.CollapsingToolbarState
-import com.codingwithmitch.cleannotes.core.framework.CollapsingToolbarState.*
+import com.codingwithmitch.cleannotes.notes.framework.presentation.state.CollapsingToolbarState.*
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.android.parcel.Parcelize
@@ -31,12 +30,9 @@ data class NoteViewState(
     @Parcelize
     data class NoteDetailViewState(
         var note: Note? = null
-    ) : Parcelable{
+    ) : Parcelable
 
-        @IgnoredOnParcel
-        var collapsingToolbarState: CollapsingToolbarState = Expanded()
 
-    }
 }
 
 

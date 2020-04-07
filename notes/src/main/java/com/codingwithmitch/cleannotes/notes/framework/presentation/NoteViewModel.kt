@@ -1,19 +1,18 @@
 package com.codingwithmitch.cleannotes.notes.framework.presentation
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.codingwithmitch.cleannotes.core.business.state.*
 import com.codingwithmitch.cleannotes.core.framework.BaseViewModel
-import com.codingwithmitch.cleannotes.core.framework.CollapsingToolbarState
-import com.codingwithmitch.cleannotes.core.framework.CollapsingToolbarState.*
 import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.notes.business.interactors.NoteInteractors
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_FILTER_DATE_UPDATED
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_ORDER_DESC
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteFactory
+import com.codingwithmitch.cleannotes.notes.framework.datasource.model.NoteEntity
+import com.codingwithmitch.cleannotes.notes.framework.presentation.state.*
 import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteStateEvent.*
-import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteViewState
+import kotlinx.android.parcel.IgnoredOnParcel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -27,6 +26,21 @@ constructor(
     private val noteInteractors: NoteInteractors,
     private val noteFactory: NoteFactory
 ): BaseViewModel<NoteViewState>(){
+
+    /*
+        NoteDetailFragment ONLY
+    */
+    private val noteInteractionManager: NoteInteractionManager =  NoteInteractionManager()
+    val noteTitleInteractionState: LiveData<NoteInteractionState>
+        get() = noteInteractionManager.noteTitleState
+    val noteBodyInteractionState: LiveData<NoteInteractionState>
+        get() = noteInteractionManager.noteBodyState
+    val collapsingToolbarState: LiveData<CollapsingToolbarState>
+        get() = noteInteractionManager.collapsingToolbarState
+    /*
+        End - NoteDetailFragment ONLY
+    */
+
 
     override fun handleNewData(data: NoteViewState) {
 
@@ -155,15 +169,93 @@ constructor(
         body: String? = null
     ) = noteFactory.create(id, title, body)
 
-    fun setCollapsingToolbarState(state: CollapsingToolbarState){
-        val update = getCurrentViewStateOrNew()
-        if(!(state.toString())
-                .equals(update.noteDetailViewState.collapsingToolbarState.toString())){
-            update.noteDetailViewState.collapsingToolbarState = state
+    fun setCollapsingToolbarState(
+        state: CollapsingToolbarState
+    ) = noteInteractionManager.setCollapsingToolbarState(state)
+
+    fun updateNote(title: String?, body: String?){
+        updateNoteTitle(title)
+        updateNoteBody(body)
+    }
+
+    private fun updateNoteTitle(title: String?){
+        if(title == null){
+            setStateEvent(
+                CreateStateMessageEvent(
+                    stateMessage = StateMessage(
+                        response = Response(
+                            message = NoteEntity.nullTitleError(),
+                            uiComponentType = UIComponentType.Dialog(),
+                            messageType = MessageType.Error()
+                        )
+                    )
+                )
+            )
+        }
+        else{
+            val update = getCurrentViewStateOrNew()
+            val updatedNote = update.noteDetailViewState.note?.copy(
+                title = title
+            )
+            update.noteDetailViewState.note = updatedNote
             setViewState(update)
         }
     }
+
+    private fun updateNoteBody(body: String?){
+        val update = getCurrentViewStateOrNew()
+        val updatedNote = update.noteDetailViewState.note?.copy(
+            body = body?: ""
+        )
+        update.noteDetailViewState.note = updatedNote
+        setViewState(update)
+    }
+
+    fun setNoteInteractionTitleState(state: NoteInteractionState){
+        noteInteractionManager.setNewNoteTitleState(state)
+    }
+
+    fun setNoteInteractionBodyState(state: NoteInteractionState){
+        noteInteractionManager.setNewNoteBodyState(state)
+    }
+
+    // return true if in EditState
+    fun checkEditState() = noteInteractionManager.checkEditState()
+
+
+    fun exitEditState() = noteInteractionManager.exitEditState()
+
+
+    fun isEditingTitle() = noteInteractionManager.isEditingTitle()
+
+    fun isEditingBody() = noteInteractionManager.isEditingBody()
+
+    // force observers to refresh
+    fun triggerNoteObservers(){
+        viewState.value?.noteDetailViewState?.note?.let { note ->
+            setNote(note)
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

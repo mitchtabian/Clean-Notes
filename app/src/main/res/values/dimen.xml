@@ -12,4 +12,6 @@
     <dimen name="toolbar_title_margin">32dp</dimen>
     <dimen name="page_title_size">20sp</dimen>
     <dimen name="view_between_spacing">7dp</dimen>
+
+    <dimen name="scrollview_bottom_margin">160dp</dimen>
 </resources>

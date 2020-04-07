@@ -27,6 +27,10 @@ data class NoteEntity(
 
     companion object{
 
+        fun nullTitleError(): String{
+            return "You must enter a title."
+        }
+
         fun nullIdError(): String{
             return "NoteEntity object has a null id. This should not be possible. Check local database."
         }

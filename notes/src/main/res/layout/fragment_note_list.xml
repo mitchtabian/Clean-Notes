@@ -22,7 +22,7 @@
             android:background="@color/colorPrimary"
             android:elevation="10dp">
 
-            <include layout="@layout/layout_default_toolbar"/>
+            <include layout="@layout/layout_note_detail_toolbar"/>
 
         </androidx.appcompat.widget.Toolbar>
 
