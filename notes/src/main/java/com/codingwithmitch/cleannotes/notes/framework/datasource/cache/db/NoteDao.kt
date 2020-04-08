@@ -10,11 +10,23 @@ interface NoteDao {
     @Insert
     suspend fun insertNote(note: NoteEntity): Long
 
+    @Query("""
+        UPDATE notes 
+        SET 
+        title = :title, 
+        body = :body,
+        updated_at = :updated_at
+        WHERE id = :primaryKey
+        """)
+    suspend fun updateNote(
+        primaryKey: Int,
+        title: String,
+        body: String?,
+        updated_at: Long
+    ): Int
+
     @Query("DELETE FROM notes WHERE id = :primaryKey")
     suspend fun deleteNote(primaryKey: Int): Int
-
-    @Update
-    suspend fun updateNote(note: NoteEntity): Int
 
     @Query("SELECT * FROM notes")
     suspend fun searchNotes(): List<NoteEntity>

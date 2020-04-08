@@ -9,8 +9,6 @@ import android.view.View;
 
 import androidx.appcompat.widget.AppCompatEditText;
 
-import com.yydcdut.markdown.MarkdownEditText;
-
 
 /**
  * This is not used in the application. I just left it here in case you

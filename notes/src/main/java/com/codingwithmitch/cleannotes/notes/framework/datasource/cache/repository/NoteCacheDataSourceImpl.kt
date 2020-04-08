@@ -34,15 +34,13 @@ constructor(
         return noteDao.deleteNote(primaryKey)
     }
 
-    override suspend fun updateNote(note: Note, newTitle: String?, newBody: String?): Int {
-        val newNote = NoteEntity(
-            id = note.id,
-            title = newTitle?: note.title,
-            body = newBody?: note.body,
-            created_at = dateUtil.convertServerStringDateToLong(note.created_at),
+    override suspend fun updateNote(primaryKey: Int, newTitle: String, newBody: String?): Int {
+        return noteDao.updateNote(
+            primaryKey = primaryKey,
+            title = newTitle,
+            body = newBody,
             updated_at = dateUtil.convertServerStringDateToLong(dateUtil.getCurrentTimestamp())
         )
-        return noteDao.updateNote(newNote)
     }
 
     override suspend fun searchNotes(

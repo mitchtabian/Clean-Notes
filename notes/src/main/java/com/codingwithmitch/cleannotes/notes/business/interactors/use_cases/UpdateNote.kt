@@ -14,19 +14,16 @@ class UpdateNote(
     private val noteRepository: NoteRepository
 ){
 
-    val UPDATE_NOTE_SUCCESS = "Successfully updated note."
-    val UPDATE_NOTE_FAILED = "Failed to update note."
-
     fun updateNote(
-        note: Note,
-        newTitle: String?,
+        primaryKey: Int,
+        newTitle: String,
         newBody: String?,
         stateEvent: StateEvent
     ): Flow<DataState<NoteViewState>> = flow {
 
         val cacheResult = safeCacheCall(Dispatchers.IO){
             noteRepository.updateNote(
-                note = note,
+                primaryKey = primaryKey,
                 newTitle = newTitle,
                 newBody = newBody
             )
@@ -63,5 +60,12 @@ class UpdateNote(
                 }
             }.getResult()
         )
+    }
+
+    companion object{
+        val UPDATE_NOTE_SUCCESS = "Successfully updated note."
+        val UPDATE_NOTE_FAILED = "Failed to update note."
+        val UPDATE_NOTE_FAILED_PK = "Update failed. Note is missing primary key."
+
     }
 }

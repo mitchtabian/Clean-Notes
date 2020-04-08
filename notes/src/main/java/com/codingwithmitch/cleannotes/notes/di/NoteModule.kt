@@ -56,8 +56,8 @@ object NoteModule {
     @Provides
     fun provideNoteDb(app: BaseApplication): NoteDatabase {
         return Room
-            .inMemoryDatabaseBuilder(app, NoteDatabase::class.java)
-//            .databaseBuilder(app, NoteDatabase::class.java, DATABASE_NAME)
+//            .inMemoryDatabaseBuilder(app, NoteDatabase::class.java)
+            .databaseBuilder(app, NoteDatabase::class.java, DATABASE_NAME)
             .fallbackToDestructiveMigration()
             .build()
     }
@@ -100,10 +100,11 @@ object NoteModule {
     @FeatureScope
     @Provides
     fun provideNoteInteractors(
-        noteRepository: NoteRepository
+        noteRepository: NoteRepository,
+        noteFactory: NoteFactory
     ): NoteInteractors{
         return NoteInteractors(
-            InsertNewNote(noteRepository),
+            InsertNewNote(noteRepository, noteFactory),
             DeleteNote(noteRepository),
             UpdateNote(noteRepository),
             SearchNotes(noteRepository)

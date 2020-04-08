@@ -35,8 +35,7 @@ sealed class NoteStateEvent: StateEvent {
 
 
     class UpdateNoteEvent(
-        val note: Note,
-        val newTitle: String?,
+        val newTitle: String,
         val newBody: String?
     ): NoteStateEvent(){
 

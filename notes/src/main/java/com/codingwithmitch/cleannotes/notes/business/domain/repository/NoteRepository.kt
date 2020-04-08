@@ -9,7 +9,7 @@ interface NoteRepository {
 
     suspend fun deleteNote(primaryKey: Int): Int
 
-    suspend fun updateNote(note: Note, newTitle: String?, newBody: String?): Int
+    suspend fun updateNote(primaryKey: Int, newTitle: String, newBody: String?): Int
 
     suspend fun searchNotes(
         query: String,

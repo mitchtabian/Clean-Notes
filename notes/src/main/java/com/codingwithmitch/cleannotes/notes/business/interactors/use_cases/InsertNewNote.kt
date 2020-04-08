@@ -3,18 +3,19 @@ package com.codingwithmitch.cleannotes.notes.business.interactors.use_cases
 import com.codingwithmitch.cleannotes.core.business.cache.CacheResponseHandler
 import com.codingwithmitch.cleannotes.core.business.safeCacheCall
 import com.codingwithmitch.cleannotes.core.business.state.*
+import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.notes.business.domain.repository.NoteRepository
+import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteFactory
 import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteViewState
+import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteViewState.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class InsertNewNote(
-    private val noteRepository: NoteRepository
+    private val noteRepository: NoteRepository,
+    private val noteFactory: NoteFactory
 ){
-
-    val INSERT_NOTE_SUCCESS = "Successfully inserted new note."
-    val INSERT_NOTE_FAILED = "Failed to insert new note."
 
     fun insertNewNote(
         title: String,
@@ -33,13 +34,22 @@ class InsertNewNote(
             ){
                 override suspend fun handleSuccess(resultObj: Long): DataState<NoteViewState> {
                     return if(resultObj > 0){
+                        val viewState = NoteViewState(
+                            noteDetailViewState = NoteDetailViewState(
+                                note = noteFactory.create(
+                                    id = resultObj.toInt(),
+                                    title = title,
+                                    body = body
+                                )
+                            )
+                        )
                         DataState.data(
                             response = Response(
                                 message = INSERT_NOTE_SUCCESS,
                                 uiComponentType = UIComponentType.Toast(),
                                 messageType = MessageType.Success()
                             ),
-                            data = null,
+                            data = viewState,
                             stateEvent = stateEvent
                         )
                     }
@@ -57,5 +67,10 @@ class InsertNewNote(
                 }
             }.getResult()
         )
+    }
+
+    companion object{
+        val INSERT_NOTE_SUCCESS = "Successfully inserted new note."
+        val INSERT_NOTE_FAILED = "Failed to insert new note."
     }
 }

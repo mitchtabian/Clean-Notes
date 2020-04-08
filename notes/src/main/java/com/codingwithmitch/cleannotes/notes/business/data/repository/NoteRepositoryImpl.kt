@@ -21,8 +21,8 @@ constructor(
         return noteCacheDataSource.deleteNote(primaryKey)
     }
 
-    override suspend fun updateNote(note: Note, newTitle: String?, newBody: String?): Int {
-        return noteCacheDataSource.updateNote(note, newTitle, newBody)
+    override suspend fun updateNote(primaryKey: Int, newTitle: String, newBody: String?): Int {
+        return noteCacheDataSource.updateNote(primaryKey, newTitle, newBody)
     }
 
     override suspend fun searchNotes(

@@ -7,13 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.codingwithmitch.cleannotes.core.business.state.Response
+import com.codingwithmitch.cleannotes.core.business.state.StateMessageCallback
 import com.codingwithmitch.cleannotes.core.framework.DialogInputCaptureCallback
 import com.codingwithmitch.cleannotes.core.framework.hideKeyboard
 import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
+import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.InsertNewNote
+import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.InsertNewNote.Companion.INSERT_NOTE_SUCCESS
 import com.codingwithmitch.cleannotes.notes.di.NotesFeatureImpl
 import com.codingwithmitch.cleannotes.notes.framework.presentation.BaseNoteFragment
 import com.codingwithmitch.cleannotes.notes.framework.presentation.NoteViewModel
@@ -45,30 +49,71 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        view.hideKeyboard()
-
         setupUI()
+        subscribeObservers()
 
         add_new_note_fab.setOnClickListener {
             uiController.displayInputCaptureDialog(
                 getString(com.codingwithmitch.cleannotes.R.string.text_enter_a_title),
                 object: DialogInputCaptureCallback{
                     override fun onTextCaptured(text: String) {
-                        viewModel.setNote(
-                            viewModel.createNewNote(
-                                title = text
+                        val newNote = viewModel.createNewNote(title = text)
+                        viewModel.setStateEvent(
+                            InsertNewNoteEvent(
+                                title = newNote.title,
+                                body = ""
                             )
                         )
-                        findNavController()
-                            .navigate(R.id.action_note_list_fragment_to_noteDetailFragment)
                     }
 
                 }
             )
         }
+
+        viewModel.setStateEvent(SearchNotesEvent())
+    }
+
+    private fun subscribeObservers(){
+        viewModel.viewState.observe(viewLifecycleOwner, Observer{ viewState ->
+
+            if(viewState != null){
+
+                viewState.noteListViewState.let { noteListViewState ->
+
+                    noteListViewState.noteList?.let { noteList ->
+
+                        for(note in noteList){
+                            printLogD("NoteListFragment", "noteId: ${note.id}, noteTitle: ${note.title}")
+                        }
+                    }
+                }
+            }
+        })
+
+        viewModel.numActiveJobs.observe(viewLifecycleOwner, Observer { jobCounter ->
+            uiController.displayProgressBar(viewModel.areAnyJobsActive())
+        })
+
+        viewModel.stateMessage.observe(viewLifecycleOwner, Observer { stateMessage ->
+            stateMessage?.let { message ->
+                if(message.response.message.equals(INSERT_NOTE_SUCCESS)){
+                    findNavController()
+                        .navigate(R.id.action_note_list_fragment_to_noteDetailFragment)
+                }
+                uiController.onResponseReceived(
+                    response = message.response,
+                    stateMessageCallback = object: StateMessageCallback {
+                        override fun removeMessageFromStack() {
+                            viewModel.clearStateMessage()
+                        }
+                    }
+                )
+            }
+        })
     }
 
     private fun setupUI(){
+        view?.hideKeyboard()
         uiController.checkBottomNav(getString(com.codingwithmitch.cleannotes.R.string.module_notes_name))
         uiController.displayBottomNav(true)
     }

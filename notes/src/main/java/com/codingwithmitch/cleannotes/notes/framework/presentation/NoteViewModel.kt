@@ -6,6 +6,7 @@ import com.codingwithmitch.cleannotes.core.framework.BaseViewModel
 import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.notes.business.interactors.NoteInteractors
+import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.UpdateNote.Companion.UPDATE_NOTE_FAILED_PK
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_FILTER_DATE_UPDATED
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_ORDER_DESC
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteFactory
@@ -51,6 +52,13 @@ constructor(
                 setQueryExhausted(it)
             }
         }
+
+        // result from inserting a new note
+        data.noteDetailViewState.let { viewState ->
+            viewState.note?.let { note ->
+                setNote(note)
+            }
+        }
     }
 
     override fun setStateEvent(stateEvent: StateEvent) {
@@ -74,10 +82,21 @@ constructor(
                 }
 
                 is UpdateNoteEvent -> {
-                    noteInteractors.updateNote.updateNote(
-                        note = stateEvent.note,
-                        newTitle = stateEvent.newTitle,
-                        newBody = stateEvent.newBody,
+                    viewState.value?.noteDetailViewState?.note?.id?.let{ pk ->
+                        noteInteractors.updateNote.updateNote(
+                            primaryKey = pk,
+                            newTitle = stateEvent.newTitle,
+                            newBody = stateEvent.newBody,
+                            stateEvent = stateEvent
+                        )
+                    }?: emitStateMessageEvent(
+                        stateMessage = StateMessage(
+                            response = Response(
+                                message = UPDATE_NOTE_FAILED_PK,
+                                uiComponentType = UIComponentType.Dialog(),
+                                messageType = MessageType.Error()
+                            )
+                        ),
                         stateEvent = stateEvent
                     )
                 }
@@ -157,7 +176,7 @@ constructor(
         setViewState(update)
     }
 
-    fun setNote(note: Note){
+    fun setNote(note: Note?){
         val update = getCurrentViewStateOrNew()
         update.noteDetailViewState.note = note
         setViewState(update)

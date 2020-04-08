@@ -13,19 +13,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.codingwithmitch.cleannotes.core.R.drawable
-import com.codingwithmitch.cleannotes.core.business.state.MessageType
-import com.codingwithmitch.cleannotes.core.business.state.Response
-import com.codingwithmitch.cleannotes.core.business.state.StateMessage
-import com.codingwithmitch.cleannotes.core.business.state.UIComponentType
+import com.codingwithmitch.cleannotes.core.business.state.*
 import com.codingwithmitch.cleannotes.core.framework.*
 import com.codingwithmitch.cleannotes.notes.framework.presentation.state.CollapsingToolbarState.*
 import com.codingwithmitch.cleannotes.core.util.printLogD
+import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.InsertNewNote
+import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.InsertNewNote.Companion.INSERT_NOTE_SUCCESS
+import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.UpdateNote
+import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.UpdateNote.Companion.UPDATE_NOTE_SUCCESS
 import com.codingwithmitch.cleannotes.notes.framework.presentation.BaseNoteFragment
 import com.codingwithmitch.cleannotes.notes.framework.presentation.NoteViewModel
 import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteInteractionState
 import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteInteractionState.*
-import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteStateEvent.CreateStateMessageEvent
-import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteStateEvent.InsertNewNoteEvent
+import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteStateEvent
+import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteStateEvent.*
 import com.codingwithmitch.notes.R
 import com.google.android.material.appbar.AppBarLayout
 import com.yydcdut.markdown.MarkdownProcessor
@@ -106,7 +107,7 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
 
     private fun updateAndSave(){
         viewModel.updateNote(getNoteTitle(), getNoteBody())
-        saveNote()
+        updateNote()
     }
 
     override fun onPause() {
@@ -116,6 +117,7 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
 
 
     private fun subscribeObservers(){
+
         viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState ->
 
             if(viewState != null){
@@ -127,6 +129,28 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
                         setNoteBody(note.body)
                     }
 
+                }
+            }
+        })
+
+        viewModel.numActiveJobs.observe(viewLifecycleOwner, Observer { jobCounter ->
+            uiController.displayProgressBar(viewModel.areAnyJobsActive())
+        })
+
+        viewModel.stateMessage.observe(viewLifecycleOwner, Observer { stateMessage ->
+            stateMessage?.let { message ->
+                if(!message.response.message.equals(UPDATE_NOTE_SUCCESS)){
+                    uiController.onResponseReceived(
+                        response = message.response,
+                        stateMessageCallback = object: StateMessageCallback {
+                            override fun removeMessageFromStack() {
+                                viewModel.clearStateMessage()
+                            }
+                        }
+                    )
+                    if(message.response.message.equals(UpdateNote.UPDATE_NOTE_FAILED_PK)){
+                        findNavController().popBackStack()
+                    }
                 }
             }
         })
@@ -152,7 +176,6 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
                     note_title.enableContentInteraction()
                     view?.showKeyboard()
                     displayEditStateToolbar()
-
                 }
 
                 is DefaultState -> {
@@ -310,13 +333,13 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         }
     }
 
-    private fun saveNote() {
+    private fun updateNote() {
         val title = checkNoteTitleNotNull()
         if (title != null) {
             viewModel.setStateEvent(
-                InsertNewNoteEvent(
-                    title = title,
-                    body = getNoteBody() // we don't check the body for null
+                UpdateNoteEvent(
+                    newTitle = title,
+                    newBody = getNoteBody() // we don't check the body for null
                 )
             )
         }
