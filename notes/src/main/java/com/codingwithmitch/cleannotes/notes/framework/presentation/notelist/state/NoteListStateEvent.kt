@@ -1,15 +1,14 @@
-package com.codingwithmitch.cleannotes.notes.framework.presentation.state
+package com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state
 
 import com.codingwithmitch.cleannotes.core.business.state.StateEvent
 import com.codingwithmitch.cleannotes.core.business.state.StateMessage
-import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 
-sealed class NoteStateEvent: StateEvent {
+sealed class NoteListStateEvent: StateEvent {
 
     class InsertNewNoteEvent(
         val title: String,
         val body: String
-    ): NoteStateEvent() {
+    ): NoteListStateEvent() {
 
         override fun errorInfo(): String {
             return "Error inserting new note."
@@ -22,7 +21,7 @@ sealed class NoteStateEvent: StateEvent {
 
     class DeleteNoteEvent(
         val primaryKey: Int
-    ): NoteStateEvent(){
+    ): NoteListStateEvent(){
 
         override fun errorInfo(): String {
             return "Error deleting note."
@@ -33,25 +32,9 @@ sealed class NoteStateEvent: StateEvent {
         }
     }
 
-
-    class UpdateNoteEvent(
-        val newTitle: String,
-        val newBody: String?
-    ): NoteStateEvent(){
-
-        override fun errorInfo(): String {
-            return "Error updating note."
-        }
-
-        override fun EventName(): String {
-            return "UpdateNoteEvent"
-        }
-    }
-
-
     class SearchNotesEvent(
         val clearLayoutManagerState: Boolean = true
-    ): NoteStateEvent(){
+    ): NoteListStateEvent(){
 
         override fun errorInfo(): String {
             return "Error getting list of notes."
@@ -62,12 +45,23 @@ sealed class NoteStateEvent: StateEvent {
         }
     }
 
-    class CreateStateMessageEvent(
-        val stateMessage: StateMessage
-    ): NoteStateEvent(){
+    class GetNumNotesInCacheEvent: NoteListStateEvent(){
 
         override fun errorInfo(): String {
-            return "Error getting list of notes."
+            return "Error getting the number of notes from the cache."
+        }
+
+        override fun EventName(): String {
+            return "GetNumNotesInCacheEvent"
+        }
+    }
+
+    class CreateStateMessageEvent(
+        val stateMessage: StateMessage
+    ): NoteListStateEvent(){
+
+        override fun errorInfo(): String {
+            return "Error creating a new state message."
         }
 
         override fun EventName(): String {

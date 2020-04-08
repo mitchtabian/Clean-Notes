@@ -1,4 +1,3 @@
-import dependencies.Dependencies
 import dependencies.Versions
 import dependencies.Build
 

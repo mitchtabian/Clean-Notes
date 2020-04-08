@@ -125,6 +125,7 @@
                 android:layout_marginTop="@dimen/toolbar_title_offset_height"
                 android:paddingStart="@dimen/default_view_margin"
                 android:paddingEnd="@dimen/default_view_margin"
+                android:clipToPadding="false"
                 >
 
                 <EditText
@@ -135,6 +136,15 @@
                     android:textColor="#000"
                     android:textSize="22sp"
                     android:hint="@string/text_enter_a_title"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorAccent"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="@dimen/default_view_margin_negative"
+                    android:layout_marginStart="@dimen/default_view_margin_negative"
                     />
 
             </RelativeLayout>

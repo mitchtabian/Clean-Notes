@@ -3,11 +3,9 @@ package com.codingwithmitch.cleannotes.notes.business.interactors.use_cases
 import com.codingwithmitch.cleannotes.core.business.cache.CacheResponseHandler
 import com.codingwithmitch.cleannotes.core.business.safeCacheCall
 import com.codingwithmitch.cleannotes.core.business.state.*
-import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.notes.business.domain.repository.NoteRepository
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteFactory
-import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteViewState
-import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteViewState.*
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -21,28 +19,27 @@ class InsertNewNote(
         title: String,
         body: String,
         stateEvent: StateEvent
-    ): Flow<DataState<NoteViewState>> = flow {
+    ): Flow<DataState<NoteListViewState>> = flow {
 
         val cacheResult = safeCacheCall(Dispatchers.IO){
             noteRepository.insertNewNote(title, body)
         }
 
         emit(
-            object: CacheResponseHandler<NoteViewState, Long>(
+            object: CacheResponseHandler<NoteListViewState, Long>(
                 response = cacheResult,
                 stateEvent = stateEvent
             ){
-                override suspend fun handleSuccess(resultObj: Long): DataState<NoteViewState> {
+                override suspend fun handleSuccess(resultObj: Long): DataState<NoteListViewState> {
                     return if(resultObj > 0){
-                        val viewState = NoteViewState(
-                            noteDetailViewState = NoteDetailViewState(
-                                note = noteFactory.create(
+                        val viewState =
+                            NoteListViewState(
+                                newNote = noteFactory.create(
                                     id = resultObj.toInt(),
                                     title = title,
                                     body = body
                                 )
                             )
-                        )
                         DataState.data(
                             response = Response(
                                 message = INSERT_NOTE_SUCCESS,

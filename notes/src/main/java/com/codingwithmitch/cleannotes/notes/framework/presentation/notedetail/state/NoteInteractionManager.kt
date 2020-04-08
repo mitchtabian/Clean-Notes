@@ -1,9 +1,9 @@
-package com.codingwithmitch.cleannotes.notes.framework.presentation.state
+package com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.codingwithmitch.cleannotes.notes.framework.presentation.state.CollapsingToolbarState.*
-import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteInteractionState.*
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.CollapsingToolbarState.*
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteInteractionState.*
 
 // Both can not be in 'EditState' at the same time.
 class NoteInteractionManager{

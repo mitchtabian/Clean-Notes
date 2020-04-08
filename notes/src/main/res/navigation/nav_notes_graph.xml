@@ -21,6 +21,7 @@
     <fragment
         android:id="@+id/noteDetailFragment"
         android:name="com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.NoteDetailFragment"
-        />
+        >
+    </fragment>
 
 </navigation>

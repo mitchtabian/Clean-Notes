@@ -15,6 +15,8 @@ interface NoteCacheDataSource{
         filterAndOrder: String,
         page: Int
     ): List<Note>
+
+    suspend fun getNumNotes(): Int
 }
 
 interface NoteNetworkDataSource{

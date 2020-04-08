@@ -5,8 +5,7 @@ import com.codingwithmitch.cleannotes.core.business.safeCacheCall
 import com.codingwithmitch.cleannotes.core.business.state.*
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.notes.business.domain.repository.NoteRepository
-import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteViewState
-import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteViewState.*
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -24,7 +23,7 @@ class SearchNotes(
         filterAndOrder: String,
         page: Int,
         stateEvent: StateEvent
-    ): Flow<DataState<NoteViewState>> = flow {
+    ): Flow<DataState<NoteListViewState>> = flow {
 
         val cacheResult = safeCacheCall(Dispatchers.IO){
             noteRepository.searchNotes(
@@ -35,11 +34,11 @@ class SearchNotes(
         }
 
         emit(
-            object: CacheResponseHandler<NoteViewState, List<Note>>(
+            object: CacheResponseHandler<NoteListViewState, List<Note>>(
                 response = cacheResult,
                 stateEvent = stateEvent
             ){
-                override suspend fun handleSuccess(resultObj: List<Note>): DataState<NoteViewState> {
+                override suspend fun handleSuccess(resultObj: List<Note>): DataState<NoteListViewState> {
                     var message: String? = SEARCH_NOTES_SUCCESS
                     var uiComponentType: UIComponentType? = UIComponentType.None()
                     if(resultObj.size == 0){
@@ -52,10 +51,8 @@ class SearchNotes(
                             uiComponentType = uiComponentType as UIComponentType,
                             messageType = MessageType.Success()
                         ),
-                        data = NoteViewState(
-                            NoteListViewState(
-                                noteList = resultObj
-                            )
+                        data = NoteListViewState(
+                            noteList = resultObj
                         ),
                         stateEvent = stateEvent
                     )

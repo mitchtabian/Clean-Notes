@@ -10,6 +10,7 @@ import com.codingwithmitch.cleannotes.core.business.network.NetworkConstants.NET
 import com.codingwithmitch.cleannotes.core.business.network.NetworkErrors.NETWORK_ERROR_TIMEOUT
 import com.codingwithmitch.cleannotes.core.business.network.NetworkErrors.NETWORK_ERROR_UNKNOWN
 import com.codingwithmitch.cleannotes.core.business.state.*
+import com.codingwithmitch.cleannotes.core.util.printLogD
 import kotlinx.coroutines.*
 import retrofit2.HttpException
 import java.io.IOException
@@ -62,13 +63,17 @@ suspend fun <T> safeCacheCall(
     cacheCall: suspend () -> T?
 ): CacheResult<T?> {
     return withContext(dispatcher) {
+        printLogD("RepositoryExtensions", "safeCacheCall")
         try {
             // throws TimeoutCancellationException
             withTimeout(CACHE_TIMEOUT){
                 CacheResult.Success(cacheCall.invoke())
             }
         } catch (throwable: Throwable) {
+            throwable.printStackTrace()
+            printLogD("RepositoryExtensions", "safeCacheCall: ${throwable}")
             when (throwable) {
+
                 is TimeoutCancellationException -> {
                     CacheResult.GenericError(CACHE_ERROR_TIMEOUT)
                 }

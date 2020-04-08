@@ -4,7 +4,7 @@
     <!-- Main theme colors -->
     <color name="colorPrimary">#fff</color>
     <color name="colorPrimaryDark">#7d7d7d</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#0094DE</color>
 
     <!-- Secondary theme colors -->
     <color name="tealDark">#0094DE</color>

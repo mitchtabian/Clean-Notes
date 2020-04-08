@@ -4,12 +4,11 @@ import com.codingwithmitch.cleannotes.core.business.cache.CacheResponseHandler
 import com.codingwithmitch.cleannotes.core.business.safeCacheCall
 import com.codingwithmitch.cleannotes.core.business.state.*
 import com.codingwithmitch.cleannotes.notes.business.domain.repository.NoteRepository
-import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteViewState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class DeleteNote(
+class DeleteNote<ViewState>(
     private val noteRepository: NoteRepository
 ){
 
@@ -19,18 +18,18 @@ class DeleteNote(
     fun deleteNote(
         primaryKey: Int,
         stateEvent: StateEvent
-    ): Flow<DataState<NoteViewState>> = flow {
+    ): Flow<DataState<ViewState>> = flow {
 
         val cacheResult = safeCacheCall(Dispatchers.IO){
             noteRepository.deleteNote(primaryKey)
         }
 
         emit(
-            object: CacheResponseHandler<NoteViewState, Int>(
+            object: CacheResponseHandler<ViewState, Int>(
                 response = cacheResult,
                 stateEvent = stateEvent
             ){
-                override suspend fun handleSuccess(resultObj: Int): DataState<NoteViewState> {
+                override suspend fun handleSuccess(resultObj: Int): DataState<ViewState> {
                     return if(resultObj > 0){
                         DataState.data(
                             response = Response(

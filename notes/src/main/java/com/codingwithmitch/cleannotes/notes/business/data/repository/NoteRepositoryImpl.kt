@@ -37,7 +37,7 @@ constructor(
         )
     }
 
-
+    override suspend fun getNumNotes() = noteCacheDataSource.getNumNotes()
 }
 
 

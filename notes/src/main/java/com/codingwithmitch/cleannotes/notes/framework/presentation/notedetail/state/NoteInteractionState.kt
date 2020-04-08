@@ -1,4 +1,4 @@
-package com.codingwithmitch.cleannotes.notes.framework.presentation.state
+package com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state
 
 
 

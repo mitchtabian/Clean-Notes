@@ -1,55 +1,50 @@
 package com.codingwithmitch.cleannotes.notes.framework.presentation.notelist
 
-import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.codingwithmitch.cleannotes.core.business.state.Response
-import com.codingwithmitch.cleannotes.core.business.state.StateMessageCallback
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.codingwithmitch.cleannotes.core.business.state.*
 import com.codingwithmitch.cleannotes.core.framework.DialogInputCaptureCallback
+import com.codingwithmitch.cleannotes.core.framework.TopSpacingItemDecoration
 import com.codingwithmitch.cleannotes.core.framework.hideKeyboard
 import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
-import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.InsertNewNote
-import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.InsertNewNote.Companion.INSERT_NOTE_SUCCESS
-import com.codingwithmitch.cleannotes.notes.di.NotesFeatureImpl
 import com.codingwithmitch.cleannotes.notes.framework.presentation.BaseNoteFragment
-import com.codingwithmitch.cleannotes.notes.framework.presentation.NoteViewModel
-import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteStateEvent
-import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteStateEvent.*
-import com.codingwithmitch.cleannotes.presentation.BaseApplication
-import com.codingwithmitch.cleannotes.presentation.MainActivity
-import com.codingwithmitch.cleannotes.presentation.UIController
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListStateEvent.*
 import com.codingwithmitch.notes.R
-import com.codingwithmitch.notes.di.DaggerNoteComponent
 import kotlinx.android.synthetic.main.fragment_note_list.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import java.lang.ClassCastException
 import javax.inject.Inject
 
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list) {
+class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
+    NoteListAdapter.Interaction
+{
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    val viewModel: NoteViewModel by viewModels {
+    val viewModel: NoteListViewModel by viewModels {
         viewModelFactory
     }
+
+    lateinit var listAdapter: NoteListAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         setupUI()
+        setupRecyclerView()
         subscribeObservers()
 
         add_new_note_fab.setOnClickListener {
@@ -65,41 +60,75 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list) {
                             )
                         )
                     }
-
                 }
             )
         }
 
-        viewModel.setStateEvent(SearchNotesEvent())
+//        viewModel.setStateEvent(GetNumNotesInCacheEvent())
+        viewModel.loadFirstPage()
+    }
+
+    // For testing
+    private fun onPaginationComplete(){
+        viewModel.setStateEvent(
+            CreateStateMessageEvent(
+                stateMessage = StateMessage(
+                    response = Response(
+                        message = "Pagination complete",
+                        uiComponentType = UIComponentType.Toast(),
+                        messageType = MessageType.Info()
+                    )
+                )
+            )
+        )
+    }
+
+    private fun setupRecyclerView(){
+        recycler_view.apply {
+            layoutManager = LinearLayoutManager(activity)
+            val topSpacingDecorator = TopSpacingItemDecoration(30)
+            addItemDecoration(topSpacingDecorator)
+            listAdapter = NoteListAdapter(this@NoteListFragment)
+            addOnScrollListener(object: RecyclerView.OnScrollListener(){
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                    val lastPosition = layoutManager.findLastVisibleItemPosition()
+                    if (lastPosition == listAdapter.itemCount.minus(1)) {
+                        viewModel.nextPage()
+                    }
+                }
+            })
+            adapter = listAdapter
+        }
     }
 
     private fun subscribeObservers(){
         viewModel.viewState.observe(viewLifecycleOwner, Observer{ viewState ->
 
             if(viewState != null){
-
-                viewState.noteListViewState.let { noteListViewState ->
-
-                    noteListViewState.noteList?.let { noteList ->
-
-                        for(note in noteList){
-                            printLogD("NoteListFragment", "noteId: ${note.id}, noteTitle: ${note.title}")
-                        }
+                viewState.noteList?.let { noteList ->
+                    if(viewModel.isPaginationExhausted()
+                        && !viewModel.isQueryExhausted()){
+                        viewModel.setQueryExhausted(true)
+                        onPaginationComplete() // for testing
                     }
+                    listAdapter.submitList(noteList)
+                }
+
+                // a new note has been inserted
+                viewState.newNote?.let { newNote ->
+                    navigateToDetailFragment(newNote)
                 }
             }
         })
 
-        viewModel.numActiveJobs.observe(viewLifecycleOwner, Observer { jobCounter ->
+        viewModel.numActiveJobs.observe(viewLifecycleOwner, Observer {
             uiController.displayProgressBar(viewModel.areAnyJobsActive())
         })
 
         viewModel.stateMessage.observe(viewLifecycleOwner, Observer { stateMessage ->
             stateMessage?.let { message ->
-                if(message.response.message.equals(INSERT_NOTE_SUCCESS)){
-                    findNavController()
-                        .navigate(R.id.action_note_list_fragment_to_noteDetailFragment)
-                }
                 uiController.onResponseReceived(
                     response = message.response,
                     stateMessageCallback = object: StateMessageCallback {
@@ -110,6 +139,15 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list) {
                 )
             }
         })
+    }
+
+    private fun navigateToDetailFragment(selectedNote: Note){
+        val bundle = bundleOf(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY to selectedNote)
+        findNavController().navigate(
+            R.id.action_note_list_fragment_to_noteDetailFragment,
+            bundle
+        )
+        viewModel.setNote(null)
     }
 
     private fun setupUI(){
@@ -123,7 +161,14 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list) {
         printLogD("NoteListFragment", "injecting into component: ${getNoteComponent()}")
     }
 
+    override fun onItemSelected(position: Int, item: Note) {
+        viewModel.setNote(item)
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        recycler_view.adapter = null // can leak memory
+    }
 }
 
 

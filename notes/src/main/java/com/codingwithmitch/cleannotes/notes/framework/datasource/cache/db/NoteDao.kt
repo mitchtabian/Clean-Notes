@@ -78,6 +78,9 @@ interface NoteDao {
         page: Int,
         pageSize: Int = NOTE_PAGINATION_PAGE_SIZE
     ): List<NoteEntity>
+
+    @Query("SELECT COUNT(*) FROM notes")
+    suspend fun getNumNotes(): Int
 }
 
 

@@ -17,4 +17,5 @@ interface NoteRepository {
         page: Int
     ): List<Note>
 
+    suspend fun getNumNotes(): Int
 }

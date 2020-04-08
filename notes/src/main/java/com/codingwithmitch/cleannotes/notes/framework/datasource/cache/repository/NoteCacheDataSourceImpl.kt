@@ -57,6 +57,8 @@ constructor(
         )
     }
 
+    override suspend fun getNumNotes() = noteDao.getNumNotes()
+
 
 }
 

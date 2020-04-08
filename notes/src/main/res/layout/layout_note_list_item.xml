@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:weightSum="100"
+    android:background="@color/colorPrimary"
+    android:gravity="center_vertical"
+    android:layout_marginEnd="@dimen/recyclerview_start_end_margins"
+    android:layout_marginStart="@dimen/recyclerview_start_end_margins">
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/colorAccent"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/note_title"
+        android:textSize="@dimen/title_list_item_text_size"
+        android:layout_weight="77"
+        android:text="Some Note Title"
+        android:textColor="#000"
+        android:lines="1"
+        android:layout_marginTop="@dimen/default_view_margin"
+        android:layout_marginBottom="@dimen/default_view_margin"
+        android:layout_marginStart="@dimen/default_view_margin"/>
+
+
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/note_timestamp"
+        android:textSize="@dimen/date_list_item_text_size"
+        android:layout_weight="20"
+        android:text="Dec 1 2017"
+        android:layout_marginTop="@dimen/default_view_margin"
+        android:layout_marginBottom="@dimen/default_view_margin"
+        android:layout_marginEnd="@dimen/default_view_margin"
+        android:gravity="end"
+        android:textColor="@color/default_grey"/>
+
+
+
+</LinearLayout>

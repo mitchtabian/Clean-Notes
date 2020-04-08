@@ -32,7 +32,7 @@ class BasicDbTests {
         DateUtil()
     private lateinit var db: NoteDatabase
     private lateinit var noteRepository: NoteRepository
-    private lateinit var interactors: NoteInteractors
+    private lateinit var interactors: NoteListInteractors
 
     @Before
     fun setupInteractors() {
@@ -46,7 +46,7 @@ class BasicDbTests {
                 dateUtil = dateUtil
             )
         )
-        interactors = NoteInteractors(
+        interactors = NoteListInteractors(
             InsertNewNote(noteRepository),
             DeleteNote(noteRepository),
             UpdateNote(noteRepository),
