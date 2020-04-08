@@ -1,5 +1,5 @@
 # Clean-Notes
-Clean Architecture with Modularization by feature (dynamic feature modules)
+Dynamic Feature Modules & Clean Architecture by layer
 
 **Work in progress**
 
