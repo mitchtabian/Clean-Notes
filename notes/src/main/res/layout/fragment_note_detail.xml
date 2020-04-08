@@ -31,7 +31,7 @@
 
             </View>
 
-            <com.codingwithmitch.cleannotes.core.framework.LinedEditText
+            <com.yydcdut.markdown.MarkdownEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="300dp"

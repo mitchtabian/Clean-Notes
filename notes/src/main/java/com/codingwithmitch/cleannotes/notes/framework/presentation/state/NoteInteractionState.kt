@@ -11,7 +11,6 @@ sealed class NoteInteractionState {
         }
     }
 
-    // EditText's will not be editable
     class DefaultState: NoteInteractionState(){
 
         override fun toString(): String {

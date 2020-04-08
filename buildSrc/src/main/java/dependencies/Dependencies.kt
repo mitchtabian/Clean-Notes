@@ -28,6 +28,7 @@ object Versions {
     val coroutines_version = "1.3.0"
     val lifecycle_version = "2.2.0-alpha03"
     val retrofit2_version = "2.6.0"
+    val markdown_processor = "0.1.3"
 }
 
 object Dependencies {
@@ -52,6 +53,7 @@ object Dependencies {
     val lifecycle_coroutines = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycle_version}"
     val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit2_version}"
     val retrofit_gson = "com.squareup.retrofit2:converter-gson:${Versions.retrofit2_version}"
+    val markdown_processor = "com.yydcdut:markdown-processor:${Versions.markdown_processor}"
 }
 
 object TestDependencies{

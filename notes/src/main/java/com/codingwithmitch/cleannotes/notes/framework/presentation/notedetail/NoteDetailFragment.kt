@@ -28,6 +28,8 @@ import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteSta
 import com.codingwithmitch.cleannotes.notes.framework.presentation.state.NoteStateEvent.InsertNewNoteEvent
 import com.codingwithmitch.notes.R
 import com.google.android.material.appbar.AppBarLayout
+import com.yydcdut.markdown.MarkdownProcessor
+import com.yydcdut.markdown.syntax.edit.EditFactory
 import kotlinx.android.synthetic.main.fragment_note_detail.*
 import kotlinx.android.synthetic.main.layout_note_detail_toolbar.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -63,6 +65,16 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
 
         note_body.setOnClickListener { v ->
             onClickNoteBody()
+        }
+
+        setupMarkdown()
+    }
+
+    private fun setupMarkdown(){
+        activity?.run {
+            val markdownProcessor = MarkdownProcessor(this)
+            markdownProcessor.factory(EditFactory.create())
+            markdownProcessor.live(note_body)
         }
     }
 

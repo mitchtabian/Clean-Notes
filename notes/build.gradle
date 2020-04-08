@@ -50,6 +50,7 @@ dependencies {
     implementation Dependencies.dagger
     implementation Dependencies.room_runtime
     implementation Dependencies.room_ktx
+    implementation Dependencies.markdown_processor
 
     implementation SupportDependencies.appcompat
     implementation SupportDependencies.constraintlayout
