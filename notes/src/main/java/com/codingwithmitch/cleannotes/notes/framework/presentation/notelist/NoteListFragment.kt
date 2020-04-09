@@ -6,7 +6,9 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.codingwithmitch.cleannotes.core.business.state.*
@@ -28,7 +30,8 @@ import javax.inject.Inject
 @FlowPreview
 @ExperimentalCoroutinesApi
 class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
-    NoteListAdapter.Interaction
+    NoteListAdapter.Interaction,
+    ItemTouchHelperAdapter
 {
 
     @Inject
@@ -43,7 +46,6 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.setupChannel()
-        view?.hideKeyboard()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -89,12 +91,23 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
         )
     }
 
+    private fun deleteNote(position: Int) = viewModel.deleteNote(position)
+
     private fun setupRecyclerView(){
         recycler_view.apply {
             layoutManager = LinearLayoutManager(activity)
             val topSpacingDecorator = TopSpacingItemDecoration(30)
             addItemDecoration(topSpacingDecorator)
-            listAdapter = NoteListAdapter(this@NoteListFragment)
+            val itemTouchHelperCallback = NoteItemTouchHelperCallback(
+                this@NoteListFragment
+            )
+            val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+            listAdapter = NoteListAdapter(
+                this@NoteListFragment,
+                lifecycleScope,
+                itemTouchHelper
+            )
+            itemTouchHelper.attachToRecyclerView(this)
             addOnScrollListener(object: RecyclerView.OnScrollListener(){
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
@@ -122,7 +135,7 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
                     listAdapter.submitList(noteList)
                 }
 
-                // a new note has been inserted
+                // a note been inserted or selected
                 viewState.newNote?.let { newNote ->
                     navigateToDetailFragment(newNote)
                 }
@@ -174,6 +187,10 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
     override fun onDestroyView() {
         super.onDestroyView()
         recycler_view.adapter = null // can leak memory
+    }
+
+    override fun onItemSwiped(position: Int) {
+        deleteNote(position)
     }
 }
 

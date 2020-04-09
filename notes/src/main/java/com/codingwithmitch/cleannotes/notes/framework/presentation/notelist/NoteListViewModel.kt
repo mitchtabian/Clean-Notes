@@ -6,6 +6,7 @@ import com.codingwithmitch.cleannotes.core.framework.BaseViewModel
 import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.notes.business.interactors.NoteListInteractors
+import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.DeleteNote.Companion.DELETE_NOTE_FAILED_NO_PRIMARY_KEY
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_FILTER_DATE_UPDATED
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_ORDER_DESC
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteFactory
@@ -122,7 +123,7 @@ constructor(
             ?: return 1
     }
 
-    private fun setNoteListData(notesList: List<Note>){
+    private fun setNoteListData(notesList: ArrayList<Note>){
         val update = getCurrentViewStateOrNew()
         update.noteList = notesList
         setViewState(update)
@@ -145,6 +146,31 @@ constructor(
         val update = getCurrentViewStateOrNew()
         update.newNote = note
         setViewState(update)
+    }
+
+    fun deleteNote(position: Int){
+
+        // remove from viewstate
+        val update = getCurrentViewStateOrNew()
+        val note = update.noteList?.get(position)
+        update.noteList?.removeAt(position)
+        setViewState(update)
+
+        // delete from cache
+        note?.id?.let { primaryKey ->
+            setStateEvent(DeleteNoteEvent(primaryKey))
+        }?: setStateEvent(
+            CreateStateMessageEvent(
+                stateMessage = StateMessage(
+                    response = Response(
+                        message = DELETE_NOTE_FAILED_NO_PRIMARY_KEY,
+                        uiComponentType = UIComponentType.Dialog(),
+                        messageType = MessageType.Error()
+                    )
+                )
+            )
+        )
+
     }
 
     private fun setNumNotesInCache(numNotes: Int){

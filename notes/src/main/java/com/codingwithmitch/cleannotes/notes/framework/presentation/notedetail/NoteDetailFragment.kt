@@ -389,6 +389,10 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         getNoteComponent()?.inject(this)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.setNote(null) // clear out the note when leaving
+    }
 }
 
 

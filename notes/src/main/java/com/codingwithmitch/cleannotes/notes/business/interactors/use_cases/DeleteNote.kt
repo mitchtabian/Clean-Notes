@@ -12,9 +12,6 @@ class DeleteNote<ViewState>(
     private val noteRepository: NoteRepository
 ){
 
-    val DELETE_NOTE_SUCCESS = "Successfully deleted note."
-    val DELETE_NOTE_FAILED = "Failed to delete note."
-
     fun deleteNote(
         primaryKey: Int,
         stateEvent: StateEvent
@@ -56,4 +53,23 @@ class DeleteNote<ViewState>(
             }.getResult()
         )
     }
+
+    companion object{
+        val DELETE_NOTE_SUCCESS = "Successfully deleted note."
+        val DELETE_NOTE_FAILED = "Failed to delete note."
+        val DELETE_NOTE_FAILED_NO_PRIMARY_KEY = "Could not delete that note. No primary key found."
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
