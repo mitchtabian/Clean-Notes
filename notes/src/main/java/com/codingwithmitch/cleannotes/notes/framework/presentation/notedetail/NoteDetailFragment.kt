@@ -44,7 +44,7 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         super.onCreate(savedInstanceState)
         arguments?.let { args ->
             args.getParcelable<Note>(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY)?.let { note ->
-                viewModel.setNote(note)
+                viewModel.setNoteFromBundle(note)
             }?: onErrorRetrievingNoteFromBundle()
         }
         viewModel.setupChannel()
@@ -122,7 +122,7 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
     }
 
     private fun updateAndSave(){
-        viewModel.updateNote(getnote_title(), getnote_body())
+        viewModel.updateNote(getNoteTitle(), getNoteBody())
         updateNote()
     }
 
@@ -139,8 +139,8 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
             if(viewState != null){
 
                 viewState.note?.let { note ->
-                    setnote_title(note.title)
-                    setnote_body(note.body)
+                    setNoteTitle(note.title)
+                    setNoteBody(note.body)
                 }
             }
         })
@@ -182,6 +182,8 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         })
 
         viewModel.collapsingToolbarState.observe(viewLifecycleOwner, Observer { state ->
+
+            printLogD("DetailFragment", "toolbar state: ${state}")
             when(state){
 
                 is Expanded -> {
@@ -256,29 +258,31 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         }
     }
 
-    private fun setnote_title(title: String){
+    private fun setNoteTitle(title: String){
         note_title.setText(title)
     }
 
-    private fun getnote_title(): String{
+    private fun getNoteTitle(): String{
         return note_title.text.toString()
     }
 
-    private fun getnote_body(): String {
+    private fun getNoteBody(): String {
         return note_body.text.toString()
     }
 
-    private fun setnote_body(body: String?){
+    private fun setNoteBody(body: String?){
         note_body.setText(body)
     }
 
     private fun onRestoreInstanceState(savedInstanceState: Bundle?){
-        // One time check for after rotation
-        if(viewModel.collapsingToolbarState.toString().equals(Collapsed().toString())){
+        // One-time check after rotation
+        if(viewModel.isToolbarCollapsed()){
             app_bar.setExpanded(false)
+            transitionToCollapsedMode()
         }
         else{
             app_bar.setExpanded(true)
+            transitionToExpandedMode()
         }
     }
 
@@ -365,7 +369,7 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
             viewModel.setStateEvent(
                 UpdateNoteEvent(
                     newTitle = title,
-                    newBody = getnote_body() // we don't check the body for null
+                    newBody = getNoteBody() // we don't check the body for null
                 )
             )
         }
@@ -373,7 +377,7 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
 
     private fun transitionToCollapsedMode() {
         note_title.fadeOut()
-        displayToolbarTitle(tool_bar_title, getnote_title(), true)
+        displayToolbarTitle(tool_bar_title, getNoteTitle(), true)
     }
 
     private fun transitionToExpandedMode() {
@@ -383,7 +387,6 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
 
     override fun inject() {
         getNoteComponent()?.inject(this)
-        printLogD("NoteDetailFragment", "injecting into component: ${getNoteComponent()}")
     }
 
 }

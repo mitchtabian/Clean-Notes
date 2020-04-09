@@ -43,6 +43,7 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.setupChannel()
+        view?.hideKeyboard()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

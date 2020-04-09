@@ -28,33 +28,29 @@ fun View.gone() {
 }
 
 fun View.fadeIn() {
-    if(visibility != View.VISIBLE){
-        val animationDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
-        apply {
-            visible()
-            alpha = 0f
-            animate()
-                .alpha(1f)
-                .setDuration(animationDuration.toLong())
-                .setListener(null)
-        }
+    val animationDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
+    apply {
+        visible()
+        alpha = 0f
+        animate()
+            .alpha(1f)
+            .setDuration(animationDuration.toLong())
+            .setListener(null)
     }
 }
 
 fun View.fadeOut(todoCallback: TodoCallback? = null){
-    if(alpha == 1f){
-        val animationDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
-        apply {
-            animate()
-                .alpha(0f)
-                .setDuration(animationDuration.toLong())
-                .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) {
-                        gone()
-                        todoCallback?.execute()
-                    }
-                })
-        }
+    val animationDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
+    apply {
+        animate()
+            .alpha(0f)
+            .setDuration(animationDuration.toLong())
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator) {
+                    gone()
+                    todoCallback?.execute()
+                }
+            })
     }
 }
 
