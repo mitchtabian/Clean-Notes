@@ -170,7 +170,6 @@ constructor(
                 )
             )
         )
-
     }
 
     private fun setNumNotesInCache(numNotes: Int){

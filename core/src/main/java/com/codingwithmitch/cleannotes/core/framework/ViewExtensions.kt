@@ -3,17 +3,24 @@ package com.codingwithmitch.cleannotes.core.framework
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.app.Activity
+import android.graphics.drawable.ColorDrawable
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingwithmitch.cleannotes.core.business.state.StateMessageCallback
 import com.codingwithmitch.cleannotes.core.util.TodoCallback
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 // threshold for when contents of collapsing toolbar is hidden
 const val COLLAPSING_TOOLBAR_VISIBILITY_THRESHOLD = -75
+const val CLICK_THRESHOLD = 150L // a click is considered 150ms or less
+const val CLICK_COLOR_CHANGE_TIME = 100L
 
 fun View.visible() {
     visibility = View.VISIBLE
@@ -53,6 +60,21 @@ fun View.fadeOut(todoCallback: TodoCallback? = null){
             })
     }
 }
+
+fun View.onSelectChangeColor(
+    lifeCycleScope: CoroutineScope,
+    clickColor: Int
+) = CoroutineScope(lifeCycleScope.coroutineContext).launch {
+        val intialColor = (background as ColorDrawable).color
+        setBackgroundColor(
+            ContextCompat.getColor(
+                context,
+                clickColor
+            )
+        )
+        delay(CLICK_COLOR_CHANGE_TIME)
+        setBackgroundColor(intialColor)
+    }
 
 
 fun EditText.disableContentInteraction() {

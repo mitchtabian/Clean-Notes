@@ -1,26 +1,25 @@
 package com.codingwithmitch.cleannotes.notes.framework.presentation.notelist
 
+import android.annotation.SuppressLint
 import android.view.*
 import androidx.recyclerview.widget.RecyclerView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
-import com.codingwithmitch.cleannotes.core.util.printLogD
+import com.codingwithmitch.cleannotes.core.framework.onSelectChangeColor
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.notes.R
 import kotlinx.android.synthetic.main.layout_note_list_item.view.*
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+
+
 
 class NoteListAdapter(
     private val interaction: Interaction? = null,
     private val lifeCycleScope: CoroutineScope,
-    private val itemTouchHelper: ItemTouchHelper
+    private val itemTouchHelper: ItemTouchHelper?
 ) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>(),
-    ItemTouchHelperAdapter
+    RecyclerView.Adapter<RecyclerView.ViewHolder>()
 {
 
     val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Note>() {
@@ -71,49 +70,34 @@ class NoteListAdapter(
         itemView: View,
         private val interaction: Interaction?,
         private val lifeCycleScope: CoroutineScope,
-        private val itemTouchHelper: ItemTouchHelper
+        private val itemTouchHelper: ItemTouchHelper?
     ) : RecyclerView.ViewHolder(itemView),
         GestureDetector.OnGestureListener,
         View.OnTouchListener
-
     {
 
         private var gestureDetector: GestureDetector
                 = GestureDetector(itemView.context, this)
+        private lateinit var note: Note
 
         fun bind(item: Note) = with(itemView) {
-//            itemView.setOnClickListener {
-//                onSelectChangeColor(it)
-//                interaction?.onItemSelected(adapterPosition, item)
-//            }
+            itemView.setOnClickListener {
+                itemView.onSelectChangeColor(
+                    lifeCycleScope = lifeCycleScope,
+                    clickColor = com.codingwithmitch.cleannotes.R.color.app_background_color
+                )
+                interaction?.onItemSelected(adapterPosition, note)
+            }
             itemView.setOnTouchListener(this@NoteViewHolder)
+            note = item
             note_title.text = item.title
             note_timestamp.text = item.updated_at
-        }
-
-        // change the color briefly when clicked
-        private fun onSelectChangeColor(view: View){
-            CoroutineScope(lifeCycleScope.coroutineContext).launch {
-                view.setBackgroundColor(
-                    ContextCompat.getColor(
-                        view.context,
-                        com.codingwithmitch.cleannotes.R.color.grey1
-                    )
-                )
-                delay(100)
-                view.setBackgroundColor(
-                    ContextCompat.getColor(
-                        view.context,
-                        com.codingwithmitch.cleannotes.R.color.colorPrimary
-                    )
-                )
-            }
         }
 
         override fun onShowPress(e: MotionEvent?) {
         }
 
-        override fun onSingleTapUp(e: MotionEvent?): Boolean {
+        override fun onSingleTapUp(event: MotionEvent?): Boolean {
             return false
         }
 
@@ -136,18 +120,16 @@ class NoteListAdapter(
             distanceX: Float,
             distanceY: Float
         ): Boolean {
-            return true
+            return false
         }
 
         override fun onLongPress(e: MotionEvent?) {
-            printLogD("ListAdapter", "${itemTouchHelper}")
-            printLogD("ListAdapter", "${this}")
-            itemTouchHelper.startSwipe(this@NoteViewHolder)
+            itemTouchHelper?.startSwipe(this@NoteViewHolder)
         }
 
-        override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-            gestureDetector.onTouchEvent(event)
-            return true
+        @SuppressLint("ClickableViewAccessibility")
+        override fun onTouch(view: View?, event: MotionEvent?): Boolean {
+            return gestureDetector.onTouchEvent(event)
         }
 
     }
@@ -156,10 +138,6 @@ class NoteListAdapter(
         fun onItemSelected(position: Int, item: Note)
     }
 
-    override fun onItemSwiped(position: Int) {
-        differ.currentList.removeAt(position)
-        notifyItemRemoved(position)
-    }
 }
 
 

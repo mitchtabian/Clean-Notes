@@ -31,26 +31,6 @@ constructor(
         itemTouchHelperAdapter.onItemSwiped(viewHolder.adapterPosition)
     }
 
-    override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
-        super.clearView(recyclerView, viewHolder)
-        viewHolder.itemView.setBackgroundColor(
-            ContextCompat.getColor(
-                viewHolder.itemView.context,
-                com.codingwithmitch.cleannotes.R.color.colorPrimary
-            ))
-    }
-
-    override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
-        super.onSelectedChanged(viewHolder, actionState)
-        if(actionState == ItemTouchHelper.ACTION_STATE_DRAG){
-            viewHolder?.itemView?.setBackgroundColor(
-                ContextCompat.getColor(
-                    viewHolder.itemView.context,
-                    com.codingwithmitch.cleannotes.R.color.grey1
-                ))
-        }
-    }
-
     override fun isLongPressDragEnabled(): Boolean {
         return false
     }

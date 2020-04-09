@@ -41,7 +41,8 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
         viewModelFactory
     }
 
-    lateinit var listAdapter: NoteListAdapter
+    private var listAdapter: NoteListAdapter? = null
+    private var itemTouchHelper: ItemTouchHelper? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,24 +97,23 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
     private fun setupRecyclerView(){
         recycler_view.apply {
             layoutManager = LinearLayoutManager(activity)
-            val topSpacingDecorator = TopSpacingItemDecoration(30)
+            val topSpacingDecorator = TopSpacingItemDecoration(20)
             addItemDecoration(topSpacingDecorator)
-            val itemTouchHelperCallback = NoteItemTouchHelperCallback(
-                this@NoteListFragment
+            itemTouchHelper = ItemTouchHelper(
+                NoteItemTouchHelperCallback(this@NoteListFragment)
             )
-            val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
             listAdapter = NoteListAdapter(
                 this@NoteListFragment,
                 lifecycleScope,
                 itemTouchHelper
             )
-            itemTouchHelper.attachToRecyclerView(this)
+            itemTouchHelper?.attachToRecyclerView(this)
             addOnScrollListener(object: RecyclerView.OnScrollListener(){
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
                     val layoutManager = recyclerView.layoutManager as LinearLayoutManager
                     val lastPosition = layoutManager.findLastVisibleItemPosition()
-                    if (lastPosition == listAdapter.itemCount.minus(1)) {
+                    if (lastPosition == listAdapter?.itemCount?.minus(1)) {
                         viewModel.nextPage()
                     }
                 }
@@ -132,7 +132,7 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
                         viewModel.setQueryExhausted(true)
                         onPaginationComplete() // for testing
                     }
-                    listAdapter.submitList(noteList)
+                    listAdapter?.submitList(noteList)
                 }
 
                 // a note been inserted or selected
@@ -186,7 +186,8 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
 
     override fun onDestroyView() {
         super.onDestroyView()
-        recycler_view.adapter = null // can leak memory
+        listAdapter = null // can leak memory
+        itemTouchHelper = null // can leak memory
     }
 
     override fun onItemSwiped(position: Int) {
