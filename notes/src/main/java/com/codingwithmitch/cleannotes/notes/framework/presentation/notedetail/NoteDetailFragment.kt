@@ -2,7 +2,6 @@ package com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail
 
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -21,7 +20,6 @@ import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.st
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteInteractionState.*
 import com.codingwithmitch.notes.R
 import com.google.android.material.appbar.AppBarLayout
-import com.yydcdut.markdown.MarkdownEditText
 import com.yydcdut.markdown.MarkdownProcessor
 import com.yydcdut.markdown.syntax.edit.EditFactory
 import kotlinx.android.synthetic.main.fragment_note_detail.*
@@ -42,9 +40,6 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         viewModelFactory
     }
 
-    private lateinit var noteTitle: EditText
-    private lateinit var noteBody: MarkdownEditText
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let { args ->
@@ -52,6 +47,7 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
                 viewModel.setNote(note)
             }?: onErrorRetrievingNoteFromBundle()
         }
+        viewModel.setupChannel()
     }
 
     private fun onErrorRetrievingNoteFromBundle(){
@@ -71,9 +67,6 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        noteTitle = view.findViewById(R.id.note_title)
-        noteBody = view.findViewById(R.id.note_body)
-
         onRestoreInstanceState(savedInstanceState)
         setupUI()
         setupOnBackPressDispatcher()
@@ -83,12 +76,12 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
             // TODO("handle click of due date")
         }
 
-        noteTitle.setOnClickListener {
-            onClickNoteTitle()
+        note_title.setOnClickListener {
+            onClicknote_title()
         }
 
-        noteBody.setOnClickListener {
-            onClickNoteBody()
+        note_body.setOnClickListener {
+            onClicknote_body()
         }
 
         setupMarkdown()
@@ -98,18 +91,18 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         activity?.run {
             val markdownProcessor = MarkdownProcessor(this)
             markdownProcessor.factory(EditFactory.create())
-            markdownProcessor.live(noteBody)
+            markdownProcessor.live(note_body)
         }
     }
 
-    private fun onClickNoteTitle(){
+    private fun onClicknote_title(){
         if(!viewModel.isEditingTitle()){
             updateAndSave()
             viewModel.setNoteInteractionTitleState(EditState())
         }
     }
 
-    private fun onClickNoteBody(){
+    private fun onClicknote_body(){
         if(!viewModel.isEditingBody()){
             updateAndSave()
             viewModel.setNoteInteractionBodyState(EditState())
@@ -129,7 +122,7 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
     }
 
     private fun updateAndSave(){
-        viewModel.updateNote(getNoteTitle(), getNoteBody())
+        viewModel.updateNote(getnote_title(), getnote_body())
         updateNote()
     }
 
@@ -146,9 +139,8 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
             if(viewState != null){
 
                 viewState.note?.let { note ->
-                    printLogD("NoteDetailFragment", "SETTING NOTE")
-//                    setNoteTitle(note.title)
-//                    setNoteBody(note.body)
+                    setnote_title(note.title)
+                    setnote_body(note.body)
                 }
             }
         })
@@ -177,7 +169,14 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
                         NOTE_DETAIL_ERROR_RETRIEVEING_SELECTED_NOTE -> {
                             findNavController().popBackStack()
                         }
+
+                        else -> {
+                            // do nothing
+                        }
                     }
+                }
+                else{
+                    viewModel.clearStateMessage()
                 }
             }
         })
@@ -200,13 +199,13 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
             when(state){
 
                 is EditState -> {
-                    noteTitle.enableContentInteraction()
+                    note_title.enableContentInteraction()
                     view?.showKeyboard()
                     displayEditStateToolbar()
                 }
 
                 is DefaultState -> {
-                    noteTitle.disableContentInteraction()
+                    note_title.disableContentInteraction()
                 }
             }
         })
@@ -216,13 +215,13 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
             when(state){
 
                 is EditState -> {
-                    noteBody.enableContentInteraction()
+                    note_body.enableContentInteraction()
                     view?.showKeyboard()
                     displayEditStateToolbar()
                 }
 
                 is DefaultState -> {
-                    noteBody.disableContentInteraction()
+                    note_body.disableContentInteraction()
                 }
             }
         })
@@ -257,22 +256,20 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         }
     }
 
-    private fun setNoteTitle(title: String){
-        printLogD("DetailFragment", "setNoteTitle: ${title}")
-        noteTitle.setText(title)
+    private fun setnote_title(title: String){
+        note_title.setText(title)
     }
 
-    private fun getNoteTitle(): String{
-        return noteTitle.text.toString()
+    private fun getnote_title(): String{
+        return note_title.text.toString()
     }
 
-    private fun getNoteBody(): String {
-        return noteBody.text.toString()
+    private fun getnote_body(): String {
+        return note_body.text.toString()
     }
 
-    private fun setNoteBody(body: String?){
-        printLogD("DetailFragment", "setNoteBody: ${body}")
-        noteBody.setText(body)
+    private fun setnote_body(body: String?){
+        note_body.setText(body)
     }
 
     private fun onRestoreInstanceState(savedInstanceState: Bundle?){
@@ -287,8 +284,8 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
 
     private fun setupUI(){
         uiController.displayBottomNav(false)
-        noteTitle.disableContentInteraction()
-        noteBody.disableContentInteraction()
+        note_title.disableContentInteraction()
+        note_body.disableContentInteraction()
         displayDefaultToolbar()
         transitionToExpandedMode()
 
@@ -342,8 +339,8 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 
-    private fun checkNoteTitleNotNull(): String? {
-        val title = noteTitle.text
+    private fun checknote_titleNotNull(): String? {
+        val title = note_title.text
         if (title.isNullOrBlank()) {
             viewModel.setStateEvent(
                 CreateStateMessageEvent(
@@ -363,24 +360,24 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
     }
 
     private fun updateNote() {
-        val title = checkNoteTitleNotNull()
+        val title = checknote_titleNotNull()
         if (title != null) {
             viewModel.setStateEvent(
                 UpdateNoteEvent(
                     newTitle = title,
-                    newBody = getNoteBody() // we don't check the body for null
+                    newBody = getnote_body() // we don't check the body for null
                 )
             )
         }
     }
 
     private fun transitionToCollapsedMode() {
-        noteTitle.fadeOut()
-        displayToolbarTitle(tool_bar_title, getNoteTitle(), true)
+        note_title.fadeOut()
+        displayToolbarTitle(tool_bar_title, getnote_title(), true)
     }
 
     private fun transitionToExpandedMode() {
-        noteTitle.fadeIn()
+        note_title.fadeIn()
         displayToolbarTitle(tool_bar_title, null, true)
     }
 

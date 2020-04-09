@@ -6,7 +6,10 @@ import com.codingwithmitch.cleannotes.core.di.scopes.FeatureScope
 import com.codingwithmitch.cleannotes.core.framework.BaseViewModel
 import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
+import com.codingwithmitch.cleannotes.notes.business.domain.repository.NoteRepository
 import com.codingwithmitch.cleannotes.notes.business.interactors.NoteDetailInteractors
+import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.DeleteNote
+import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.UpdateNote
 import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.UpdateNote.Companion.UPDATE_NOTE_FAILED_PK
 import com.codingwithmitch.cleannotes.notes.framework.datasource.model.NoteEntity
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.*
@@ -28,6 +31,7 @@ class NoteDetailViewModel
 constructor(
     private val noteInteractors: NoteDetailInteractors
 ): BaseViewModel<NoteDetailViewState>(){
+
 
     private val noteInteractionManager: NoteInteractionManager =
         NoteInteractionManager()
@@ -56,11 +60,7 @@ constructor(
                 }
 
                 is UpdateNoteEvent -> {
-                    printLogD("DetailViewModel", "UpdateNoteEvent")
                     getCurrentViewStateOrNew().note?.id?.let{ pk ->
-                        printLogD("DetailViewModel", "attempting update: ${stateEvent.newTitle}")
-                        printLogD("DetailViewModel", "attempting update: ${stateEvent.newBody}")
-                        printLogD("DetailViewModel", "attempting update: ${noteInteractors.updateNote}")
 
                         noteInteractors.updateNote.updateNote(
                             primaryKey = pk,

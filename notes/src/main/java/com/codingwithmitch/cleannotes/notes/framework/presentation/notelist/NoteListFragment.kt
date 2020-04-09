@@ -40,6 +40,11 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
 
     lateinit var listAdapter: NoteListAdapter
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.setupChannel()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

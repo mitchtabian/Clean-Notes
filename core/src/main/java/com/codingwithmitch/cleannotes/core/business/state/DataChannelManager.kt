@@ -3,6 +3,7 @@ package com.codingwithmitch.cleannotes.core.business.state
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.codingwithmitch.cleannotes.core.util.printLogD
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -62,13 +63,24 @@ abstract class DataChannelManager<ViewState> {
         stateEvent: StateEvent,
         jobFunction: Flow<DataState<ViewState>>
     ){
-        if(!isStateEventActive(stateEvent) && messageStack.size == 0){
+        if(!isStateEventActive(stateEvent) && isMessageStackEmpty()){
             addStateEvent(stateEvent)
             jobFunction
                 .onEach { dataState ->
                     offerToDataChannel(dataState)
                 }
                 .launchIn(getChannelScope())
+        }
+    }
+
+    private fun isMessageStackEmpty(): Boolean {
+        if(messageStack.isStackEmpty()){
+            printLogD("DataChannelManager", "MessageStack is empty.")
+            return true
+        }
+        else{
+            printLogD("DataChannelManager", "MessageStack is NOT emtpy.")
+            return false
         }
     }
 

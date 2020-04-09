@@ -18,6 +18,10 @@ class MessageStack: ArrayList<StateMessage>() {
     val stateMessage: LiveData<StateMessage?>
         get() = _stateMessage
 
+    fun isStackEmpty(): Boolean{
+        return size == 0
+    }
+
     override fun addAll(elements: Collection<StateMessage>): Boolean {
         for(element in elements){
             add(element)

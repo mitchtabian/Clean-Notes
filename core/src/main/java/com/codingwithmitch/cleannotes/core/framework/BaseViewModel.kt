@@ -71,9 +71,7 @@ abstract class BaseViewModel<ViewState> : ViewModel()
     fun launchJob(
         stateEvent: StateEvent,
         jobFunction: Flow<DataState<ViewState>>
-    ){
-        dataChannelManager.launchJob(stateEvent, jobFunction)
-    }
+    ) = dataChannelManager.launchJob(stateEvent, jobFunction)
 
     fun areAnyJobsActive(): Boolean{
         return dataChannelManager.numActiveJobs.value?.let {
