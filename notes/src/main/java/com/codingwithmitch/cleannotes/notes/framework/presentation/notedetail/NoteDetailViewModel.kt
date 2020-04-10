@@ -10,6 +10,7 @@ import com.codingwithmitch.cleannotes.notes.business.interactors.NoteDetailInter
 import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.UpdateNote.Companion.UPDATE_NOTE_FAILED_PK
 import com.codingwithmitch.cleannotes.notes.framework.datasource.model.NoteEntity
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.*
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.CollapsingToolbarState.*
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteDetailStateEvent.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -37,7 +38,6 @@ constructor(
         get() = noteInteractionManager.noteBodyState
     val collapsingToolbarState: LiveData<CollapsingToolbarState>
         get() = noteInteractionManager.collapsingToolbarState
-
 
     override fun handleNewData(data: NoteDetailViewState) {
         // no data coming in from requests...
@@ -90,6 +90,10 @@ constructor(
             }
             launchJob(stateEvent, job)
         }
+    }
+
+    fun resetCollapsingToolbarState(){
+        setCollapsingToolbarState(Expanded())
     }
 
     override fun initNewViewState(): NoteDetailViewState {
@@ -159,10 +163,10 @@ constructor(
     }
 
     fun isToolbarCollapsed() = collapsingToolbarState.toString()
-        .equals(CollapsingToolbarState.Collapsed().toString())
+        .equals(Collapsed().toString())
 
     fun isToolbarExpanded() = collapsingToolbarState.toString()
-        .equals(CollapsingToolbarState.Expanded().toString())
+        .equals(Expanded().toString())
 
     // return true if in EditState
     fun checkEditState() = noteInteractionManager.checkEditState()
