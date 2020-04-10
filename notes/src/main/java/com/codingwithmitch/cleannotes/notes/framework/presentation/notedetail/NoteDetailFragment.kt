@@ -128,8 +128,10 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
     }
 
     private fun updateAndSave(){
-        viewModel.updateNote(getNoteTitle(), getNoteBody())
-        updateNote()
+        if(viewModel.getNote() != null){
+            viewModel.updateNote(getNoteTitle(), getNoteBody())
+            updateNote()
+        }
     }
 
     override fun onPause() {
@@ -177,6 +179,7 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
                         }
 
                         DELETE_NOTE_SUCCESS -> {
+                            viewModel.setNote(null)
                             findNavController().popBackStack()
                         }
 

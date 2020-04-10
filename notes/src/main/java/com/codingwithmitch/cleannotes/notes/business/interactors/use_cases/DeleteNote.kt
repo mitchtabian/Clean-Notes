@@ -18,7 +18,6 @@ class DeleteNote<ViewState>(
         stateEvent: StateEvent
     ): Flow<DataState<ViewState>> = flow {
 
-        printLogD("DeleteNote", "attempting to delete: $primaryKey")
         val cacheResult = safeCacheCall(Dispatchers.IO){
             noteRepository.deleteNote(primaryKey)
         }
@@ -29,7 +28,6 @@ class DeleteNote<ViewState>(
                 stateEvent = stateEvent
             ){
                 override suspend fun handleSuccess(resultObj: Int): DataState<ViewState> {
-                    printLogD("DeleteNote", "handleSucces: ${resultObj}")
                     return if(resultObj > 0){
                         DataState.data(
                             response = Response(

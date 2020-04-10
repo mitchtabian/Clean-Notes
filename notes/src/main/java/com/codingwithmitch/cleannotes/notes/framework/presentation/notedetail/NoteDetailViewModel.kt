@@ -49,7 +49,6 @@ constructor(
             val job: Flow<DataState<NoteDetailViewState>> = when(stateEvent){
 
                 is DeleteNoteEvent -> {
-                    printLogD("DetailVieWModel", "DeleteNoteEvent")
                     noteInteractors.deleteNote.deleteNote(
                         primaryKey = stateEvent.primaryKey,
                         stateEvent = stateEvent
@@ -90,6 +89,10 @@ constructor(
             }
             launchJob(stateEvent, job)
         }
+    }
+
+    fun getNote(): Note? {
+        return getCurrentViewStateOrNew().note
     }
 
     fun resetCollapsingToolbarState(){
