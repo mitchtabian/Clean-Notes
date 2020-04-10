@@ -17,6 +17,7 @@ import javax.inject.Inject
 
 
 const val DELETE_PENDING_ERROR = "There is already a pending delete operation."
+const val NOTE_PENDING_DELETE_BUNDLE_KEY = "pending_delete"
 
 @ExperimentalCoroutinesApi
 @FlowPreview
@@ -142,6 +143,17 @@ constructor(
         setViewState(update)
     }
 
+    fun removePendingNoteFromList(){
+        val update = getCurrentViewStateOrNew()
+        val pendingNote = update.notePendingDelete
+        val list = update.noteList
+        if(list?.contains(pendingNote) == true){
+            list.remove(pendingNote)
+            update.noteList = list
+            setViewState(update)
+        }
+    }
+
     // can be selected from Recyclerview or created new from dialog
     fun setNote(note: Note?){
         val update = getCurrentViewStateOrNew()
@@ -188,10 +200,10 @@ constructor(
         // replace note in viewstate
         val update = getCurrentViewStateOrNew()
         update.notePendingDelete?.let {
+            setNotePendingDelete(null)
             update.noteList?.add(it)
         }
         setViewState(update)
-        setNotePendingDelete(null)
     }
 
 

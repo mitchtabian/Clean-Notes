@@ -13,6 +13,8 @@ import com.codingwithmitch.cleannotes.notes.framework.datasource.model.NoteEntit
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.*
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.CollapsingToolbarState.*
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteDetailStateEvent.*
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.DELETE_PENDING_ERROR
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListStateEvent
 import com.codingwithmitch.notes.R
 import kotlinx.android.synthetic.main.fragment_note_detail.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -186,6 +188,26 @@ constructor(
         )
         update.note = updatedNote
         setViewState(update)
+    }
+
+    fun isDeletePending(): Boolean{
+        if(isJobAlreadyActive(NoteListStateEvent.DeleteNoteEvent(primaryKey = 0))){
+            setStateEvent(
+                NoteListStateEvent.CreateStateMessageEvent(
+                    stateMessage = StateMessage(
+                        response = Response(
+                            message = DELETE_PENDING_ERROR,
+                            uiComponentType = UIComponentType.Toast(),
+                            messageType = MessageType.Info()
+                        )
+                    )
+                )
+            )
+            return true
+        }
+        else{
+            return false
+        }
     }
 
     fun setNoteInteractionTitleState(state: NoteInteractionState){

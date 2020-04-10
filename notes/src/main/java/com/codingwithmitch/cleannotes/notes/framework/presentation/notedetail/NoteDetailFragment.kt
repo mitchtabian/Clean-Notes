@@ -15,6 +15,7 @@ import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.DeleteNote
 import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.DeleteNote.Companion.DELETE_ARE_YOU_SURE
+import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.DeleteNote.Companion.DELETE_NOTE_PENDING
 import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.DeleteNote.Companion.DELETE_NOTE_SUCCESS
 import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.UpdateNote.Companion.UPDATE_NOTE_FAILED_PK
 import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.UpdateNote.Companion.UPDATE_NOTE_SUCCESS
@@ -25,6 +26,7 @@ import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.st
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteDetailStateEvent.*
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteInteractionState.DefaultState
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteInteractionState.EditState
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.NOTE_PENDING_DELETE_BUNDLE_KEY
 import com.codingwithmitch.notes.R
 import com.google.android.material.appbar.AppBarLayout
 import com.yydcdut.markdown.MarkdownProcessor
@@ -388,11 +390,9 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
                             object: AreYouSureCallback{
                                 override fun proceed() {
                                     viewModel.getCurrentViewStateOrNew().note?.let{note ->
-                                        viewModel.setStateEvent(
-                                            DeleteNoteEvent(
-                                                note.id
-                                            )
-                                        )
+                                        // Create bundle arg containing note to be deleted
+                                        // nav to NoteListFragment and clear backstack
+                                        initiateDeleteTransaction()
                                     }
                                 }
 
@@ -408,6 +408,13 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         )
     }
 
+    private fun initiateDeleteTransaction(){
+        val bundle = bundleOf(NOTE_PENDING_DELETE_BUNDLE_KEY to viewModel.getNote())
+        findNavController().navigate(
+            R.id.action_note_detail_fragment_to_noteListFragment,
+            bundle
+        )
+    }
 
     private fun setupOnBackPressDispatcher() {
         val callback = object : OnBackPressedCallback(true) {

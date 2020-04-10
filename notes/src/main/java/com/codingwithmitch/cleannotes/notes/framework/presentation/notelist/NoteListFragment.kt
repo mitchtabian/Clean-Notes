@@ -15,9 +15,7 @@ import com.codingwithmitch.cleannotes.core.business.state.*
 import com.codingwithmitch.cleannotes.core.framework.DialogInputCaptureCallback
 import com.codingwithmitch.cleannotes.core.framework.TopSpacingItemDecoration
 import com.codingwithmitch.cleannotes.core.framework.hideKeyboard
-import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
-import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.DeleteNote
 import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.DeleteNote.Companion.DELETE_NOTE_SUCCESS
 import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.DeleteNote.Companion.DELETE_UNDO
 import com.codingwithmitch.cleannotes.notes.framework.presentation.BaseNoteFragment
@@ -50,6 +48,12 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.setupChannel()
+        arguments?.let { args ->
+            args.getParcelable<Note>(NOTE_PENDING_DELETE_BUNDLE_KEY)?.let { note ->
+                viewModel.setNotePendingDelete(note)
+                viewModel.beginPendingDelete()
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -142,6 +146,9 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
                     navigateToDetailFragment(newNote)
                 }
 
+                viewState.notePendingDelete?.let { note ->
+                    viewModel.removePendingNoteFromList()
+                }
             }
         })
 
