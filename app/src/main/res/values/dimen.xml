@@ -20,7 +20,7 @@
     <dimen name="view_between_spacing">7dp</dimen>
     <dimen name="recyclerview_start_end_margins">5dp</dimen>
 
-    <dimen name="scrollview_bottom_margin">160dp</dimen>
+    <dimen name="scrollview_bottom_margin">80dp</dimen>
 
 
 

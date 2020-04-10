@@ -7,17 +7,23 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.codingwithmitch.cleannotes.core.R.drawable
+import com.codingwithmitch.cleannotes.R.drawable
 import com.codingwithmitch.cleannotes.core.business.state.*
 import com.codingwithmitch.cleannotes.core.framework.*
-import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.CollapsingToolbarState.*
 import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
+import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.DeleteNote
+import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.DeleteNote.Companion.DELETE_ARE_YOU_SURE
+import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.DeleteNote.Companion.DELETE_NOTE_SUCCESS
 import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.UpdateNote.Companion.UPDATE_NOTE_FAILED_PK
 import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.UpdateNote.Companion.UPDATE_NOTE_SUCCESS
 import com.codingwithmitch.cleannotes.notes.framework.presentation.BaseNoteFragment
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.CollapsingToolbarState.Collapsed
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.CollapsingToolbarState.Expanded
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteDetailStateEvent
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteDetailStateEvent.*
-import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteInteractionState.*
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteInteractionState.DefaultState
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteInteractionState.EditState
 import com.codingwithmitch.notes.R
 import com.google.android.material.appbar.AppBarLayout
 import com.yydcdut.markdown.MarkdownProcessor
@@ -170,6 +176,10 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
                             findNavController().popBackStack()
                         }
 
+                        DELETE_NOTE_SUCCESS -> {
+                            findNavController().popBackStack()
+                        }
+
                         else -> {
                             // do nothing
                         }
@@ -183,7 +193,6 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
 
         viewModel.collapsingToolbarState.observe(viewLifecycleOwner, Observer { state ->
 
-            printLogD("DetailFragment", "toolbar state: ${state}")
             when(state){
 
                 is Expanded -> {
@@ -237,7 +246,12 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
                     a.application.theme
                 )
             )
-            toolbar_secondary_icon.setImageDrawable(null)
+            toolbar_secondary_icon.setImageDrawable(
+                resources.getDrawable(
+                    drawable.ic_delete,
+                    a.application.theme
+                )
+            )
         }
     }
 
@@ -330,7 +344,40 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
                 viewModel.exitEditState()
                 displayDefaultToolbar()
             }
+            else{
+                deleteNote()
+            }
         }
+    }
+
+    private fun deleteNote(){
+        viewModel.setStateEvent(
+            CreateStateMessageEvent(
+                stateMessage = StateMessage(
+                    response = Response(
+                        message = DELETE_ARE_YOU_SURE,
+                        uiComponentType = UIComponentType.AreYouSureDialog(
+                            object: AreYouSureCallback{
+                                override fun proceed() {
+                                    viewModel.getCurrentViewStateOrNew().note?.let{note ->
+                                        viewModel.setStateEvent(
+                                            DeleteNoteEvent(
+                                                note.id
+                                            )
+                                        )
+                                    }
+                                }
+
+                                override fun cancel() {
+                                    // do nothing
+                                }
+                            }
+                        ),
+                        messageType = MessageType.Info()
+                    )
+                )
+            )
+        )
     }
 
 
@@ -393,6 +440,8 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         super.onDestroyView()
         viewModel.setNote(null) // clear out the note when leaving
     }
+
+
 }
 
 

@@ -6,4 +6,5 @@
     <string name="text_note_title_cannot_be_empty">Note title can not be empty.</string>
     <string name="text_Edit_body">Edit Body</string>
     <string name="text_Edit_title">Edit Title</string>
+    <string name="text_Delete">Delete</string>
 </resources>

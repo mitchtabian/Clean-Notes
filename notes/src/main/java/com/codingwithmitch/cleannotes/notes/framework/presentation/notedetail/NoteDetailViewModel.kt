@@ -49,6 +49,7 @@ constructor(
             val job: Flow<DataState<NoteDetailViewState>> = when(stateEvent){
 
                 is DeleteNoteEvent -> {
+                    printLogD("DetailVieWModel", "DeleteNoteEvent")
                     noteInteractors.deleteNote.deleteNote(
                         primaryKey = stateEvent.primaryKey,
                         stateEvent = stateEvent

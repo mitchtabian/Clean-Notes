@@ -63,7 +63,8 @@ abstract class DataChannelManager<ViewState> {
         stateEvent: StateEvent,
         jobFunction: Flow<DataState<ViewState>>
     ){
-        if(!isStateEventActive(stateEvent) && isMessageStackEmpty()){
+//        if(!isStateEventActive(stateEvent) && isMessageStackEmpty()){
+        if(!isStateEventActive(stateEvent)){
             addStateEvent(stateEvent)
             jobFunction
                 .onEach { dataState ->

@@ -91,7 +91,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/scrollview_bottom_margin"
                 android:background="@color/app_background_color"
-                android:layout_gravity="bottom"
                 >
 
             </View>
