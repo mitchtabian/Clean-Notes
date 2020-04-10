@@ -6,7 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
+import com.codingwithmitch.cleannotes.core.framework.TextUtils.handleTextOverflow
+import com.codingwithmitch.cleannotes.core.framework.handleTextViewOverflow
 import com.codingwithmitch.cleannotes.core.framework.onSelectChangeColor
+import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.notes.R
 import kotlinx.android.synthetic.main.layout_note_list_item.view.*
@@ -92,6 +95,7 @@ class NoteListAdapter(
             note = item
             note_title.text = item.title
             note_timestamp.text = item.updated_at
+            note_title.handleTextViewOverflow(95, note.title)
         }
 
         override fun onShowPress(e: MotionEvent?) {

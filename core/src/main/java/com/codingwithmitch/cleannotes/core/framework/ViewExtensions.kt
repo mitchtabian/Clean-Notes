@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.app.Activity
 import android.graphics.drawable.ColorDrawable
 import android.view.View
+import android.view.ViewTreeObserver
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -13,7 +14,9 @@ import androidx.core.content.ContextCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.codingwithmitch.cleannotes.core.business.state.StateMessageCallback
 import com.codingwithmitch.cleannotes.core.util.TodoCallback
+import com.codingwithmitch.cleannotes.core.util.printLogD
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -75,6 +78,23 @@ fun View.onSelectChangeColor(
         delay(CLICK_COLOR_CHANGE_TIME)
         setBackgroundColor(intialColor)
     }
+
+fun TextView.handleTextViewOverflow(cutOffPercent: Int, content: String){
+    val tv = this
+    tv.viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener{
+        override fun onGlobalLayout() {
+            tv.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            tv.measure(0,0)
+            val updatedContent = TextUtils.handleTextOverflow(
+                cutOffPercent = cutOffPercent,
+                c = tv.measuredWidth.toFloat(),
+                v = tv.width.toFloat(),
+                originalString = content
+            )
+            tv.text = updatedContent
+        }
+    })
+}
 
 
 fun EditText.disableContentInteraction() {
