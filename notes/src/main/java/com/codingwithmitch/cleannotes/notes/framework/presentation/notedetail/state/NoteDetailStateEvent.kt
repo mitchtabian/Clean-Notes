@@ -20,10 +20,7 @@ sealed class NoteDetailStateEvent: StateEvent {
     }
 
 
-    class UpdateNoteEvent(
-        val newTitle: String,
-        val newBody: String?
-    ): NoteDetailStateEvent(){
+    class UpdateNoteEvent: NoteDetailStateEvent(){
 
         override fun errorInfo(): String {
             return "Error updating note."

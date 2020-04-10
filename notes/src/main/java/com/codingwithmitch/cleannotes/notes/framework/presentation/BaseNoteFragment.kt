@@ -10,10 +10,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.annotation.IdRes
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
-import com.codingwithmitch.cleannotes.core.framework.fadeIn
-import com.codingwithmitch.cleannotes.core.framework.fadeOut
-import com.codingwithmitch.cleannotes.core.framework.gone
-import com.codingwithmitch.cleannotes.core.framework.visible
+import com.codingwithmitch.cleannotes.core.framework.*
 import com.codingwithmitch.cleannotes.core.util.TodoCallback
 import com.codingwithmitch.cleannotes.notes.di.NotesFeatureImpl
 import com.codingwithmitch.cleannotes.presentation.BaseApplication
@@ -72,6 +69,7 @@ constructor(
         animation: Boolean
     ){
         textView.text = title
+        textView.handleTextViewOverflow(90, title)
         if(animation){
             textView.fadeIn()
         }

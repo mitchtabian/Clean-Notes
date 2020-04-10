@@ -57,7 +57,7 @@ fun View.fadeOut(todoCallback: TodoCallback? = null){
             .setDuration(animationDuration.toLong())
             .setListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
-                    gone()
+                    invisible()
                     todoCallback?.execute()
                 }
             })
@@ -80,6 +80,7 @@ fun View.onSelectChangeColor(
     }
 
 fun TextView.handleTextViewOverflow(cutOffPercent: Int, content: String){
+    printLogD("ViewEx", "handleTextViewOverflow")
     val tv = this
     tv.viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener{
         override fun onGlobalLayout() {

@@ -83,11 +83,11 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         }
 
         note_title.setOnClickListener {
-            onClicknote_title()
+            onClick_noteTitle()
         }
 
         note_body.setOnClickListener {
-            onClicknote_body()
+            onClick_noteBody()
         }
 
         setupMarkdown()
@@ -101,16 +101,18 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         }
     }
 
-    private fun onClicknote_title(){
+    private fun onClick_noteTitle(){
         if(!viewModel.isEditingTitle()){
-            updateAndSave()
+            viewModel.updateNoteBody(getNoteBody())
+            updateNote()
             viewModel.setNoteInteractionTitleState(EditState())
         }
     }
 
-    private fun onClicknote_body(){
+    private fun onClick_noteBody(){
         if(!viewModel.isEditingBody()){
-            updateAndSave()
+            viewModel.updateNoteTitle(getNoteTitle())
+            updateNote()
             viewModel.setNoteInteractionBodyState(EditState())
         }
     }
@@ -118,25 +120,24 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
     private fun onBackPressed() {
         view?.hideKeyboard()
         if(viewModel.checkEditState()){
+            if(viewModel.isEditingBody()) {
+                viewModel.updateNoteBody(getNoteBody())
+            }
+            if(viewModel.isEditingTitle()) {
+                viewModel.updateNoteTitle(getNoteTitle())
+            }
             viewModel.exitEditState()
             displayDefaultToolbar()
-            updateAndSave()
+            updateNote()
         }
         else{
             findNavController().popBackStack()
         }
     }
 
-    private fun updateAndSave(){
-        if(viewModel.getNote() != null){
-            viewModel.updateNote(getNoteTitle(), getNoteBody())
-            updateNote()
-        }
-    }
-
     override fun onPause() {
         super.onPause()
-        updateAndSave()
+        updateNote()
     }
 
 
@@ -275,7 +276,7 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         }
     }
 
-    private fun setNoteTitle(title: String){
+    private fun setNoteTitle(title: String) {
         note_title.setText(title)
     }
 
@@ -283,7 +284,7 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         return note_title.text.toString()
     }
 
-    private fun getNoteBody(): String {
+    private fun getNoteBody(): String{
         return note_body.text.toString()
     }
 
@@ -315,7 +316,10 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
 
                 if(offset < COLLAPSING_TOOLBAR_VISIBILITY_THRESHOLD){
                     if(viewModel.isEditingTitle()){
-                        onBackPressed() // save any changes
+                        viewModel.updateNoteTitle(getNoteTitle())
+                        viewModel.exitEditState()
+                        displayDefaultToolbar()
+                        updateNote()
                     }
                     viewModel.setCollapsingToolbarState(Collapsed())
                 }
@@ -341,9 +345,7 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         toolbar_secondary_icon.setOnClickListener {
             if(viewModel.checkEditState()){
                 view?.hideKeyboard()
-                // pressing 'checkmark'
-                // -> save any changes to title or body
-                updateAndSave()
+                updateNote()
                 viewModel.exitEditState()
                 displayDefaultToolbar()
             }
@@ -393,36 +395,11 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 
-    private fun checknote_titleNotNull(): String? {
-        val title = note_title.text
-        if (title.isNullOrBlank()) {
-            viewModel.setStateEvent(
-                CreateStateMessageEvent(
-                    stateMessage = StateMessage(
-                        response = Response(
-                            message = getString(R.string.text_note_title_cannot_be_empty),
-                            uiComponentType = UIComponentType.Dialog(),
-                            messageType = MessageType.Info()
-                        )
-                    )
-                )
-            )
-            return null
-        } else {
-            return title.toString()
-        }
-    }
 
     private fun updateNote() {
-        val title = checknote_titleNotNull()
-        if (title != null) {
-            viewModel.setStateEvent(
-                UpdateNoteEvent(
-                    newTitle = title,
-                    newBody = getNoteBody() // we don't check the body for null
-                )
-            )
-        }
+        viewModel.setStateEvent(
+            UpdateNoteEvent()
+        )
     }
 
     private fun transitionToCollapsedMode() {

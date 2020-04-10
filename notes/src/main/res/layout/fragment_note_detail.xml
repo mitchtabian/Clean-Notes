@@ -104,20 +104,20 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height_tall"
+        android:layout_height="wrap_content"
         android:id="@+id/app_bar"
         >
 
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:expandedTitleGravity="top"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             >
 
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_collapseMode="parallax"
@@ -125,13 +125,14 @@
                 android:paddingStart="@dimen/default_view_margin"
                 android:paddingEnd="@dimen/default_view_margin"
                 android:clipToPadding="false"
+                android:orientation="vertical"
                 >
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="@dimen/toolbar_height"
                     android:id="@+id/note_title"
-                    android:layout_centerVertical="true"
                     android:textColor="#000"
                     android:textSize="22sp"
                     android:hint="@string/text_enter_a_title"
@@ -141,12 +142,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/colorAccent"
-                    android:layout_alignParentBottom="true"
                     android:layout_marginEnd="@dimen/default_view_margin_negative"
                     android:layout_marginStart="@dimen/default_view_margin_negative"
                     />
 
-            </RelativeLayout>
+            </LinearLayout>
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/tool_bar"

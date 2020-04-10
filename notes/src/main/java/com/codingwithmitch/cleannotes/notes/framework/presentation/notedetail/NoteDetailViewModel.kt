@@ -7,11 +7,14 @@ import com.codingwithmitch.cleannotes.core.framework.BaseViewModel
 import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.notes.business.interactors.NoteDetailInteractors
+import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.UpdateNote.Companion.UPDATE_NOTE_FAILED
 import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.UpdateNote.Companion.UPDATE_NOTE_FAILED_PK
 import com.codingwithmitch.cleannotes.notes.framework.datasource.model.NoteEntity
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.*
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.CollapsingToolbarState.*
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteDetailStateEvent.*
+import com.codingwithmitch.notes.R
+import kotlinx.android.synthetic.main.fragment_note_detail.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -20,6 +23,7 @@ import javax.inject.Inject
 
 const val NOTE_DETAIL_ERROR_RETRIEVEING_SELECTED_NOTE = "Error retrieving selected note from bundle."
 const val NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY = "selectedNote"
+const val NOTE_TITLE_CANNOT_BE_EMPTY = "Note title can not be empty."
 
 @ExperimentalCoroutinesApi
 @FlowPreview
@@ -56,24 +60,26 @@ constructor(
                 }
 
                 is UpdateNoteEvent -> {
-                    getCurrentViewStateOrNew().note?.id?.let{ pk ->
-
+                    val pk = getNote()?.id
+                    if(!isNoteTitleNull() && pk != null){
                         noteInteractors.updateNote.updateNote(
                             primaryKey = pk,
-                            newTitle = stateEvent.newTitle,
-                            newBody = stateEvent.newBody,
+                            newTitle = getNote()!!.title,
+                            newBody = getNote()!!.body,
                             stateEvent = stateEvent
                         )
-                    }?: emitStateMessageEvent(
-                        stateMessage = StateMessage(
-                            response = Response(
-                                message = UPDATE_NOTE_FAILED_PK,
-                                uiComponentType = UIComponentType.Dialog(),
-                                messageType = MessageType.Error()
-                            )
-                        ),
-                        stateEvent = stateEvent
-                    )
+                    }else{
+                        emitStateMessageEvent(
+                            stateMessage = StateMessage(
+                                response = Response(
+                                    message = UPDATE_NOTE_FAILED,
+                                    uiComponentType = UIComponentType.Dialog(),
+                                    messageType = MessageType.Error()
+                                )
+                            ),
+                            stateEvent = stateEvent
+                        )
+                    }
                 }
 
                 is CreateStateMessageEvent -> {
@@ -91,6 +97,26 @@ constructor(
         }
     }
 
+    private fun isNoteTitleNull(): Boolean {
+        val title = getNote()?.title
+        if (title.isNullOrBlank()) {
+            setStateEvent(
+                CreateStateMessageEvent(
+                    stateMessage = StateMessage(
+                        response = Response(
+                            message = NOTE_TITLE_CANNOT_BE_EMPTY,
+                            uiComponentType = UIComponentType.Dialog(),
+                            messageType = MessageType.Info()
+                        )
+                    )
+                )
+            )
+            return true
+        } else {
+            return false
+        }
+    }
+
     fun getNote(): Note? {
         return getCurrentViewStateOrNew().note
     }
@@ -101,6 +127,10 @@ constructor(
 
     override fun initNewViewState(): NoteDetailViewState {
         return NoteDetailViewState()
+    }
+
+    fun getCollapsingToolbarState(): CollapsingToolbarState? {
+        return collapsingToolbarState.value
     }
 
     fun setNote(note: Note?){
@@ -124,7 +154,7 @@ constructor(
         updateNoteBody(body)
     }
 
-    private fun updateNoteTitle(title: String?){
+    fun updateNoteTitle(title: String?){
         if(title == null){
             setStateEvent(
                 CreateStateMessageEvent(
@@ -148,7 +178,7 @@ constructor(
         }
     }
 
-    private fun updateNoteBody(body: String?){
+    fun updateNoteBody(body: String?){
         val update = getCurrentViewStateOrNew()
         val updatedNote = update.note?.copy(
             body = body?: ""
