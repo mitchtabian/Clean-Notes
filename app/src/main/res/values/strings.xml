@@ -19,5 +19,6 @@
     <string name="are_you_sure">Are you sure?</string>
     <string name="text_yes">Yes</string>
     <string name="text_enter_a_title">Enter a title</string>
+    <string name="text_undo">Undo</string>
 
 </resources>

@@ -6,16 +6,17 @@ import com.codingwithmitch.cleannotes.core.framework.BaseViewModel
 import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.notes.business.interactors.NoteListInteractors
-import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.DeleteNote.Companion.DELETE_NOTE_FAILED_NO_PRIMARY_KEY
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_FILTER_DATE_UPDATED
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_ORDER_DESC
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteFactory
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListStateEvent.*
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
+
+
+const val DELETE_PENDING_ERROR = "There is already a pending delete operation."
 
 @ExperimentalCoroutinesApi
 @FlowPreview
@@ -148,28 +149,56 @@ constructor(
         setViewState(update)
     }
 
-    fun deleteNote(position: Int){
-
-        // remove from viewstate
-        val update = getCurrentViewStateOrNew()
-        val note = update.noteList?.get(position)
-        update.noteList?.removeAt(position)
-        setViewState(update)
-
-        // delete from cache
-        note?.id?.let { primaryKey ->
-            setStateEvent(DeleteNoteEvent(primaryKey))
-        }?: setStateEvent(
-            CreateStateMessageEvent(
-                stateMessage = StateMessage(
-                    response = Response(
-                        message = DELETE_NOTE_FAILED_NO_PRIMARY_KEY,
-                        uiComponentType = UIComponentType.Dialog(),
-                        messageType = MessageType.Error()
+    fun isDeletePending(): Boolean{
+        if(isJobAlreadyActive(DeleteNoteEvent(primaryKey = 0))){
+            setStateEvent(
+                CreateStateMessageEvent(
+                    stateMessage = StateMessage(
+                        response = Response(
+                            message = DELETE_PENDING_ERROR,
+                            uiComponentType = UIComponentType.Toast(),
+                            messageType = MessageType.Info()
+                        )
                     )
                 )
             )
-        )
+            return true
+        }
+        else{
+            return false
+        }
+    }
+
+    fun onCompleteDelete(){
+        setNotePendingDelete(null)
+    }
+
+    fun beginPendingDelete(){
+        // remove from viewstate
+        val update = getCurrentViewStateOrNew()
+        update.notePendingDelete?.let { note ->
+            update.noteList?.remove(note)
+            setViewState(update)
+            setStateEvent(DeleteNoteEvent(note.id))
+        }
+
+    }
+
+    fun undoDelete(){
+        // replace note in viewstate
+        val update = getCurrentViewStateOrNew()
+        update.notePendingDelete?.let {
+            update.noteList?.add(it)
+        }
+        setViewState(update)
+        setNotePendingDelete(null)
+    }
+
+
+    fun setNotePendingDelete(note: Note?){
+        val update = getCurrentViewStateOrNew()
+        update.notePendingDelete = note
+        setViewState(update)
     }
 
     private fun setNumNotesInCache(numNotes: Int){

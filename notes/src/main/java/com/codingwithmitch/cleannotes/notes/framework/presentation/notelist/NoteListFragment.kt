@@ -17,6 +17,9 @@ import com.codingwithmitch.cleannotes.core.framework.TopSpacingItemDecoration
 import com.codingwithmitch.cleannotes.core.framework.hideKeyboard
 import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
+import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.DeleteNote
+import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.DeleteNote.Companion.DELETE_NOTE_SUCCESS
+import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.DeleteNote.Companion.DELETE_UNDO
 import com.codingwithmitch.cleannotes.notes.framework.presentation.BaseNoteFragment
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListStateEvent.*
@@ -92,8 +95,6 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
         )
     }
 
-    private fun deleteNote(position: Int) = viewModel.deleteNote(position)
-
     private fun setupRecyclerView(){
         recycler_view.apply {
             layoutManager = LinearLayoutManager(activity)
@@ -133,12 +134,14 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
                         onPaginationComplete() // for testing
                     }
                     listAdapter?.submitList(noteList)
+                    listAdapter?.notifyDataSetChanged()
                 }
 
                 // a note been inserted or selected
                 viewState.newNote?.let { newNote ->
                     navigateToDetailFragment(newNote)
                 }
+
             }
         })
 
@@ -148,6 +151,12 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
 
         viewModel.stateMessage.observe(viewLifecycleOwner, Observer { stateMessage ->
             stateMessage?.let { message ->
+                if(message.response.message?.equals(DELETE_UNDO) == true){
+                    viewModel.undoDelete()
+                }
+                if(message.response.message?.equals(DELETE_NOTE_SUCCESS) == true){
+                    viewModel.onCompleteDelete()
+                }
                 uiController.onResponseReceived(
                     response = message.response,
                     stateMessageCallback = object: StateMessageCallback {
@@ -190,7 +199,13 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
     }
 
     override fun onItemSwiped(position: Int) {
-        deleteNote(position)
+        if(!viewModel.isDeletePending()){
+            viewModel.setNotePendingDelete(listAdapter?.getNote(position))
+            viewModel.beginPendingDelete()
+        }
+        else{
+            listAdapter?.notifyDataSetChanged()
+        }
     }
 }
 

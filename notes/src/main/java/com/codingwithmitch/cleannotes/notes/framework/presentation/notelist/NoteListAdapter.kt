@@ -6,15 +6,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
-import com.codingwithmitch.cleannotes.core.framework.TextUtils.handleTextOverflow
-import com.codingwithmitch.cleannotes.core.framework.handleTextViewOverflow
 import com.codingwithmitch.cleannotes.core.framework.onSelectChangeColor
 import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.notes.R
 import kotlinx.android.synthetic.main.layout_note_list_item.view.*
 import kotlinx.coroutines.CoroutineScope
-
+import java.lang.IndexOutOfBoundsException
 
 
 class NoteListAdapter(
@@ -66,6 +64,15 @@ class NoteListAdapter(
 
     fun submitList(list: List<Note>) {
         differ.submitList(list)
+    }
+
+    fun getNote(index: Int): Note? {
+        return try{
+            differ.currentList[index]
+        }catch (e: IndexOutOfBoundsException){
+            e.printStackTrace()
+            null
+        }
     }
 
     class NoteViewHolder

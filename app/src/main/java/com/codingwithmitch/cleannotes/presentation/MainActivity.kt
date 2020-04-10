@@ -15,13 +15,11 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.afollestad.materialdialogs.input.input
 import com.codingwithmitch.cleannotes.R
-import com.codingwithmitch.cleannotes.core.business.state.AreYouSureCallback
-import com.codingwithmitch.cleannotes.core.business.state.MessageType
-import com.codingwithmitch.cleannotes.core.business.state.Response
-import com.codingwithmitch.cleannotes.core.business.state.StateMessageCallback
+import com.codingwithmitch.cleannotes.core.business.state.*
 import com.codingwithmitch.cleannotes.core.business.state.UIComponentType.*
 import com.codingwithmitch.cleannotes.core.framework.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -177,6 +175,18 @@ class MainActivity : AppCompatActivity(),
 
         when(response.uiComponentType){
 
+            is SnackBar -> {
+                (response.uiComponentType as SnackBar).undoCallback?.let { callback ->
+                    response.message?.let { msg ->
+                        displaySnackbar(
+                            message = msg,
+                            snackbarUndoCallback = callback,
+                            stateMessageCallback = stateMessageCallback
+                        )
+                    }
+                }
+            }
+
             is AreYouSureDialog -> {
 
                 response.message?.let {
@@ -211,6 +221,24 @@ class MainActivity : AppCompatActivity(),
                 stateMessageCallback.removeMessageFromStack()
             }
         }
+    }
+
+    private fun displaySnackbar(
+        message: String,
+        snackbarUndoCallback: SnackbarUndoCallback,
+        stateMessageCallback: StateMessageCallback
+    ){
+        val snackbar = Snackbar.make(
+            findViewById(R.id.main_container),
+            message,
+            Snackbar.LENGTH_LONG
+        )
+        snackbar.setAction(
+            getString(R.string.text_undo),
+            SnackbarUndoListener(snackbarUndoCallback)
+        )
+        snackbar.show()
+        stateMessageCallback.removeMessageFromStack()
     }
 
     private fun displayDialog(

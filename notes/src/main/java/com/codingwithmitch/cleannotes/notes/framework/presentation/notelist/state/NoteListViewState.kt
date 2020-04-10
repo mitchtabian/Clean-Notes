@@ -9,6 +9,7 @@ data class NoteListViewState(
 
     var noteList: ArrayList<Note>? = null,
     var newNote: Note? = null, // note that can be created with fab
+    var notePendingDelete: Note? = null, // set when delete is pending (can be undone)
     var searchQuery: String? = null,
     var page: Int? = null,
     var isQueryExhausted: Boolean? = null,

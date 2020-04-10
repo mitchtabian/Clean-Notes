@@ -1,5 +1,7 @@
 package com.codingwithmitch.cleannotes.core.business.state
 
+import android.view.View
+
 
 data class StateMessage(val response: Response)
 
@@ -17,6 +19,10 @@ sealed class UIComponentType{
 
     class AreYouSureDialog(
         val callback: AreYouSureCallback
+    ): UIComponentType()
+
+    class SnackBar(
+        val undoCallback: SnackbarUndoCallback? = null
     ): UIComponentType()
 
     class None: UIComponentType()
@@ -46,6 +52,26 @@ interface AreYouSureCallback {
 
     fun cancel()
 }
+
+interface SnackbarUndoCallback {
+
+    fun undo()
+}
+
+class SnackbarUndoListener
+    constructor(
+        private val snackbarUndoCallback: SnackbarUndoCallback
+    ): View.OnClickListener {
+
+    override fun onClick(v: View?) {
+        snackbarUndoCallback.undo()
+    }
+
+}
+
+
+
+
 
 
 

@@ -1,6 +1,5 @@
 package com.codingwithmitch.cleannotes.presentation
 
-import android.view.View
 import com.codingwithmitch.cleannotes.core.business.state.Response
 import com.codingwithmitch.cleannotes.core.business.state.StateMessageCallback
 import com.codingwithmitch.cleannotes.core.framework.DialogInputCaptureCallback
