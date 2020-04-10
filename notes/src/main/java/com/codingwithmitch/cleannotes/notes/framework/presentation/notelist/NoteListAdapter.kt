@@ -95,7 +95,6 @@ class NoteListAdapter(
             note = item
             note_title.text = item.title
             note_timestamp.text = item.updated_at
-            note_title.handleTextViewOverflow(95, note.title)
         }
 
         override fun onShowPress(e: MotionEvent?) {

@@ -155,6 +155,7 @@ constructor(
     }
 
     fun updateNoteTitle(title: String?){
+        printLogD("DetailViewModel", "updating title: ${title}")
         if(title == null){
             setStateEvent(
                 CreateStateMessageEvent(

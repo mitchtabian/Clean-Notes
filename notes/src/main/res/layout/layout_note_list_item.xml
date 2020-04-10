@@ -27,7 +27,9 @@
         android:lines="1"
         android:layout_marginTop="@dimen/default_view_margin"
         android:layout_marginBottom="@dimen/default_view_margin"
-        android:layout_marginStart="@dimen/default_view_margin"/>
+        android:layout_marginStart="@dimen/default_view_margin"
+        android:maxLines="1"
+        android:ellipsize="end"/>
 
 
 

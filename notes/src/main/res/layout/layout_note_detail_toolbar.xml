@@ -31,6 +31,7 @@
         android:gravity="center_vertical"
         android:textSize="@dimen/page_title_size"
         android:maxLines="1"
+        android:ellipsize="end"
         />
 
 

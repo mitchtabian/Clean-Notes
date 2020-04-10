@@ -177,7 +177,6 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
 
     override fun inject() {
         getNoteComponent()?.inject(this)
-        printLogD("NoteListFragment", "injecting into component: ${getNoteComponent()}")
     }
 
     override fun onItemSelected(position: Int, item: Note) {

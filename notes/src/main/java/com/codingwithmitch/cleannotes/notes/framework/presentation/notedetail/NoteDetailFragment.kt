@@ -3,6 +3,7 @@ package com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -48,11 +49,23 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let { args ->
-            args.getParcelable<Note>(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY)?.let { note ->
+
+        // get Note after a rotation
+        savedInstanceState?.let { inState ->
+            (inState.getParcelable(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY) as Note?)?.let{ note ->
                 viewModel.setNoteFromBundle(note)
-            }?: onErrorRetrievingNoteFromBundle()
+            }
         }
+
+        // get Note after navigation
+        if(viewModel.getNote() == null){
+            arguments?.let { args ->
+                args.getParcelable<Note>(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY)?.let { note ->
+                    viewModel.setNoteFromBundle(note)
+                }?: onErrorRetrievingNoteFromBundle()
+            }
+        }
+
         viewModel.setupChannel()
     }
 
@@ -103,7 +116,7 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
 
     private fun onClick_noteTitle(){
         if(!viewModel.isEditingTitle()){
-            viewModel.updateNoteBody(getNoteBody())
+            updateBodyInViewModel()
             updateNote()
             viewModel.setNoteInteractionTitleState(EditState())
         }
@@ -111,7 +124,7 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
 
     private fun onClick_noteBody(){
         if(!viewModel.isEditingBody()){
-            viewModel.updateNoteTitle(getNoteTitle())
+            updateTitleInViewModel()
             updateNote()
             viewModel.setNoteInteractionBodyState(EditState())
         }
@@ -120,15 +133,11 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
     private fun onBackPressed() {
         view?.hideKeyboard()
         if(viewModel.checkEditState()){
-            if(viewModel.isEditingBody()) {
-                viewModel.updateNoteBody(getNoteBody())
-            }
-            if(viewModel.isEditingTitle()) {
-                viewModel.updateNoteTitle(getNoteTitle())
-            }
+            updateBodyInViewModel()
+            updateTitleInViewModel()
+            updateNote()
             viewModel.exitEditState()
             displayDefaultToolbar()
-            updateNote()
         }
         else{
             findNavController().popBackStack()
@@ -137,6 +146,8 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
 
     override fun onPause() {
         super.onPause()
+        updateTitleInViewModel()
+        updateBodyInViewModel()
         updateNote()
     }
 
@@ -304,6 +315,18 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         }
     }
 
+    private fun updateTitleInViewModel(){
+        if(viewModel.isEditingTitle()){
+            viewModel.updateNoteTitle(getNoteTitle())
+        }
+    }
+
+    private fun updateBodyInViewModel(){
+        if(viewModel.isEditingBody()){
+            viewModel.updateNoteBody(getNoteBody())
+        }
+    }
+
     private fun setupUI(){
         uiController.displayBottomNav(false)
         note_title.disableContentInteraction()
@@ -315,8 +338,8 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
             AppBarLayout.OnOffsetChangedListener{_, offset ->
 
                 if(offset < COLLAPSING_TOOLBAR_VISIBILITY_THRESHOLD){
+                    updateTitleInViewModel()
                     if(viewModel.isEditingTitle()){
-                        viewModel.updateNoteTitle(getNoteTitle())
                         viewModel.exitEditState()
                         displayDefaultToolbar()
                         updateNote()
@@ -331,8 +354,6 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         toolbar_primary_icon.setOnClickListener {
             if(viewModel.checkEditState()){
                 view?.hideKeyboard()
-                // pressing 'x'
-                // -> discard any changes made to title or body
                 viewModel.triggerNoteObservers()
                 viewModel.exitEditState()
                 displayDefaultToolbar()
@@ -345,6 +366,8 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         toolbar_secondary_icon.setOnClickListener {
             if(viewModel.checkEditState()){
                 view?.hideKeyboard()
+                updateTitleInViewModel()
+                updateBodyInViewModel()
                 updateNote()
                 viewModel.exitEditState()
                 displayDefaultToolbar()
@@ -422,7 +445,10 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         viewModel.resetCollapsingToolbarState()
     }
 
-
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY, viewModel.getNote())
+    }
 }
 
 

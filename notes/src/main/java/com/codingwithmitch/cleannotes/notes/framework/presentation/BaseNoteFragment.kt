@@ -69,7 +69,6 @@ constructor(
         animation: Boolean
     ){
         textView.text = title
-        textView.handleTextViewOverflow(90, title)
         if(animation){
             textView.fadeIn()
         }
