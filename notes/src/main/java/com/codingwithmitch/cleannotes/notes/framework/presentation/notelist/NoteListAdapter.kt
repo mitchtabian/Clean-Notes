@@ -63,7 +63,12 @@ class NoteListAdapter(
     }
 
     fun submitList(list: List<Note>) {
-        differ.submitList(list)
+        val commitCallback = Runnable {
+            // if process died must restore list position
+            // very annoying
+            interaction?.restoreListPosition()
+        }
+        differ.submitList(list, commitCallback)
     }
 
     fun getNote(index: Int): Note? {
@@ -146,6 +151,8 @@ class NoteListAdapter(
 
     interface Interaction {
         fun onItemSelected(position: Int, item: Note)
+
+        fun restoreListPosition()
     }
 
 }

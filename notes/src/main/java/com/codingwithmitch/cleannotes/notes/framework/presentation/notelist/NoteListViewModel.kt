@@ -1,12 +1,13 @@
 package com.codingwithmitch.cleannotes.notes.framework.presentation.notelist
 
+import android.os.Parcelable
 import com.codingwithmitch.cleannotes.core.business.state.*
 import com.codingwithmitch.cleannotes.core.di.scopes.FeatureScope
 import com.codingwithmitch.cleannotes.core.framework.BaseViewModel
 import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.notes.business.interactors.NoteListInteractors
-import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_FILTER_DATE_UPDATED
+import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_FILTER_DATE_CREATED
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_ORDER_DESC
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteFactory
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListStateEvent.*
@@ -107,7 +108,7 @@ constructor(
 
     private fun getFilter(): String {
         return getCurrentViewStateOrNew().filter
-            ?: NOTE_FILTER_DATE_UPDATED
+            ?: NOTE_FILTER_DATE_CREATED
     }
 
     private fun getOrder(): String {
@@ -152,6 +153,12 @@ constructor(
             update.noteList = list
             setViewState(update)
         }
+    }
+
+    fun clearNoteList(){
+        val update = getCurrentViewStateOrNew()
+        update.noteList = ArrayList()
+        setViewState(update)
     }
 
     // can be selected from Recyclerview or created new from dialog
@@ -237,7 +244,11 @@ constructor(
         setViewState(update)
     }
 
-    fun isQueryExhausted() = getCurrentViewStateOrNew().isQueryExhausted?: true
+    fun isQueryExhausted(): Boolean{
+        printLogD("NoteListViewModel",
+            "is query exhasuted? ${getCurrentViewStateOrNew().isQueryExhausted?: true}")
+        return getCurrentViewStateOrNew().isQueryExhausted?: true
+    }
 
     fun loadFirstPage() {
         if(!isJobAlreadyActive(SearchNotesEvent())){
@@ -256,9 +267,22 @@ constructor(
         setViewState(update)
     }
 
+    fun restoreFromCache(){
+        if(!isJobAlreadyActive(SearchNotesEvent())){
+            setQueryExhausted(false)
+            setStateEvent(SearchNotesEvent(false))
+        }
+    }
+
+    fun setLayoutManagerState(layoutManagerState: Parcelable){
+        val update = getCurrentViewStateOrNew()
+        update.layoutManagerState = layoutManagerState
+        setViewState(update)
+    }
+
     fun nextPage(){
         if(!isJobAlreadyActive(SearchNotesEvent())
-            && !getCurrentViewStateOrNew().isQueryExhausted!!
+            && !isQueryExhausted()
         ){
             printLogD("NoteListViewModel", "attempting to load next page...")
             incrementPageNumber()

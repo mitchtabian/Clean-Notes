@@ -21,12 +21,15 @@ import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.Delet
 import com.codingwithmitch.cleannotes.notes.framework.presentation.BaseNoteFragment
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListStateEvent.*
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState
 import com.codingwithmitch.notes.R
 import kotlinx.android.synthetic.main.fragment_note_list.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import javax.inject.Inject
 
+
+const val NOTE_LIST_STATE_BUNDLE_KEY = "com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state"
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -80,23 +83,56 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
             )
         }
 
-//        viewModel.setStateEvent(GetNumNotesInCacheEvent())
-        viewModel.loadFirstPage()
+        countNumNotesInCache()
+        restoreInstanceState(savedInstanceState)
     }
 
-    // For testing
-    private fun onPaginationComplete(){
-        viewModel.setStateEvent(
-            CreateStateMessageEvent(
-                stateMessage = StateMessage(
-                    response = Response(
-                        message = "Pagination complete",
-                        uiComponentType = UIComponentType.Toast(),
-                        messageType = MessageType.Info()
-                    )
-                )
-            )
+    private fun countNumNotesInCache(){
+        viewModel.setStateEvent(GetNumNotesInCacheEvent())
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.restoreFromCache()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        saveLayoutManagerState()
+    }
+
+    // return true only if state is restored
+    private fun restoreInstanceState(savedInstanceState: Bundle?){
+        savedInstanceState?.let { inState ->
+            (inState[NOTE_LIST_STATE_BUNDLE_KEY] as NoteListViewState?)?.let { viewState ->
+                viewModel.setViewState(viewState)
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        val viewState = viewModel.viewState.value
+
+        //clear the list. Don't want to save a large list to bundle.
+        viewState?.noteList =  ArrayList()
+
+        outState.putParcelable(
+            NOTE_LIST_STATE_BUNDLE_KEY,
+            viewState
         )
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun restoreListPosition() {
+        viewModel.viewState.value?.layoutManagerState?.let { lmState ->
+            recycler_view?.layoutManager?.onRestoreInstanceState(lmState)
+        }
+    }
+
+    private fun saveLayoutManagerState(){
+        recycler_view.layoutManager?.onSaveInstanceState()?.let { lmState ->
+            viewModel.setLayoutManagerState(lmState)
+        }
     }
 
     private fun setupRecyclerView(){
@@ -135,7 +171,6 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
                     if(viewModel.isPaginationExhausted()
                         && !viewModel.isQueryExhausted()){
                         viewModel.setQueryExhausted(true)
-                        onPaginationComplete() // for testing
                     }
                     listAdapter?.submitList(noteList)
                     listAdapter?.notifyDataSetChanged()

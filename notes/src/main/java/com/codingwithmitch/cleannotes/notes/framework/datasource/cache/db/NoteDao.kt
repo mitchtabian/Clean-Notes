@@ -35,7 +35,7 @@ interface NoteDao {
         SELECT * FROM notes 
         WHERE title LIKE '%' || :query || '%' 
         OR body LIKE '%' || :query || '%' 
-        ORDER BY updated_at DESC LIMIT (:page * :pageSize)
+        ORDER BY created_at DESC LIMIT (:page * :pageSize)
         """)
     suspend fun searchNotesOrderByDateDESC(
         query: String,
@@ -47,7 +47,7 @@ interface NoteDao {
         SELECT * FROM notes 
         WHERE title LIKE '%' || :query || '%' 
         OR body LIKE '%' || :query || '%' 
-        ORDER BY updated_at ASC LIMIT (:page * :pageSize)
+        ORDER BY created_at ASC LIMIT (:page * :pageSize)
         """)
     suspend fun searchNotesOrderByDateASC(
         query: String,

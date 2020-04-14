@@ -7,14 +7,14 @@ import com.codingwithmitch.notes.datasource.cache.db.NoteDao
 const val NOTE_ORDER_ASC: String = ""
 const val NOTE_ORDER_DESC: String = "-"
 const val NOTE_FILTER_TITLE = "title"
-const val NOTE_FILTER_DATE_UPDATED = "updated_at"
+const val NOTE_FILTER_DATE_CREATED = "created_at"
 
-const val ORDER_BY_ASC_DATE_UPDATED = NOTE_ORDER_ASC + NOTE_FILTER_DATE_UPDATED
-const val ORDER_BY_DESC_DATE_UPDATED = NOTE_ORDER_DESC + NOTE_FILTER_DATE_UPDATED
+const val ORDER_BY_ASC_DATE_UPDATED = NOTE_ORDER_ASC + NOTE_FILTER_DATE_CREATED
+const val ORDER_BY_DESC_DATE_UPDATED = NOTE_ORDER_DESC + NOTE_FILTER_DATE_CREATED
 const val ORDER_BY_ASC_USERNAME = NOTE_ORDER_ASC + NOTE_FILTER_TITLE
 const val ORDER_BY_DESC_USERNAME = NOTE_ORDER_DESC + NOTE_FILTER_TITLE
 
-const val NOTE_PAGINATION_PAGE_SIZE = 30
+const val NOTE_PAGINATION_PAGE_SIZE = 3
 
 suspend fun NoteDao.returnOrderedQuery(
     query: String,
