@@ -24,9 +24,12 @@ import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.st
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.CollapsingToolbarState.Expanded
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteDetailStateEvent
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteDetailStateEvent.*
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteDetailViewState
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteInteractionState.DefaultState
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteInteractionState.EditState
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.NOTE_LIST_STATE_BUNDLE_KEY
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.NOTE_PENDING_DELETE_BUNDLE_KEY
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState
 import com.codingwithmitch.notes.R
 import com.google.android.material.appbar.AppBarLayout
 import com.yydcdut.markdown.MarkdownProcessor
@@ -36,6 +39,8 @@ import kotlinx.android.synthetic.main.layout_note_detail_toolbar.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import javax.inject.Inject
+
+const val NOTE_DETAIL_STATE_BUNDLE_KEY = "com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state"
 
 
 @FlowPreview
@@ -152,7 +157,6 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         updateBodyInViewModel()
         updateNote()
     }
-
 
     private fun subscribeObservers(){
 
@@ -306,6 +310,12 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
     }
 
     private fun onRestoreInstanceState(savedInstanceState: Bundle?){
+        savedInstanceState?.let { inState ->
+            (inState[NOTE_DETAIL_STATE_BUNDLE_KEY] as NoteDetailViewState?)?.let { viewState ->
+                viewModel.setViewState(viewState)
+            }
+        }
+
         // One-time check after rotation
         if(viewModel.isToolbarCollapsed()){
             app_bar.setExpanded(false)
@@ -455,6 +465,9 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putParcelable(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY, viewModel.getNote())
+
+        val viewState = viewModel.getCurrentViewStateOrNew()
+        outState.putParcelable(NOTE_DETAIL_STATE_BUNDLE_KEY, viewState)
     }
 }
 
