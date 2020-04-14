@@ -36,6 +36,7 @@ dependencies {
     implementation project(Modules.app)
     implementation project(Modules.core)
     testImplementation 'junit:junit:4.12'
+
     androidTestImplementation project(Modules.app)
     androidTestImplementation TestDependencies.kotlin_test
     androidTestImplementation TestDependencies.espresso_core
@@ -54,6 +55,7 @@ dependencies {
     implementation SupportDependencies.appcompat
     implementation SupportDependencies.constraintlayout
     implementation SupportDependencies.material_design
+    implementation SupportDependencies.swipe_refresh_layout
 
     kapt AnnotationProcessorsDependencies.dagger_compiler
     kapt AnnotationProcessorsDependencies.room_compiler

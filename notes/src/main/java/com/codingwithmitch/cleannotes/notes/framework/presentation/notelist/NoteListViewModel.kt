@@ -116,7 +116,7 @@ constructor(
             ?: NOTE_ORDER_DESC
     }
 
-    private fun getSearchQuery(): String {
+    fun getSearchQuery(): String {
         return getCurrentViewStateOrNew().searchQuery
             ?: return ""
     }
@@ -155,16 +155,16 @@ constructor(
         }
     }
 
-    fun clearNoteList(){
-        val update = getCurrentViewStateOrNew()
-        update.noteList = ArrayList()
-        setViewState(update)
-    }
-
     // can be selected from Recyclerview or created new from dialog
     fun setNote(note: Note?){
         val update = getCurrentViewStateOrNew()
         update.newNote = note
+        setViewState(update)
+    }
+
+    fun setQuery(query: String?){
+        val update =  getCurrentViewStateOrNew()
+        update.searchQuery = query
         setViewState(update)
     }
 

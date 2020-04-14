@@ -1,8 +1,15 @@
 package com.codingwithmitch.cleannotes.notes.framework.presentation.notelist
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
+import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
+import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
+import androidx.core.view.children
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,6 +22,7 @@ import com.codingwithmitch.cleannotes.core.business.state.*
 import com.codingwithmitch.cleannotes.core.framework.DialogInputCaptureCallback
 import com.codingwithmitch.cleannotes.core.framework.TopSpacingItemDecoration
 import com.codingwithmitch.cleannotes.core.framework.hideKeyboard
+import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.DeleteNote.Companion.DELETE_NOTE_SUCCESS
 import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.DeleteNote.Companion.DELETE_UNDO
@@ -66,6 +74,7 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
         setupUI()
         setupRecyclerView()
         subscribeObservers()
+        initSearchView()
 
         add_new_note_fab.setOnClickListener {
             uiController.displayInputCaptureDialog(
@@ -86,6 +95,60 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
 
         countNumNotesInCache()
         restoreInstanceState(savedInstanceState)
+    }
+
+
+    private fun initSearchView(){
+
+//        // THIS WILL NOT WORK.....?
+        val searchPlate: SearchView.SearchAutoComplete? = search_view.findViewById(R.id.search_src_text)
+
+
+        // So I made this stupid hack
+        for((index1, child) in search_view.children.withIndex()){
+            printLogD("ListFragment", "${index1}, ${child}")
+            for((index2, child2) in (child as ViewGroup).children.withIndex()){
+                printLogD("ListFragment", "T2: ${index2}, ${child2}")
+                if(child2 is ViewGroup){
+                    for((index3, child3) in (child2 as ViewGroup).children.withIndex()){
+                        printLogD("ListFragment", "T3: ${index3}, ${child3}")
+                        if(child3 is ViewGroup){
+                            for((index4, child4) in (child3 as ViewGroup).children.withIndex()){
+                                printLogD("ListFragment", "T4: ${index4}, ${child4}")
+                                if(child4 is SearchView.SearchAutoComplete){
+                                    child4.setOnEditorActionListener { v, actionId, event ->
+                                        if (actionId == EditorInfo.IME_ACTION_UNSPECIFIED
+                                            || actionId == EditorInfo.IME_ACTION_SEARCH ) {
+                                            val searchQuery = v.text.toString()
+                                            printLogD("NoteList", "SearchView: (keyboard or arrow) executing search...: ${searchQuery}")
+                                            viewModel.setQuery(searchQuery).let{
+                                                viewModel.loadFirstPage()
+                                            }
+                                        }
+                                        true
+                                    }
+                                    break
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+//        searchPlate?.setOnEditorActionListener { v, actionId, event ->
+//
+//            if (actionId == EditorInfo.IME_ACTION_UNSPECIFIED
+//                || actionId == EditorInfo.IME_ACTION_SEARCH ) {
+//                val searchQuery = v.text.toString()
+//                printLogD("NoteList", "SearchView: (keyboard or arrow) executing search...: ${searchQuery}")
+//                viewModel.setQuery(searchQuery).let{
+//                    viewModel.loadFirstPage()
+//                }
+//            }
+//            true
+//        }
     }
 
     private fun countNumNotesInCache(){

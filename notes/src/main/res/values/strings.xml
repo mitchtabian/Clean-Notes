@@ -7,4 +7,6 @@
     <string name="text_Edit_body">Edit Body</string>
     <string name="text_Edit_title">Edit Title</string>
     <string name="text_Delete">Delete</string>
+    <string name="text_Filter">Filter</string>
+    <string name="text_Search">Search</string>
 </resources>

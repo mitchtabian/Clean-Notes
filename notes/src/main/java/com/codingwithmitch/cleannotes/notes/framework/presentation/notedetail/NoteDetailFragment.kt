@@ -2,6 +2,7 @@ package com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail
 
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels

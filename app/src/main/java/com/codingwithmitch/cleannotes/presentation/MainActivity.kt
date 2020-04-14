@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.widget.SearchView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -18,6 +19,7 @@ import com.codingwithmitch.cleannotes.R
 import com.codingwithmitch.cleannotes.core.business.state.*
 import com.codingwithmitch.cleannotes.core.business.state.UIComponentType.*
 import com.codingwithmitch.cleannotes.core.framework.*
+import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
@@ -44,7 +46,6 @@ class MainActivity : AppCompatActivity(),
 
         retrieveTopLevelFragmentIds()
         setupBottomNavigation()
-
     }
 
     private fun retrieveTopLevelFragmentIds(){
