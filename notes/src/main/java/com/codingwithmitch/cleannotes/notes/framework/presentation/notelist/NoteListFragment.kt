@@ -100,8 +100,8 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
 
     private fun initSearchView(){
 
-//        // THIS WILL NOT WORK.....?
-        val searchPlate: SearchView.SearchAutoComplete? = search_view.findViewById(R.id.search_src_text)
+        // THIS WILL NOT WORK.....?
+        // val searchPlate: SearchView.SearchAutoComplete? = search_view.findViewById(R.id.search_src_text)
 
 
         // So I made this stupid hack
@@ -135,20 +135,6 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
                 }
             }
         }
-
-
-//        searchPlate?.setOnEditorActionListener { v, actionId, event ->
-//
-//            if (actionId == EditorInfo.IME_ACTION_UNSPECIFIED
-//                || actionId == EditorInfo.IME_ACTION_SEARCH ) {
-//                val searchQuery = v.text.toString()
-//                printLogD("NoteList", "SearchView: (keyboard or arrow) executing search...: ${searchQuery}")
-//                viewModel.setQuery(searchQuery).let{
-//                    viewModel.loadFirstPage()
-//                }
-//            }
-//            true
-//        }
     }
 
     private fun countNumNotesInCache(){
