@@ -59,6 +59,7 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
         }
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -197,7 +198,7 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
                     viewModel.undoDelete()
                 }
                 if(message.response.message?.equals(DELETE_NOTE_SUCCESS) == true){
-                    viewModel.onCompleteDelete()
+                    onCompleteDelete()
                 }
                 uiController.onResponseReceived(
                     response = message.response,
@@ -209,6 +210,15 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
                 )
             }
         })
+    }
+
+    private fun onCompleteDelete(){
+        clearDeleteArgs()
+        viewModel.onCompleteDelete()
+    }
+
+    private fun clearDeleteArgs(){
+        arguments?.remove(NOTE_PENDING_DELETE_BUNDLE_KEY)
     }
 
     private fun navigateToDetailFragment(selectedNote: Note){
