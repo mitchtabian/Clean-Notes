@@ -244,6 +244,9 @@ constructor(
         setViewState(update)
     }
 
+    // for debugging
+    fun getActiveJobs() = dataChannelManager.getActiveJobs()
+
     fun isQueryExhausted(): Boolean{
         printLogD("NoteListViewModel",
             "is query exhasuted? ${getCurrentViewStateOrNew().isQueryExhausted?: true}")

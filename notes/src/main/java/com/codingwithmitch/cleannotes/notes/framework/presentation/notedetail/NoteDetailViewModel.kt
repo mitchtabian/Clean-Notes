@@ -8,15 +8,10 @@ import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.notes.business.interactors.NoteDetailInteractors
 import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.UpdateNote.Companion.UPDATE_NOTE_FAILED
-import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.UpdateNote.Companion.UPDATE_NOTE_FAILED_PK
 import com.codingwithmitch.cleannotes.notes.framework.datasource.model.NoteEntity
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.*
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.CollapsingToolbarState.*
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteDetailStateEvent.*
-import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.DELETE_PENDING_ERROR
-import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListStateEvent
-import com.codingwithmitch.notes.R
-import kotlinx.android.synthetic.main.fragment_note_detail.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
@@ -53,13 +48,6 @@ constructor(
 
         if(!isJobAlreadyActive(stateEvent)){
             val job: Flow<DataState<NoteDetailViewState>> = when(stateEvent){
-
-                is DeleteNoteEvent -> {
-                    noteInteractors.deleteNote.deleteNote(
-                        primaryKey = stateEvent.primaryKey,
-                        stateEvent = stateEvent
-                    )
-                }
 
                 is UpdateNoteEvent -> {
                     val pk = getNote()?.id
@@ -188,26 +176,6 @@ constructor(
         )
         update.note = updatedNote
         setViewState(update)
-    }
-
-    fun isDeletePending(): Boolean{
-        if(isJobAlreadyActive(NoteListStateEvent.DeleteNoteEvent(primaryKey = 0))){
-            setStateEvent(
-                NoteListStateEvent.CreateStateMessageEvent(
-                    stateMessage = StateMessage(
-                        response = Response(
-                            message = DELETE_PENDING_ERROR,
-                            uiComponentType = UIComponentType.Toast(),
-                            messageType = MessageType.Info()
-                        )
-                    )
-                )
-            )
-            return true
-        }
-        else{
-            return false
-        }
     }
 
     fun setNoteInteractionTitleState(state: NoteInteractionState){

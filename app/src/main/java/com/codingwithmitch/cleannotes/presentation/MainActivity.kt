@@ -246,7 +246,6 @@ class MainActivity : AppCompatActivity(),
         response: Response,
         stateMessageCallback: StateMessageCallback
     ){
-        Log.d(TAG, "displayDialog: ")
         response.message?.let { message ->
 
             dialogInView = when (response.messageType) {
@@ -365,13 +364,13 @@ class MainActivity : AppCompatActivity(),
                 title(R.string.are_you_sure)
                 message(text = message)
                 negativeButton(R.string.text_cancel){
-                    callback.cancel()
                     stateMessageCallback.removeMessageFromStack()
+                    callback.cancel()
                     dismiss()
                 }
                 positiveButton(R.string.text_yes){
-                    callback.proceed()
                     stateMessageCallback.removeMessageFromStack()
+                    callback.proceed()
                     dismiss()
                 }
                 onDismiss {

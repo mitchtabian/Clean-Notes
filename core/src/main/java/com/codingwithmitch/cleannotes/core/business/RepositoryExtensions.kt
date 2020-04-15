@@ -63,7 +63,6 @@ suspend fun <T> safeCacheCall(
     cacheCall: suspend () -> T?
 ): CacheResult<T?> {
     return withContext(dispatcher) {
-        printLogD("RepositoryExtensions", "safeCacheCall")
         try {
             // throws TimeoutCancellationException
             withTimeout(CACHE_TIMEOUT){
@@ -71,7 +70,6 @@ suspend fun <T> safeCacheCall(
             }
         } catch (throwable: Throwable) {
             throwable.printStackTrace()
-            printLogD("RepositoryExtensions", "safeCacheCall: ${throwable}")
             when (throwable) {
 
                 is TimeoutCancellationException -> {

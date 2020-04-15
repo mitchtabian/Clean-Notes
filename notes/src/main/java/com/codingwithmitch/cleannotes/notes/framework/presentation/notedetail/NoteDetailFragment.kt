@@ -172,8 +172,8 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
             }
         })
 
-        viewModel.numActiveJobs.observe(viewLifecycleOwner, Observer {
-            uiController.displayProgressBar(viewModel.areAnyJobsActive())
+        viewModel.shouldDisplayProgressBar.observe(viewLifecycleOwner, Observer {
+            uiController.displayProgressBar(it)
         })
 
         viewModel.stateMessage.observe(viewLifecycleOwner, Observer { stateMessage ->
@@ -194,11 +194,6 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
                         }
 
                         NOTE_DETAIL_ERROR_RETRIEVEING_SELECTED_NOTE -> {
-                            findNavController().popBackStack()
-                        }
-
-                        DELETE_NOTE_SUCCESS -> {
-                            viewModel.setNote(null)
                             findNavController().popBackStack()
                         }
 
@@ -400,7 +395,7 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
                         uiComponentType = UIComponentType.AreYouSureDialog(
                             object: AreYouSureCallback{
                                 override fun proceed() {
-                                    viewModel.getCurrentViewStateOrNew().note?.let{note ->
+                                    viewModel.getNote()?.let{ note ->
                                         // Create bundle arg containing note to be deleted
                                         // nav to NoteListFragment and clear backstack
                                         initiateDeleteTransaction()

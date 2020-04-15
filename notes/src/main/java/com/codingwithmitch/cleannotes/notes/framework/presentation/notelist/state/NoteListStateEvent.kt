@@ -14,9 +14,11 @@ sealed class NoteListStateEvent: StateEvent {
             return "Error inserting new note."
         }
 
-        override fun EventName(): String {
+        override fun eventName(): String {
             return "InsertNewNoteEvent"
         }
+
+        override fun shouldDisplayProgressBar() = true
     }
 
     class DeleteNoteEvent(
@@ -27,9 +29,11 @@ sealed class NoteListStateEvent: StateEvent {
             return "Error deleting note."
         }
 
-        override fun EventName(): String {
+        override fun eventName(): String {
             return "DeleteNoteEvent"
         }
+
+        override fun shouldDisplayProgressBar() = false
     }
 
     class SearchNotesEvent(
@@ -40,9 +44,11 @@ sealed class NoteListStateEvent: StateEvent {
             return "Error getting list of notes."
         }
 
-        override fun EventName(): String {
-            return "GetNotesEvent"
+        override fun eventName(): String {
+            return "SearchNotesEvent"
         }
+
+        override fun shouldDisplayProgressBar() = true
     }
 
     class GetNumNotesInCacheEvent: NoteListStateEvent(){
@@ -51,9 +57,11 @@ sealed class NoteListStateEvent: StateEvent {
             return "Error getting the number of notes from the cache."
         }
 
-        override fun EventName(): String {
+        override fun eventName(): String {
             return "GetNumNotesInCacheEvent"
         }
+
+        override fun shouldDisplayProgressBar() = true
     }
 
     class CreateStateMessageEvent(
@@ -64,9 +72,11 @@ sealed class NoteListStateEvent: StateEvent {
             return "Error creating a new state message."
         }
 
-        override fun EventName(): String {
-            return "GetNotesEvent"
+        override fun eventName(): String {
+            return "CreateStateMessageEvent"
         }
+
+        override fun shouldDisplayProgressBar() = false
     }
 
 }

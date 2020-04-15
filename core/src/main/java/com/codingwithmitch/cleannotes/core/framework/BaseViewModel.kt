@@ -26,8 +26,8 @@ abstract class BaseViewModel<ViewState> : ViewModel()
     val viewState: LiveData<ViewState>
         get() = _viewState
 
-    val numActiveJobs: LiveData<Int>
-            = dataChannelManager.numActiveJobs
+    val shouldDisplayProgressBar: LiveData<Boolean>
+            = dataChannelManager.shouldDisplayProgressBar
 
     val stateMessage: LiveData<StateMessage?>
         get() = dataChannelManager.messageStack.stateMessage
@@ -73,12 +73,6 @@ abstract class BaseViewModel<ViewState> : ViewModel()
         jobFunction: Flow<DataState<ViewState>>
     ) = dataChannelManager.launchJob(stateEvent, jobFunction)
 
-    fun areAnyJobsActive(): Boolean{
-        return dataChannelManager.numActiveJobs.value?.let {
-            it > 0
-        }?: false
-    }
-
     fun isJobAlreadyActive(stateEvent: StateEvent): Boolean {
         printLogD("BaseViewModel", "is job already active? ${dataChannelManager.isJobAlreadyActive(stateEvent)} ")
         return dataChannelManager.isJobAlreadyActive(stateEvent)
@@ -99,12 +93,7 @@ abstract class BaseViewModel<ViewState> : ViewModel()
         dataChannelManager.clearStateMessage(index)
     }
 
-    open fun cancelActiveJobs(){
-        if(areAnyJobsActive()){
-            printLogD("BaseViewModel", "cancel active jobs: ${dataChannelManager.numActiveJobs.value ?: 0}")
-            dataChannelManager.cancelJobs()
-        }
-    }
+    fun cancelActiveJobs() = dataChannelManager.cancelJobs()
 
     abstract fun initNewViewState(): ViewState
 

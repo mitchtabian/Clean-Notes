@@ -17,16 +17,13 @@ import kotlinx.coroutines.flow.onEach
 @ExperimentalCoroutinesApi
 abstract class DataChannelManager<ViewState> {
 
-    private val _activeStateEvents: HashSet<String> = HashSet()
-    private val _numActiveJobs: MutableLiveData<Int> = MutableLiveData()
     private val dataChannel: ConflatedBroadcastChannel<DataState<ViewState>> =  ConflatedBroadcastChannel()
     private var channelScope: CoroutineScope? = null
+    private val stateEventManager: StateEventManager = StateEventManager()
 
-    val messageStack =
-        MessageStack()
+    val messageStack = MessageStack()
 
-    val numActiveJobs: LiveData<Int>
-        get() = _numActiveJobs
+    val shouldDisplayProgressBar = stateEventManager.shouldDisplayProgressBar
 
     init {
         dataChannel
@@ -97,27 +94,56 @@ abstract class DataChannelManager<ViewState> {
         messageStack.removeAt(index)
     }
 
-    private fun clearActiveStateEventCounter(){
-        _activeStateEvents.clear()
-        syncNumActiveStateEvents()
-    }
+    // for debugging
+    fun getActiveJobs() = stateEventManager.getActiveJobNames()
 
-    private fun addStateEvent(stateEvent: StateEvent){
-        _activeStateEvents.add(stateEvent.EventName())
-        syncNumActiveStateEvents()
-    }
+    private fun clearActiveStateEventCounter()
+            = stateEventManager.clearActiveStateEventCounter()
 
-    private fun removeStateEvent(stateEvent: StateEvent?){
-        _activeStateEvents.remove(stateEvent?.EventName())
-        syncNumActiveStateEvents()
-    }
+    private fun addStateEvent(stateEvent: StateEvent)
+            = stateEventManager.addStateEvent(stateEvent)
+
+    private fun removeStateEvent(stateEvent: StateEvent?)
+            = stateEventManager.removeStateEvent(stateEvent)
+
+    private fun isStateEventActive(stateEvent: StateEvent)
+            = stateEventManager.isStateEventActive(stateEvent)
+
+
+//    private fun clearActiveStateEventCounter(){
+//        _activeStateEvents.clear()
+//        syncNumActiveStateEvents()
+//    }
+//
+//    private fun addStateEvent(stateEvent: StateEvent){
+//        printLogD("DCM",
+//            "adding state event: ${stateEvent.eventName()}")
+//        _activeStateEvents.add(stateEvent)
+//        syncNumActiveStateEvents()
+//    }
+//
+//    private fun removeStateEvent(stateEvent: StateEvent?){
+//        printLogD("DCM",
+//            "removing state event: ${stateEvent?.eventName()}")
+//        _activeStateEvents.remove(stateEvent)
+//        syncNumActiveStateEvents()
+//    }
+//
+//    private fun isStateEventActive(stateEvent: StateEvent): Boolean{
+//        for(event in _activeStateEvents){
+//            if(stateEvent.eventName().equals(event.eventName())){
+//                return true
+//            }
+//        }
+//        return false
+//    }
+//
+//    private fun syncNumActiveStateEvents(){
+//        _numActiveJobs.value = _activeStateEvents.size
+//    }
 
     fun isJobAlreadyActive(stateEvent: StateEvent): Boolean {
         return isStateEventActive(stateEvent)
-    }
-
-    private fun isStateEventActive(stateEvent: StateEvent): Boolean{
-        return _activeStateEvents.contains(stateEvent.EventName())
     }
 
     fun getChannelScope(): CoroutineScope {
@@ -139,9 +165,6 @@ abstract class DataChannelManager<ViewState> {
         clearActiveStateEventCounter()
     }
 
-    private fun syncNumActiveStateEvents(){
-        _numActiveJobs.value = _activeStateEvents.size
-    }
 }
 
 
