@@ -22,7 +22,6 @@ import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.DeleteNote.Companion.DELETE_NOTE_PENDING
 import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.DeleteNote.Companion.DELETE_NOTE_SUCCESS
-import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.DeleteNote.Companion.DELETE_UNDO
 import com.codingwithmitch.cleannotes.notes.framework.presentation.BaseNoteFragment
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListStateEvent.*
@@ -63,8 +62,10 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
 
         setupUI()
         setupRecyclerView()
+        setupSearchView()
+        setupSwipeRefresh()
+        setupFAB()
         subscribeObservers()
-        initSearchView()
 
         add_new_note_fab.setOnClickListener {
             uiController.displayInputCaptureDialog(
@@ -97,7 +98,6 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
         saveLayoutManagerState()
     }
 
-    // return true only if state is restored
     private fun restoreInstanceState(savedInstanceState: Bundle?){
         savedInstanceState?.let { inState ->
             (inState[NOTE_LIST_STATE_BUNDLE_KEY] as NoteListViewState?)?.let { viewState ->
@@ -279,20 +279,47 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
         }
     }
 
-    private fun initSearchView(){
+    private fun setupSearchView(){
 
-         val searchPlate: SearchView.SearchAutoComplete?
-                 = search_view.findViewById(androidx.appcompat.R.id.search_src_text)
+        val searchPlate: SearchView.SearchAutoComplete?
+                = search_view.findViewById(androidx.appcompat.R.id.search_src_text)
 
         searchPlate?.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_UNSPECIFIED
                 || actionId == EditorInfo.IME_ACTION_SEARCH ) {
                 val searchQuery = v.text.toString()
-                viewModel.setQuery(searchQuery).let{
-                    viewModel.loadFirstPage()
-                }
+                viewModel.setQuery(searchQuery)
+                startNewSearch()
             }
             true
+        }
+    }
+
+    private fun setupFAB(){
+        add_new_note_fab.setOnClickListener {
+            uiController.displayInputCaptureDialog(
+                getString(com.codingwithmitch.cleannotes.R.string.text_enter_a_title),
+                object: DialogInputCaptureCallback{
+                    override fun onTextCaptured(text: String) {
+                        val newNote = viewModel.createNewNote(title = text)
+                        viewModel.setStateEvent(
+                            InsertNewNoteEvent(
+                                title = newNote.title,
+                                body = ""
+                            )
+                        )
+                    }
+                }
+            )
+        }
+    }
+
+    private fun startNewSearch() = viewModel.loadFirstPage()
+
+    private fun setupSwipeRefresh(){
+        swipe_refresh.setOnRefreshListener {
+            startNewSearch()
+            swipe_refresh.isRefreshing = false
         }
     }
 
