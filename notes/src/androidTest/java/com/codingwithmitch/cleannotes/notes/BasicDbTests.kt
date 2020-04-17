@@ -8,8 +8,8 @@ import com.codingwithmitch.cleannotes.notes.business.data.repository.NoteReposit
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteEntityMapper
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.notes.business.domain.repository.NoteRepository
-import com.codingwithmitch.cleannotes.notes.business.interactors.*
 import com.codingwithmitch.cleannotes.core.business.DateUtil
+import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.NoteListInteractors
 import com.codingwithmitch.notes.datasource.cache.db.NoteDatabase
 import com.codingwithmitch.notes.datasource.cache.repository.NoteCacheDataSourceImpl
 import kotlinx.coroutines.runBlocking
@@ -46,12 +46,13 @@ class BasicDbTests {
                 dateUtil = dateUtil
             )
         )
-        interactors = NoteListInteractors(
-            InsertNewNote(noteRepository),
-            DeleteNote(noteRepository),
-            UpdateNote(noteRepository),
-            GetNotes(noteRepository)
-        )
+        interactors =
+            NoteListInteractors(
+                InsertNewNote(noteRepository),
+                DeleteNote(noteRepository),
+                UpdateNote(noteRepository),
+                GetNotes(noteRepository)
+            )
     }
 
     @After

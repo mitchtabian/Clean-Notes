@@ -1,6 +1,7 @@
 package com.codingwithmitch.cleannotes.core.business.state
 
 import android.view.View
+import com.codingwithmitch.cleannotes.core.util.TodoCallback
 
 
 data class StateMessage(val response: Response)
@@ -22,7 +23,8 @@ sealed class UIComponentType{
     ): UIComponentType()
 
     class SnackBar(
-        val undoCallback: SnackbarUndoCallback? = null
+        val undoCallback: SnackbarUndoCallback? = null,
+        val onDismissCallback: TodoCallback? = null
     ): UIComponentType()
 
     class None: UIComponentType()
@@ -60,11 +62,11 @@ interface SnackbarUndoCallback {
 
 class SnackbarUndoListener
     constructor(
-        private val snackbarUndoCallback: SnackbarUndoCallback
+        private val snackbarUndoCallback: SnackbarUndoCallback?
     ): View.OnClickListener {
 
     override fun onClick(v: View?) {
-        snackbarUndoCallback.undo()
+        snackbarUndoCallback?.undo()
     }
 
 }

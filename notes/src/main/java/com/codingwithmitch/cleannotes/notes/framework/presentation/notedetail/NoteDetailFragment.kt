@@ -2,7 +2,6 @@ package com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail
 
 import android.os.Bundle
 import android.view.View
-import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
@@ -12,25 +11,18 @@ import androidx.navigation.fragment.findNavController
 import com.codingwithmitch.cleannotes.R.drawable
 import com.codingwithmitch.cleannotes.core.business.state.*
 import com.codingwithmitch.cleannotes.core.framework.*
-import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
-import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.DeleteNote
-import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.DeleteNote.Companion.DELETE_ARE_YOU_SURE
-import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.DeleteNote.Companion.DELETE_NOTE_PENDING
-import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.DeleteNote.Companion.DELETE_NOTE_SUCCESS
-import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.UpdateNote.Companion.UPDATE_NOTE_FAILED_PK
-import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.UpdateNote.Companion.UPDATE_NOTE_SUCCESS
+import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.DeleteNote.Companion.DELETE_ARE_YOU_SURE
+import com.codingwithmitch.cleannotes.notes.business.interactors.notedetailfragment.UpdateNote.Companion.UPDATE_NOTE_FAILED_PK
+import com.codingwithmitch.cleannotes.notes.business.interactors.notedetailfragment.UpdateNote.Companion.UPDATE_NOTE_SUCCESS
 import com.codingwithmitch.cleannotes.notes.framework.presentation.BaseNoteFragment
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.CollapsingToolbarState.Collapsed
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.CollapsingToolbarState.Expanded
-import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteDetailStateEvent
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteDetailStateEvent.*
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteDetailViewState
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteInteractionState.DefaultState
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteInteractionState.EditState
-import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.NOTE_LIST_STATE_BUNDLE_KEY
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.NOTE_PENDING_DELETE_BUNDLE_KEY
-import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState
 import com.codingwithmitch.notes.R
 import com.google.android.material.appbar.AppBarLayout
 import com.yydcdut.markdown.MarkdownProcessor

@@ -6,12 +6,13 @@ import com.codingwithmitch.cleannotes.core.di.scopes.FeatureScope
 import com.codingwithmitch.cleannotes.core.framework.BaseViewModel
 import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
-import com.codingwithmitch.cleannotes.notes.business.interactors.NoteListInteractors
+import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.NoteListInteractors
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_FILTER_DATE_CREATED
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_ORDER_DESC
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteFactory
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListStateEvent.*
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -45,6 +46,10 @@ constructor(
             viewState.newNote?.let { note ->
                 setNote(note)
             }
+
+            viewState.notePendingDelete?.let { restoredNote ->
+                setNotePendingDelete(null)
+            }
         }
 
     }
@@ -65,6 +70,13 @@ constructor(
                 is DeleteNoteEvent -> {
                     noteInteractors.deleteNote.deleteNote(
                         primaryKey = stateEvent.primaryKey,
+                        stateEvent = stateEvent
+                    )
+                }
+
+                is RestoreDeletedNoteEvent -> {
+                    noteInteractors.restoreDeletedNote.restoreDeletedNote(
+                        note = stateEvent.note,
                         stateEvent = stateEvent
                     )
                 }
@@ -144,17 +156,6 @@ constructor(
         setViewState(update)
     }
 
-    fun removePendingNoteFromList(){
-        val update = getCurrentViewStateOrNew()
-        val pendingNote = update.notePendingDelete
-        val list = update.noteList
-        if(list?.contains(pendingNote) == true){
-            list.remove(pendingNote)
-            update.noteList = list
-            setViewState(update)
-        }
-    }
-
     // can be selected from Recyclerview or created new from dialog
     fun setNote(note: Note?){
         val update = getCurrentViewStateOrNew()
@@ -188,27 +189,38 @@ constructor(
         }
     }
 
-    fun onCompleteDelete(){
-        setNotePendingDelete(null)
+    fun beginPendingDelete(note: Note){
+        setNotePendingDelete(note)
+        removePendingNoteFromList(note)
+        setStateEvent(
+            DeleteNoteEvent(
+                primaryKey = note.id
+            )
+        )
     }
 
-    fun beginPendingDelete(){
-        // remove from viewstate
+    fun removePendingNoteFromList(note: Note?){
         val update = getCurrentViewStateOrNew()
-        update.notePendingDelete?.let { note ->
-            update.noteList?.remove(note)
+        val list = update.noteList
+        if(list?.contains(note) == true){
+            list.remove(note)
+            update.noteList = list
             setViewState(update)
-            setStateEvent(DeleteNoteEvent(note.id))
         }
-
     }
 
     fun undoDelete(){
         // replace note in viewstate
         val update = getCurrentViewStateOrNew()
-        update.notePendingDelete?.let {
-            setNotePendingDelete(null)
-            update.noteList?.add(it)
+        update.notePendingDelete?.let { note ->
+            if(note.listPosition != null && note.note != null){
+                printLogD("ListViewModel", "undo delete ${note.note?.title}")
+                update.noteList?.add(
+                    note.listPosition as Int,
+                    note.note as Note
+                )
+                setStateEvent(RestoreDeletedNoteEvent(note.note as Note))
+            }
         }
         setViewState(update)
     }
@@ -216,8 +228,28 @@ constructor(
 
     fun setNotePendingDelete(note: Note?){
         val update = getCurrentViewStateOrNew()
-        update.notePendingDelete = note
+        if(note != null){
+            update.notePendingDelete = NotePendingDelete(
+                note = note,
+                listPosition = findListPositionOfNote(note)
+            )
+        }
+        else{
+            update.notePendingDelete = null
+        }
         setViewState(update)
+    }
+
+    private fun findListPositionOfNote(note: Note?): Int {
+        val viewState = getCurrentViewStateOrNew()
+        viewState.noteList?.let { noteList ->
+            for((index, item) in noteList.withIndex()){
+                if(item.id == note?.id){
+                    return index
+                }
+            }
+        }
+        return 0
     }
 
     private fun setNumNotesInCache(numNotes: Int){

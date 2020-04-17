@@ -1,6 +1,6 @@
-package com.codingwithmitch.cleannotes.notes.business.interactors
+package com.codingwithmitch.cleannotes.notes.business.interactors.notedetailfragment
 
-import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.*
+import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.DeleteNote
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteDetailViewState
 
 // Use cases

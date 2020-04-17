@@ -6,8 +6,8 @@ import com.codingwithmitch.cleannotes.core.di.scopes.FeatureScope
 import com.codingwithmitch.cleannotes.core.framework.BaseViewModel
 import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
-import com.codingwithmitch.cleannotes.notes.business.interactors.NoteDetailInteractors
-import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.UpdateNote.Companion.UPDATE_NOTE_FAILED
+import com.codingwithmitch.cleannotes.notes.business.interactors.notedetailfragment.NoteDetailInteractors
+import com.codingwithmitch.cleannotes.notes.business.interactors.notedetailfragment.UpdateNote.Companion.UPDATE_NOTE_FAILED
 import com.codingwithmitch.cleannotes.notes.framework.datasource.model.NoteEntity
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.*
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.CollapsingToolbarState.*

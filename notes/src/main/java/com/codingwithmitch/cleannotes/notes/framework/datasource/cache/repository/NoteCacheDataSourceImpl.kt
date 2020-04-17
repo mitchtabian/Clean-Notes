@@ -30,6 +30,20 @@ constructor(
         return noteDao.insertNote(note)
     }
 
+    override suspend fun restoreDeletedNote(
+        title: String,
+        body: String,
+        created_at: String,
+        updated_at: String
+    ): Long {
+        return noteDao.restoreDeletedNote(
+            title = title,
+            body = body,
+            created_at = dateUtil.convertServerStringDateToLong(created_at),
+            updated_at = dateUtil.convertServerStringDateToLong(updated_at)
+        )
+    }
+
     override suspend fun deleteNote(primaryKey: Int): Int {
         return noteDao.deleteNote(primaryKey)
     }

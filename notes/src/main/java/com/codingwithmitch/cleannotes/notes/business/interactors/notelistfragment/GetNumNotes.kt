@@ -1,4 +1,4 @@
-package com.codingwithmitch.cleannotes.notes.business.interactors.use_cases
+package com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment
 
 import com.codingwithmitch.cleannotes.core.business.cache.CacheResponseHandler
 import com.codingwithmitch.cleannotes.core.business.safeCacheCall

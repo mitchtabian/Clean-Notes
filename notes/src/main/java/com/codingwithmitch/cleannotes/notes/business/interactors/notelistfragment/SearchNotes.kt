@@ -1,7 +1,6 @@
-package com.codingwithmitch.cleannotes.notes.business.interactors.use_cases
+package com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment
 
 import com.codingwithmitch.cleannotes.core.business.cache.CacheResponseHandler
-import com.codingwithmitch.cleannotes.core.business.cache.CacheResult
 import com.codingwithmitch.cleannotes.core.business.safeCacheCall
 import com.codingwithmitch.cleannotes.core.business.state.*
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
@@ -36,10 +35,12 @@ class SearchNotes(
                 stateEvent = stateEvent
             ){
                 override suspend fun handleSuccess(resultObj: List<Note>): DataState<NoteListViewState> {
-                    var message: String? = SEARCH_NOTES_SUCCESS
+                    var message: String? =
+                        SEARCH_NOTES_SUCCESS
                     var uiComponentType: UIComponentType? = UIComponentType.None()
                     if(resultObj.size == 0){
-                        message = SEARCH_NOTES_NO_MATCHING_RESULTS
+                        message =
+                            SEARCH_NOTES_NO_MATCHING_RESULTS
                         uiComponentType = UIComponentType.Toast()
                     }
                     return DataState.data(

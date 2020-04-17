@@ -2,6 +2,7 @@ package com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.sta
 
 import com.codingwithmitch.cleannotes.core.business.state.StateEvent
 import com.codingwithmitch.cleannotes.core.business.state.StateMessage
+import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 
 sealed class NoteListStateEvent: StateEvent {
 
@@ -31,6 +32,21 @@ sealed class NoteListStateEvent: StateEvent {
 
         override fun eventName(): String {
             return "DeleteNoteEvent"
+        }
+
+        override fun shouldDisplayProgressBar() = true
+    }
+
+    class RestoreDeletedNoteEvent(
+        val note: Note
+    ): NoteListStateEvent() {
+
+        override fun errorInfo(): String {
+            return "Error restoring the note that was deleted."
+        }
+
+        override fun eventName(): String {
+            return "RestoreDeletedNoteEvent"
         }
 
         override fun shouldDisplayProgressBar() = false

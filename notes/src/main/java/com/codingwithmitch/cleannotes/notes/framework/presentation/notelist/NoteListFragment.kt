@@ -1,15 +1,10 @@
 package com.codingwithmitch.cleannotes.notes.framework.presentation.notelist
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
-import androidx.core.view.children
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -22,10 +17,12 @@ import com.codingwithmitch.cleannotes.core.business.state.*
 import com.codingwithmitch.cleannotes.core.framework.DialogInputCaptureCallback
 import com.codingwithmitch.cleannotes.core.framework.TopSpacingItemDecoration
 import com.codingwithmitch.cleannotes.core.framework.hideKeyboard
+import com.codingwithmitch.cleannotes.core.util.TodoCallback
 import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
-import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.DeleteNote.Companion.DELETE_NOTE_SUCCESS
-import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.DeleteNote.Companion.DELETE_UNDO
+import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.DeleteNote.Companion.DELETE_NOTE_PENDING
+import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.DeleteNote.Companion.DELETE_NOTE_SUCCESS
+import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.DeleteNote.Companion.DELETE_UNDO
 import com.codingwithmitch.cleannotes.notes.framework.presentation.BaseNoteFragment
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListStateEvent.*
@@ -59,12 +56,6 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.setupChannel()
-        arguments?.let { args ->
-            args.getParcelable<Note>(NOTE_PENDING_DELETE_BUNDLE_KEY)?.let { note ->
-                viewModel.setNotePendingDelete(note)
-                viewModel.beginPendingDelete()
-            }
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -186,9 +177,6 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
                     navigateToDetailFragment(newNote)
                 }
 
-                viewState.notePendingDelete?.let { note ->
-                    viewModel.removePendingNoteFromList()
-                }
             }
         })
 
@@ -199,22 +187,48 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
 
         viewModel.stateMessage.observe(viewLifecycleOwner, Observer { stateMessage ->
             stateMessage?.let { message ->
-                if(message.response.message?.equals(DELETE_UNDO) == true){
-                    viewModel.undoDelete()
-                }
                 if(message.response.message?.equals(DELETE_NOTE_SUCCESS) == true){
-                    onCompleteDelete()
+                    showUndoSnackbar_deleteNote()
                 }
-                uiController.onResponseReceived(
-                    response = message.response,
-                    stateMessageCallback = object: StateMessageCallback {
-                        override fun removeMessageFromStack() {
-                            viewModel.clearStateMessage()
+                else{
+                    uiController.onResponseReceived(
+                        response = message.response,
+                        stateMessageCallback = object: StateMessageCallback {
+                            override fun removeMessageFromStack() {
+                                viewModel.clearStateMessage()
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
         })
+    }
+
+    private fun showUndoSnackbar_deleteNote(){
+        uiController.onResponseReceived(
+            response = Response(
+                message = DELETE_NOTE_PENDING,
+                uiComponentType = UIComponentType.SnackBar(
+                    undoCallback = object : SnackbarUndoCallback {
+                        override fun undo() {
+                            viewModel.undoDelete()
+                        }
+                    },
+                    onDismissCallback = object: TodoCallback{
+                        override fun execute() {
+                            // if the note is not restored, clear pending note
+                            viewModel.setNotePendingDelete(null)
+                        }
+                    }
+                ),
+                messageType = MessageType.Info()
+            ),
+            stateMessageCallback = object: StateMessageCallback{
+                override fun removeMessageFromStack() {
+                    viewModel.clearStateMessage()
+                }
+            }
+        )
     }
 
     // for debugging
@@ -223,15 +237,6 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
             printLogD("NoteList",
                 "${index}: ${job}")
         }
-    }
-
-    private fun onCompleteDelete(){
-        clearDeleteArgs()
-        viewModel.onCompleteDelete()
-    }
-
-    private fun clearDeleteArgs(){
-        arguments?.remove(NOTE_PENDING_DELETE_BUNDLE_KEY)
     }
 
     private fun navigateToDetailFragment(selectedNote: Note){
@@ -265,8 +270,9 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
 
     override fun onItemSwiped(position: Int) {
         if(!viewModel.isDeletePending()){
-            viewModel.setNotePendingDelete(listAdapter?.getNote(position))
-            viewModel.beginPendingDelete()
+            listAdapter?.getNote(position)?.let { note ->
+                viewModel.beginPendingDelete(note)
+            }
         }
         else{
             listAdapter?.notifyDataSetChanged()

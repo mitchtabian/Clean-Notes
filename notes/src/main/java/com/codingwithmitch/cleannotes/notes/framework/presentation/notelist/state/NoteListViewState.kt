@@ -9,7 +9,7 @@ data class NoteListViewState(
 
     var noteList: ArrayList<Note>? = null,
     var newNote: Note? = null, // note that can be created with fab
-    var notePendingDelete: Note? = null, // set when delete is pending (can be undone)
+    var notePendingDelete: NotePendingDelete? = null, // set when delete is pending (can be undone)
     var searchQuery: String? = null,
     var page: Int? = null,
     var isQueryExhausted: Boolean? = null,
@@ -18,7 +18,14 @@ data class NoteListViewState(
     var layoutManagerState: Parcelable? = null,
     var numNotesInCache: Int? = null
 
-) : Parcelable
+) : Parcelable{
+
+    @Parcelize
+    data class NotePendingDelete(
+        var note: Note? = null,
+        var listPosition: Int? = null
+    ) : Parcelable
+}
 
 
 

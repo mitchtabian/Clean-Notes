@@ -6,6 +6,13 @@ interface NoteCacheDataSource{
 
     suspend fun insertNewNote(title: String, body: String): Long
 
+    suspend fun restoreDeletedNote(
+        title: String,
+        body: String,
+        created_at: String,
+        updated_at: String
+    ): Long
+
     suspend fun deleteNote(primaryKey: Int): Int
 
     suspend fun updateNote(primaryKey: Int, newTitle: String, newBody: String?): Int

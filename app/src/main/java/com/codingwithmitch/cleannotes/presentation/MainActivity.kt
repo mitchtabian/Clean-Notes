@@ -19,8 +19,10 @@ import com.codingwithmitch.cleannotes.R
 import com.codingwithmitch.cleannotes.core.business.state.*
 import com.codingwithmitch.cleannotes.core.business.state.UIComponentType.*
 import com.codingwithmitch.cleannotes.core.framework.*
+import com.codingwithmitch.cleannotes.core.util.TodoCallback
 import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -177,15 +179,18 @@ class MainActivity : AppCompatActivity(),
         when(response.uiComponentType){
 
             is SnackBar -> {
-                (response.uiComponentType as SnackBar).undoCallback?.let { callback ->
+                    val onDismissCallback: TodoCallback?
+                            = (response.uiComponentType as SnackBar).onDismissCallback
+                    val undoCallback: SnackbarUndoCallback?
+                            = (response.uiComponentType as SnackBar).undoCallback
                     response.message?.let { msg ->
                         displaySnackbar(
                             message = msg,
-                            snackbarUndoCallback = callback,
+                            snackbarUndoCallback = undoCallback,
+                            onDismissCallback = onDismissCallback,
                             stateMessageCallback = stateMessageCallback
                         )
                     }
-                }
             }
 
             is AreYouSureDialog -> {
@@ -226,7 +231,8 @@ class MainActivity : AppCompatActivity(),
 
     private fun displaySnackbar(
         message: String,
-        snackbarUndoCallback: SnackbarUndoCallback,
+        snackbarUndoCallback: SnackbarUndoCallback?,
+        onDismissCallback: TodoCallback?,
         stateMessageCallback: StateMessageCallback
     ){
         val snackbar = Snackbar.make(
@@ -238,6 +244,11 @@ class MainActivity : AppCompatActivity(),
             getString(R.string.text_undo),
             SnackbarUndoListener(snackbarUndoCallback)
         )
+        snackbar.addCallback(object: BaseTransientBottomBar.BaseCallback<Snackbar>(){
+            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                onDismissCallback?.execute()
+            }
+        })
         snackbar.show()
         stateMessageCallback.removeMessageFromStack()
     }

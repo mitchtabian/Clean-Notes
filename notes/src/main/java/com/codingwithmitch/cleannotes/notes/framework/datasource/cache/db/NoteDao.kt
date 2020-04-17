@@ -11,6 +11,18 @@ interface NoteDao {
     suspend fun insertNote(note: NoteEntity): Long
 
     @Query("""
+        INSERT INTO notes
+        (title, body, created_at, updated_at)
+        VALUES (:title, :body, :created_at, :updated_at)
+    """)
+    suspend fun restoreDeletedNote(
+        title: String,
+        body: String,
+        created_at: Long,
+        updated_at: Long
+    ): Long
+
+    @Query("""
         UPDATE notes 
         SET 
         title = :title, 

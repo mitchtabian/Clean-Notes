@@ -17,6 +17,17 @@ constructor(
         return noteCacheDataSource.insertNewNote(title, body)
     }
 
+    override suspend fun restoreDeletedNote(
+        title: String,
+        body: String,
+        created_at: String,
+        updated_at: String
+    ): Long {
+        return noteCacheDataSource.restoreDeletedNote(
+            title, body, created_at, updated_at
+        )
+    }
+
     override suspend fun deleteNote(primaryKey: Int): Int {
         return noteCacheDataSource.deleteNote(primaryKey)
     }

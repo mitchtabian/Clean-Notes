@@ -8,10 +8,11 @@ import com.codingwithmitch.cleannotes.notes.business.data.repository.NoteReposit
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteEntityMapper
 import com.codingwithmitch.cleannotes.notes.di.NotesFeatureImpl
 import com.codingwithmitch.cleannotes.notes.business.domain.repository.NoteRepository
-import com.codingwithmitch.cleannotes.notes.business.interactors.*
 import com.codingwithmitch.cleannotes.presentation.BaseApplication
 import com.codingwithmitch.cleannotes.core.business.DateUtil
-import com.codingwithmitch.cleannotes.notes.business.interactors.use_cases.*
+import com.codingwithmitch.cleannotes.notes.business.interactors.notedetailfragment.NoteDetailInteractors
+import com.codingwithmitch.cleannotes.notes.business.interactors.notedetailfragment.UpdateNote
+import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.*
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteFactory
 import com.codingwithmitch.notes.datasource.cache.db.NoteDao
 import com.codingwithmitch.notes.datasource.cache.db.NoteDatabase
@@ -99,10 +100,14 @@ object NoteModule {
     @Provides
     fun provideNoteDetailInteractors(
         noteRepository: NoteRepository
-    ): NoteDetailInteractors{
+    ): NoteDetailInteractors {
         return NoteDetailInteractors(
-            DeleteNote(noteRepository),
-            UpdateNote(noteRepository)
+            DeleteNote(
+                noteRepository
+            ),
+            UpdateNote(
+                noteRepository
+            )
         )
     }
 
@@ -112,13 +117,13 @@ object NoteModule {
     fun provideNoteListInteractors(
         noteRepository: NoteRepository,
         noteFactory: NoteFactory
-    ): NoteListInteractors{
+    ): NoteListInteractors {
         return NoteListInteractors(
             InsertNewNote(noteRepository, noteFactory),
             DeleteNote(noteRepository),
             SearchNotes(noteRepository),
-            GetNumNotes(noteRepository)
-
+            GetNumNotes(noteRepository),
+            RestoreDeletedNote(noteRepository)
         )
     }
 
