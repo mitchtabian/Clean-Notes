@@ -35,7 +35,7 @@ constructor(
 ): BaseViewModel<NoteListViewState>(){
 
 
-    private val noteListInteractionManager = NoteListInteractionManager()
+    val noteListInteractionManager = NoteListInteractionManager()
 
     val toolbarState: LiveData<NoteListToolbarState>
             get() = noteListInteractionManager.toolbarState
@@ -124,6 +124,12 @@ constructor(
             launchJob(stateEvent, job)
         }
     }
+
+    fun setToolbarState(state: NoteListToolbarState)
+            = noteListInteractionManager.setToolbarState(state)
+
+    fun isMultiSelectionStateActive()
+            = noteListInteractionManager.isMultiSelectionStateActive()
 
     override fun initNewViewState(): NoteListViewState {
         return NoteListViewState()
@@ -352,6 +358,42 @@ constructor(
             setStateEvent(SearchNotesEvent())
         }
     }
+
+    fun addOrRemoveNoteFromSelectedList(note: Note)
+            = noteListInteractionManager.addOrRemoveNoteFromSelectedList(note)
+
+    fun isNoteSelected(note: Note): Boolean
+            = noteListInteractionManager.isNoteSelected(note)
+
+    fun clearSelectedNotes() = noteListInteractionManager.clearSelectedNotes()
+
+//    fun addOrRemoveNoteFromSelectedList(note: Note){
+//        val update = getCurrentViewStateOrNew()
+//        var list = update.selectedNotes
+//        if(list == null){
+//            list = ArrayList()
+//        }
+//        if (list.contains(note)){
+//            list.remove(note)
+//        }
+//        else{
+//            list.add(note)
+//        }
+//        update.selectedNotes = list
+//        setViewState(update)
+//    }
+//
+//    fun isNoteSelected(note: Note): Boolean{
+//        return getCurrentViewStateOrNew()
+//            .selectedNotes?.contains(note)?: false
+//    }
+//
+//    fun clearSelectedNotes(){
+//        val update = getCurrentViewStateOrNew()
+//        update.selectedNotes = null
+//        setViewState(update)
+//    }
+
 
 }
 

@@ -17,6 +17,7 @@ data class NoteListViewState(
     var order: String? = null,
     var layoutManagerState: Parcelable? = null,
     var numNotesInCache: Int? = null
+//    var selectedNotes: ArrayList<Note>? = null
 
 ) : Parcelable{
 

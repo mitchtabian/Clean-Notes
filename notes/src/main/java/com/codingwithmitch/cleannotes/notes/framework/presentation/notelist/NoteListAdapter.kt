@@ -2,12 +2,17 @@ package com.codingwithmitch.cleannotes.notes.framework.presentation.notelist
 
 import android.annotation.SuppressLint
 import android.view.*
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import androidx.recyclerview.selection.ItemDetailsLookup
 import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
+import com.codingwithmitch.cleannotes.core.framework.changeColor
 import com.codingwithmitch.cleannotes.core.framework.onSelectChangeColor
 import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
@@ -19,7 +24,9 @@ import java.lang.IndexOutOfBoundsException
 
 class NoteListAdapter(
     private val interaction: Interaction? = null,
-    private val lifeCycleScope: CoroutineScope
+    private val lifeCycleScope: CoroutineScope,
+    private val lifecycleOwner: LifecycleOwner,
+    private val selectedNotes: LiveData<ArrayList<Note>>
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>()
 {
@@ -46,7 +53,9 @@ class NoteListAdapter(
                 false
             ),
             interaction,
-            lifeCycleScope
+            lifeCycleScope,
+            lifecycleOwner,
+            selectedNotes
         )
     }
 
@@ -84,7 +93,9 @@ class NoteListAdapter(
     constructor(
         itemView: View,
         private val interaction: Interaction?,
-        private val lifeCycleScope: CoroutineScope
+        private val lifeCycleScope: CoroutineScope,
+        private val lifecycleOwner: LifecycleOwner,
+        private val selectedNotes: LiveData<ArrayList<Note>>
     ) : RecyclerView.ViewHolder(itemView),
         GestureDetector.OnGestureListener,
         View.OnTouchListener
@@ -96,19 +107,28 @@ class NoteListAdapter(
 
         fun bind(item: Note) = with(itemView) {
             itemView.setOnClickListener {
-                if(interaction?.isMultiSelectionModeEnabled() == false){
-                    itemView.onSelectChangeColor(
-                        lifeCycleScope = lifeCycleScope,
-                        clickColor = com.codingwithmitch.cleannotes.R.color.app_background_color
-                    )
-                    interaction.onItemSelected(adapterPosition, note)
-                }
-
+                interaction?.onItemSelected(adapterPosition, note)
             }
             itemView.setOnTouchListener(this@NoteViewHolder)
             note = item
             note_title.text = item.title
             note_timestamp.text = item.updated_at
+
+
+            selectedNotes.observe(lifecycleOwner, Observer { notes ->
+                if(notes != null){
+                    if(notes.contains(note)){
+                        itemView.changeColor(
+                            newColor = com.codingwithmitch.cleannotes.R.color.app_background_color
+                        )
+                    }
+                    else{
+                        itemView.changeColor(
+                            newColor = com.codingwithmitch.cleannotes.R.color.colorPrimary
+                        )
+                    }
+                }
+            })
         }
 
         override fun onShowPress(e: MotionEvent?) {
@@ -160,6 +180,8 @@ class NoteListAdapter(
         fun isMultiSelectionModeEnabled(): Boolean
 
         fun activateMultiSelectionMode()
+
+        fun isNoteSelected(note: Note): Boolean
     }
 
 }

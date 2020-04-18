@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 // threshold for when contents of collapsing toolbar is hidden
 const val COLLAPSING_TOOLBAR_VISIBILITY_THRESHOLD = -75
 const val CLICK_THRESHOLD = 150L // a click is considered 150ms or less
-const val CLICK_COLOR_CHANGE_TIME = 100L
+const val CLICK_COLOR_CHANGE_TIME = 250L
 
 fun View.visible() {
     visibility = View.VISIBLE
@@ -75,6 +75,14 @@ fun View.onSelectChangeColor(
         setBackgroundColor(intialColor)
     }
 
+fun View.changeColor(newColor: Int) {
+    setBackgroundColor(
+        ContextCompat.getColor(
+            context,
+            newColor
+        )
+    )
+}
 
 fun EditText.disableContentInteraction() {
     keyListener = null

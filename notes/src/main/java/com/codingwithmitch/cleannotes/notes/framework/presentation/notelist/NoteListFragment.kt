@@ -2,13 +2,13 @@ package com.codingwithmitch.cleannotes.notes.framework.presentation.notelist
 
 import android.os.Build
 import android.os.Bundle
-import android.view.ActionMode
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.view.inputmethod.EditorInfo
+import android.widget.ImageView
+import android.widget.LinearLayout
 import androidx.annotation.MenuRes
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -77,7 +77,6 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
 
         setupUI()
         setupRecyclerView()
-        setupSearchView()
         setupSwipeRefresh()
         setupFAB()
         subscribeObservers()
@@ -154,12 +153,15 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
             addItemDecoration(topSpacingDecorator)
             itemTouchHelper = ItemTouchHelper(
                 NoteItemTouchHelperCallback(
-                    this@NoteListFragment
+                    this@NoteListFragment,
+                    viewModel.noteListInteractionManager
                 )
             )
             listAdapter = NoteListAdapter(
                 this@NoteListFragment,
-                lifecycleScope
+                lifecycleScope,
+                viewLifecycleOwner,
+                viewModel.noteListInteractionManager.selectedNotes
             )
             itemTouchHelper?.attachToRecyclerView(this)
             addOnScrollListener(object: RecyclerView.OnScrollListener(){
@@ -177,28 +179,73 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
     }
 
     private fun enableMultiSelectToolbarState(){
-        toolbar_content_container.addView(R.layout.layout_multiselection_toolbar)
+        view?.let { v ->
+            val view = View.inflate(
+                v.context,
+                R.layout.layout_multiselection_toolbar,
+                null
+            )
+            view.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+            )
+            toolbar_content_container.addView(view)
+            setupMultiSelectionToolbar(view)
+        }
+    }
+
+    private fun setupMultiSelectionToolbar(parentView: View){
+        parentView
+                .findViewById<ImageView>(R.id.action_exit_multiselect_state)
+            .setOnClickListener {
+                viewModel.setToolbarState(SearchViewState())
+            }
+
+        parentView
+            .findViewById<ImageView>(R.id.action_delete_notes)
+            .setOnClickListener {
+                // TODO("execute multi-delete")
+            }
     }
 
     private fun enableSearchViewToolbarState(){
-        toolbar_content_container.addView(R.layout.layout_searchview_toolbar)
+        view?.let { v ->
+            val view = View.inflate(
+                v.context,
+                R.layout.layout_searchview_toolbar,
+                null
+            )
+            view.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+            )
+            toolbar_content_container.addView(view)
+            setupSearchView()
+        }
     }
 
     private fun disableMultiSelectToolbarState(){
-        toolbar_content_container.removeView(R.layout.layout_multiselection_toolbar)
+        view?.let { v ->
+            val view = toolbar_content_container
+                .findViewById<Toolbar>(R.id.multiselect_toolbar)
+            toolbar_content_container.removeView(view)
+            viewModel.clearSelectedNotes()
+        }
     }
 
     private fun disableSearchViewToolbarState(){
-        toolbar_content_container.removeView(R.layout.layout_searchview_toolbar)
+        view?.let { v ->
+            val view = toolbar_content_container
+                .findViewById<Toolbar>(R.id.searchview_toolbar)
+            toolbar_content_container.removeView(view)
+        }
     }
 
-    override fun isMultiSelectionModeEnabled(): Boolean {
-        return false
-    }
+    override fun isMultiSelectionModeEnabled()
+            = viewModel.isMultiSelectionStateActive()
 
-    override fun activateMultiSelectionMode() {
-
-    }
+    override fun activateMultiSelectionMode()
+            = viewModel.setToolbarState(MultiSelectionState())
 
     private fun subscribeObservers(){
 
@@ -317,13 +364,22 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
     }
 
     override fun onItemSelected(position: Int, item: Note) {
-        viewModel.setNote(item)
+        if(isMultiSelectionModeEnabled()){
+            viewModel.addOrRemoveNoteFromSelectedList(item)
+        }
+        else{
+            viewModel.setNote(item)
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         listAdapter = null // can leak memory
         itemTouchHelper = null // can leak memory
+    }
+
+    override fun isNoteSelected(note: Note): Boolean {
+        return viewModel.isNoteSelected(note)
     }
 
     override fun onItemSwiped(position: Int) {
@@ -339,17 +395,25 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
 
     private fun setupSearchView(){
 
-        val searchPlate: SearchView.SearchAutoComplete?
-                = search_view.findViewById(androidx.appcompat.R.id.search_src_text)
+        val searchViewToolbar: Toolbar? = toolbar_content_container
+            .findViewById<Toolbar>(R.id.searchview_toolbar)
 
-        searchPlate?.setOnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_UNSPECIFIED
-                || actionId == EditorInfo.IME_ACTION_SEARCH ) {
-                val searchQuery = v.text.toString()
-                viewModel.setQuery(searchQuery)
-                startNewSearch()
+        searchViewToolbar?.let { toolbar ->
+
+            val searchView = toolbar.findViewById<SearchView>(R.id.search_view)
+
+            val searchPlate: SearchView.SearchAutoComplete?
+                    = searchView.findViewById(androidx.appcompat.R.id.search_src_text)
+
+            searchPlate?.setOnEditorActionListener { v, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_UNSPECIFIED
+                    || actionId == EditorInfo.IME_ACTION_SEARCH ) {
+                    val searchQuery = v.text.toString()
+                    viewModel.setQuery(searchQuery)
+                    startNewSearch()
+                }
+                true
             }
-            true
         }
     }
 
