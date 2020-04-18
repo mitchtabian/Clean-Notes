@@ -367,33 +367,6 @@ constructor(
 
     fun clearSelectedNotes() = noteListInteractionManager.clearSelectedNotes()
 
-//    fun addOrRemoveNoteFromSelectedList(note: Note){
-//        val update = getCurrentViewStateOrNew()
-//        var list = update.selectedNotes
-//        if(list == null){
-//            list = ArrayList()
-//        }
-//        if (list.contains(note)){
-//            list.remove(note)
-//        }
-//        else{
-//            list.add(note)
-//        }
-//        update.selectedNotes = list
-//        setViewState(update)
-//    }
-//
-//    fun isNoteSelected(note: Note): Boolean{
-//        return getCurrentViewStateOrNew()
-//            .selectedNotes?.contains(note)?: false
-//    }
-//
-//    fun clearSelectedNotes(){
-//        val update = getCurrentViewStateOrNew()
-//        update.selectedNotes = null
-//        setViewState(update)
-//    }
-
 
 }
 

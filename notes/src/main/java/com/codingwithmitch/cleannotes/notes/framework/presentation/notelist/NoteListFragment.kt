@@ -1,19 +1,16 @@
 package com.codingwithmitch.cleannotes.notes.framework.presentation.notelist
 
-import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
 import android.widget.LinearLayout
-import androidx.annotation.MenuRes
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,13 +27,10 @@ import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNo
 import com.codingwithmitch.cleannotes.notes.framework.presentation.BaseNoteFragment
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListStateEvent.*
-import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListToolbarState
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListToolbarState.*
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState
 import com.codingwithmitch.notes.R
 import kotlinx.android.synthetic.main.fragment_note_list.*
-import kotlinx.android.synthetic.main.layout_note_detail_toolbar.*
-import kotlinx.android.synthetic.main.layout_searchview_toolbar.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import javax.inject.Inject
@@ -159,7 +153,6 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
             )
             listAdapter = NoteListAdapter(
                 this@NoteListFragment,
-                lifecycleScope,
                 viewLifecycleOwner,
                 viewModel.noteListInteractionManager.selectedNotes
             )

@@ -24,7 +24,6 @@ import java.lang.IndexOutOfBoundsException
 
 class NoteListAdapter(
     private val interaction: Interaction? = null,
-    private val lifeCycleScope: CoroutineScope,
     private val lifecycleOwner: LifecycleOwner,
     private val selectedNotes: LiveData<ArrayList<Note>>
 ) :
@@ -53,7 +52,6 @@ class NoteListAdapter(
                 false
             ),
             interaction,
-            lifeCycleScope,
             lifecycleOwner,
             selectedNotes
         )
@@ -93,29 +91,29 @@ class NoteListAdapter(
     constructor(
         itemView: View,
         private val interaction: Interaction?,
-        private val lifeCycleScope: CoroutineScope,
         private val lifecycleOwner: LifecycleOwner,
         private val selectedNotes: LiveData<ArrayList<Note>>
-    ) : RecyclerView.ViewHolder(itemView),
-        GestureDetector.OnGestureListener,
-        View.OnTouchListener
+    ) : RecyclerView.ViewHolder(itemView)
     {
 
-        private var gestureDetector: GestureDetector
-                = GestureDetector(itemView.context, this)
         private lateinit var note: Note
 
         fun bind(item: Note) = with(itemView) {
             itemView.setOnClickListener {
                 interaction?.onItemSelected(adapterPosition, note)
             }
-            itemView.setOnTouchListener(this@NoteViewHolder)
+            itemView.setOnLongClickListener {
+                interaction?.activateMultiSelectionMode()
+                interaction?.onItemSelected(adapterPosition, note)
+                true
+            }
             note = item
             note_title.text = item.title
             note_timestamp.text = item.updated_at
 
 
             selectedNotes.observe(lifecycleOwner, Observer { notes ->
+
                 if(notes != null){
                     if(notes.contains(note)){
                         itemView.changeColor(
@@ -127,48 +125,13 @@ class NoteListAdapter(
                             newColor = com.codingwithmitch.cleannotes.R.color.colorPrimary
                         )
                     }
+                }else{
+                    itemView.changeColor(
+                        newColor = com.codingwithmitch.cleannotes.R.color.colorPrimary
+                    )
                 }
             })
         }
-
-        override fun onShowPress(e: MotionEvent?) {
-        }
-
-        override fun onSingleTapUp(event: MotionEvent?): Boolean {
-            return false
-        }
-
-        override fun onDown(e: MotionEvent?): Boolean {
-            return false
-        }
-
-        override fun onFling(
-            e1: MotionEvent?,
-            e2: MotionEvent?,
-            velocityX: Float,
-            velocityY: Float
-        ): Boolean {
-            return false
-        }
-
-        override fun onScroll(
-            e1: MotionEvent?,
-            e2: MotionEvent?,
-            distanceX: Float,
-            distanceY: Float
-        ): Boolean {
-            return false
-        }
-
-        override fun onLongPress(e: MotionEvent?) {
-            interaction?.activateMultiSelectionMode()
-        }
-
-        @SuppressLint("ClickableViewAccessibility")
-        override fun onTouch(view: View?, event: MotionEvent?): Boolean {
-            return gestureDetector.onTouchEvent(event)
-        }
-
     }
 
     interface Interaction {

@@ -2,7 +2,6 @@ package com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.sta
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListToolbarState.*
 
