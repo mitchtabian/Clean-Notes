@@ -1,9 +1,13 @@
 package com.codingwithmitch.cleannotes.notes.framework.presentation.notelist
 
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.NoteListFragment.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
+@ExperimentalCoroutinesApi
+@FlowPreview
 class NoteItemTouchHelperCallback
 constructor(
     private val itemTouchHelperAdapter: ItemTouchHelperAdapter

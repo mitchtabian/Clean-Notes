@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/searchview_toolbar"
+    android:background="@color/colorPrimary"
+    android:elevation="10dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:iconifiedByDefault="false"
+        android:queryHint="@string/text_Search"
+        android:layout_centerHorizontal="true" />
+
+</androidx.appcompat.widget.Toolbar>
