@@ -1,14 +1,17 @@
 package com.codingwithmitch.cleannotes.notes.framework.presentation.notelist
 
 import android.os.Bundle
-import android.view.View
+import android.view.*
 import android.view.inputmethod.EditorInfo
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +28,7 @@ import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNo
 import com.codingwithmitch.cleannotes.notes.framework.presentation.BaseNoteFragment
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListStateEvent.*
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListToolbarState.*
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState
 import com.codingwithmitch.notes.R
 import kotlinx.android.synthetic.main.fragment_note_list.*
@@ -68,7 +72,6 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
 
         setupUI()
         setupRecyclerView()
-        setupSearchView()
         setupSwipeRefresh()
         setupFAB()
         subscribeObservers()
@@ -92,6 +95,7 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
 
         restoreInstanceState(savedInstanceState)
     }
+
 
     override fun onResume() {
         super.onResume()
@@ -143,12 +147,15 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
             val topSpacingDecorator = TopSpacingItemDecoration(20)
             addItemDecoration(topSpacingDecorator)
             itemTouchHelper = ItemTouchHelper(
-                NoteItemTouchHelperCallback(this@NoteListFragment)
+                NoteItemTouchHelperCallback(
+                    this@NoteListFragment,
+                    viewModel.noteListInteractionManager
+                )
             )
             listAdapter = NoteListAdapter(
                 this@NoteListFragment,
-                lifecycleScope,
-                itemTouchHelper
+                viewLifecycleOwner,
+                viewModel.noteListInteractionManager.selectedNotes
             )
             itemTouchHelper?.attachToRecyclerView(this)
             addOnScrollListener(object: RecyclerView.OnScrollListener(){
@@ -165,7 +172,94 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
         }
     }
 
+    private fun enableMultiSelectToolbarState(){
+        view?.let { v ->
+            val view = View.inflate(
+                v.context,
+                R.layout.layout_multiselection_toolbar,
+                null
+            )
+            view.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+            )
+            toolbar_content_container.addView(view)
+            setupMultiSelectionToolbar(view)
+        }
+    }
+
+    private fun setupMultiSelectionToolbar(parentView: View){
+        parentView
+                .findViewById<ImageView>(R.id.action_exit_multiselect_state)
+            .setOnClickListener {
+                viewModel.setToolbarState(SearchViewState())
+            }
+
+        parentView
+            .findViewById<ImageView>(R.id.action_delete_notes)
+            .setOnClickListener {
+                // TODO("execute multi-delete")
+                Toast.makeText(context, "TODO: Delete all selected notes", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun enableSearchViewToolbarState(){
+        view?.let { v ->
+            val view = View.inflate(
+                v.context,
+                R.layout.layout_searchview_toolbar,
+                null
+            )
+            view.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+            )
+            toolbar_content_container.addView(view)
+            setupSearchView()
+        }
+    }
+
+    private fun disableMultiSelectToolbarState(){
+        view?.let { v ->
+            val view = toolbar_content_container
+                .findViewById<Toolbar>(R.id.multiselect_toolbar)
+            toolbar_content_container.removeView(view)
+            viewModel.clearSelectedNotes()
+        }
+    }
+
+    private fun disableSearchViewToolbarState(){
+        view?.let { v ->
+            val view = toolbar_content_container
+                .findViewById<Toolbar>(R.id.searchview_toolbar)
+            toolbar_content_container.removeView(view)
+        }
+    }
+
+    override fun isMultiSelectionModeEnabled()
+            = viewModel.isMultiSelectionStateActive()
+
+    override fun activateMultiSelectionMode()
+            = viewModel.setToolbarState(MultiSelectionState())
+
     private fun subscribeObservers(){
+
+        viewModel.toolbarState.observe(viewLifecycleOwner, Observer{ toolbarState ->
+
+            when(toolbarState){
+
+                is MultiSelectionState -> {
+                    enableMultiSelectToolbarState()
+                    disableSearchViewToolbarState()
+                }
+
+                is SearchViewState -> {
+                    enableSearchViewToolbarState()
+                    disableMultiSelectToolbarState()
+                }
+            }
+        })
+
         viewModel.viewState.observe(viewLifecycleOwner, Observer{ viewState ->
 
             if(viewState != null){
@@ -265,13 +359,22 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
     }
 
     override fun onItemSelected(position: Int, item: Note) {
-        viewModel.setNote(item)
+        if(isMultiSelectionModeEnabled()){
+            viewModel.addOrRemoveNoteFromSelectedList(item)
+        }
+        else{
+            viewModel.setNote(item)
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         listAdapter = null // can leak memory
         itemTouchHelper = null // can leak memory
+    }
+
+    override fun isNoteSelected(note: Note): Boolean {
+        return viewModel.isNoteSelected(note)
     }
 
     override fun onItemSwiped(position: Int) {
@@ -287,17 +390,25 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
 
     private fun setupSearchView(){
 
-        val searchPlate: SearchView.SearchAutoComplete?
-                = search_view.findViewById(androidx.appcompat.R.id.search_src_text)
+        val searchViewToolbar: Toolbar? = toolbar_content_container
+            .findViewById<Toolbar>(R.id.searchview_toolbar)
 
-        searchPlate?.setOnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_UNSPECIFIED
-                || actionId == EditorInfo.IME_ACTION_SEARCH ) {
-                val searchQuery = v.text.toString()
-                viewModel.setQuery(searchQuery)
-                startNewSearch()
+        searchViewToolbar?.let { toolbar ->
+
+            val searchView = toolbar.findViewById<SearchView>(R.id.search_view)
+
+            val searchPlate: SearchView.SearchAutoComplete?
+                    = searchView.findViewById(androidx.appcompat.R.id.search_src_text)
+
+            searchPlate?.setOnEditorActionListener { v, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_UNSPECIFIED
+                    || actionId == EditorInfo.IME_ACTION_SEARCH ) {
+                    val searchQuery = v.text.toString()
+                    viewModel.setQuery(searchQuery)
+                    startNewSearch()
+                }
+                true
             }
-            true
         }
     }
 

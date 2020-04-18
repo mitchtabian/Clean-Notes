@@ -1,0 +1,57 @@
+<androidx.appcompat.widget.Toolbar android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/multiselect_toolbar"
+    android:background="@color/colorPrimary"
+    android:elevation="10dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        >
+
+        <ImageView
+            android:layout_width="@dimen/toolbar_item_margin"
+            android:layout_height="@dimen/toolbar_item_margin"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:id="@+id/action_exit_multiselect_state"
+            android:src="@drawable/ic_close_grey_24dp"
+            />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/action_exit_multiselect_state"
+            app:layout_constraintRight_toLeftOf="@id/action_delete_notes"
+            app:layout_constraintHorizontal_bias="0"
+            android:id="@+id/tool_bar_title"
+            android:textColor="@color/default_grey"
+            android:layout_marginStart="@dimen/toolbar_title_margin"
+            android:layout_marginEnd="@dimen/default_view_margin"
+            android:gravity="center_vertical"
+            android:textSize="@dimen/page_title_size"
+            android:maxLines="1"
+            android:ellipsize="end"
+            />
+
+
+        <ImageView
+            android:layout_width="@dimen/toolbar_item_margin"
+            android:layout_height="@dimen/toolbar_item_margin"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/action_delete_notes"
+            android:layout_marginEnd="@dimen/default_view_margin"
+            android:src="@drawable/ic_delete"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.appcompat.widget.Toolbar>

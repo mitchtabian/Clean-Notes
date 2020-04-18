@@ -1,6 +1,7 @@
 package com.codingwithmitch.cleannotes.notes.framework.presentation.notelist
 
 import android.os.Parcelable
+import androidx.lifecycle.LiveData
 import com.codingwithmitch.cleannotes.core.business.state.*
 import com.codingwithmitch.cleannotes.core.di.scopes.FeatureScope
 import com.codingwithmitch.cleannotes.core.framework.BaseViewModel
@@ -10,7 +11,9 @@ import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragmen
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_FILTER_DATE_CREATED
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_ORDER_DESC
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteFactory
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListInteractionManager
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListStateEvent.*
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListToolbarState
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState.*
 import kotlinx.coroutines.*
@@ -31,6 +34,11 @@ constructor(
     private val noteFactory: NoteFactory
 ): BaseViewModel<NoteListViewState>(){
 
+
+    val noteListInteractionManager = NoteListInteractionManager()
+
+    val toolbarState: LiveData<NoteListToolbarState>
+            get() = noteListInteractionManager.toolbarState
 
     override fun handleNewData(data: NoteListViewState) {
 
@@ -117,6 +125,12 @@ constructor(
         }
     }
 
+    fun setToolbarState(state: NoteListToolbarState)
+            = noteListInteractionManager.setToolbarState(state)
+
+    fun isMultiSelectionStateActive()
+            = noteListInteractionManager.isMultiSelectionStateActive()
+
     override fun initNewViewState(): NoteListViewState {
         return NoteListViewState()
     }
@@ -190,7 +204,8 @@ constructor(
     }
 
     fun isDeletePending(): Boolean{
-        if(isJobAlreadyActive(DeleteNoteEvent(primaryKey = 0))){
+        val pendingNote = getCurrentViewStateOrNew().notePendingDelete
+        if(pendingNote != null){
             setStateEvent(
                 CreateStateMessageEvent(
                     stateMessage = StateMessage(
@@ -343,6 +358,15 @@ constructor(
             setStateEvent(SearchNotesEvent())
         }
     }
+
+    fun addOrRemoveNoteFromSelectedList(note: Note)
+            = noteListInteractionManager.addOrRemoveNoteFromSelectedList(note)
+
+    fun isNoteSelected(note: Note): Boolean
+            = noteListInteractionManager.isNoteSelected(note)
+
+    fun clearSelectedNotes() = noteListInteractionManager.clearSelectedNotes()
+
 
 }
 

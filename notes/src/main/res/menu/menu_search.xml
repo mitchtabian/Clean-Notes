@@ -2,17 +2,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
 
-    <item android:id="@+id/action_filter_settings"
+    <item android:id="@+id/action_delete_notes"
         android:title="@string/text_Filter"
-        android:icon="@drawable/ic_filter_list_grey_24dp"
-        android:orderInCategory="100"
+        android:icon="@drawable/ic_delete"
+        android:orderInCategory="2"
         app:showAsAction="always" />
 
-    <item
-        android:id="@+id/action_search"
-        android:icon="@android:drawable/ic_menu_search"
-        app:showAsAction="always"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
-        android:title="@string/text_Search"/>
 
 </menu>

@@ -1,12 +1,19 @@
 package com.codingwithmitch.cleannotes.notes.framework.presentation.notelist
 
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteInteractionManager
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.NoteListFragment.*
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListInteractionManager
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 
+@ExperimentalCoroutinesApi
+@FlowPreview
 class NoteItemTouchHelperCallback
 constructor(
-    private val itemTouchHelperAdapter: ItemTouchHelperAdapter
+    private val itemTouchHelperAdapter: ItemTouchHelperAdapter,
+    private val noteListInteractionManager: NoteListInteractionManager
 ): ItemTouchHelper.Callback() {
 
     override fun getMovementFlags(
@@ -36,7 +43,7 @@ constructor(
     }
 
     override fun isItemViewSwipeEnabled(): Boolean {
-        return true
+        return !noteListInteractionManager.isMultiSelectionStateActive()
     }
 
 }

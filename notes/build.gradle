@@ -56,6 +56,7 @@ dependencies {
     implementation SupportDependencies.constraintlayout
     implementation SupportDependencies.material_design
     implementation SupportDependencies.swipe_refresh_layout
+    implementation SupportDependencies.recyclerview_selection
 
     kapt AnnotationProcessorsDependencies.dagger_compiler
     kapt AnnotationProcessorsDependencies.room_compiler
