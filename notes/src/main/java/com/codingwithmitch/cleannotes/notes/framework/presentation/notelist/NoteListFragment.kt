@@ -199,7 +199,7 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
             .findViewById<ImageView>(R.id.action_delete_notes)
             .setOnClickListener {
                 // TODO("execute multi-delete")
-                Toast.makeText(context, "TODO: Delete all selected note", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "TODO: Delete all selected notes", Toast.LENGTH_SHORT).show()
             }
     }
 
