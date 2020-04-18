@@ -5,10 +5,10 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:weightSum="100"
-    android:background="@color/colorPrimary"
     android:gravity="center_vertical"
     android:layout_marginEnd="@dimen/recyclerview_start_end_margins"
-    android:layout_marginStart="@dimen/recyclerview_start_end_margins">
+    android:layout_marginStart="@dimen/recyclerview_start_end_margins"
+    android:background="@drawable/list_item_selector">
 
     <View
         android:layout_width="0dp"

@@ -2,6 +2,8 @@ package com.codingwithmitch.cleannotes.notes.framework.presentation.notelist
 
 import android.annotation.SuppressLint
 import android.view.*
+import androidx.recyclerview.selection.ItemDetailsLookup
+import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -22,6 +24,12 @@ class NoteListAdapter(
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>()
 {
+
+    var tracker: SelectionTracker<Long>? = null
+
+    init {
+        setHasStableIds(true)
+    }
 
     val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Note>() {
 
@@ -53,10 +61,21 @@ class NoteListAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is NoteViewHolder -> {
-                holder.bind(differ.currentList.get(position))
+                tracker?.let {
+                    holder.bind(
+                        differ.currentList.get(position),
+                        it.isSelected(position.toLong())
+                    )?: throwRequiresTrackerException()
+                }
             }
         }
     }
+
+    private fun throwRequiresTrackerException(){
+        throw Exception("NoteListAdapter: You must set the SelectionTracker.")
+    }
+
+    override fun getItemId(position: Int): Long = position.toLong()
 
     override fun getItemCount(): Int {
         return differ.currentList.size
@@ -95,19 +114,26 @@ class NoteListAdapter(
                 = GestureDetector(itemView.context, this)
         private lateinit var note: Note
 
-        fun bind(item: Note) = with(itemView) {
+        fun bind(item: Note, isActivated: Boolean = false) = with(itemView) {
+            itemView.isActivated = isActivated
             itemView.setOnClickListener {
-                itemView.onSelectChangeColor(
-                    lifeCycleScope = lifeCycleScope,
-                    clickColor = com.codingwithmitch.cleannotes.R.color.app_background_color
-                )
+//                itemView.onSelectChangeColor(
+//                    lifeCycleScope = lifeCycleScope,
+//                    clickColor = com.codingwithmitch.cleannotes.R.color.app_background_color
+//                )
                 interaction?.onItemSelected(adapterPosition, note)
             }
-            itemView.setOnTouchListener(this@NoteViewHolder)
+//            itemView.setOnTouchListener(this@NoteViewHolder)
             note = item
             note_title.text = item.title
             note_timestamp.text = item.updated_at
         }
+
+        fun getItemDetails(): ItemDetailsLookup.ItemDetails<Long> =
+            object : ItemDetailsLookup.ItemDetails<Long>() {
+                override fun getPosition(): Int = adapterPosition
+                override fun getSelectionKey(): Long? = itemId
+            }
 
         override fun onShowPress(e: MotionEvent?) {
         }

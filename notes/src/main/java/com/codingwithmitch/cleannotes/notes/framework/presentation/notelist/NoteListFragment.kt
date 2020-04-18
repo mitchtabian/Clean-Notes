@@ -10,6 +10,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.selection.SelectionPredicates
+import androidx.recyclerview.selection.SelectionTracker
+import androidx.recyclerview.selection.StableIdKeyProvider
+import androidx.recyclerview.selection.StorageStrategy
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -51,6 +55,7 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
 
     private var listAdapter: NoteListAdapter? = null
     private var itemTouchHelper: ItemTouchHelper? = null
+    private var tracker: SelectionTracker<Long>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -137,6 +142,18 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
         }
     }
 
+    private fun setupTracker(recyclerView: RecyclerView){
+        tracker = SelectionTracker.Builder<Long>(
+            "selectedNote",
+            recyclerView,
+            StableIdKeyProvider(recyclerView),
+            NoteItemDetailsLookup(recyclerView),
+            StorageStrategy.createLongStorage()
+        ).withSelectionPredicate(
+            SelectionPredicates.createSelectAnything()
+        ).build()
+    }
+
     private fun setupRecyclerView(){
         recycler_view.apply {
             layoutManager = LinearLayoutManager(activity)
@@ -162,6 +179,9 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
                 }
             })
             adapter = listAdapter
+
+            setupTracker(this)
+            (adapter as NoteListAdapter).tracker = tracker
         }
     }
 
@@ -272,6 +292,7 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
         super.onDestroyView()
         listAdapter = null // can leak memory
         itemTouchHelper = null // can leak memory
+        tracker = null // can leak memory
     }
 
     override fun onItemSwiped(position: Int) {
