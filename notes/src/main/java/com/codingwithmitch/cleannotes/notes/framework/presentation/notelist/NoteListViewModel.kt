@@ -190,7 +190,8 @@ constructor(
     }
 
     fun isDeletePending(): Boolean{
-        if(isJobAlreadyActive(DeleteNoteEvent(primaryKey = 0))){
+        val pendingNote = getCurrentViewStateOrNew().notePendingDelete
+        if(pendingNote != null){
             setStateEvent(
                 CreateStateMessageEvent(
                     stateMessage = StateMessage(
