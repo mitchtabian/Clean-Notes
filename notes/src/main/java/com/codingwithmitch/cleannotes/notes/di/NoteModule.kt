@@ -10,6 +10,7 @@ import com.codingwithmitch.cleannotes.notes.di.NotesFeatureImpl
 import com.codingwithmitch.cleannotes.notes.business.domain.repository.NoteRepository
 import com.codingwithmitch.cleannotes.presentation.BaseApplication
 import com.codingwithmitch.cleannotes.core.business.DateUtil
+import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNote
 import com.codingwithmitch.cleannotes.notes.business.interactors.notedetailfragment.NoteDetailInteractors
 import com.codingwithmitch.cleannotes.notes.business.interactors.notedetailfragment.UpdateNote
 import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.*
@@ -102,12 +103,8 @@ object NoteModule {
         noteRepository: NoteRepository
     ): NoteDetailInteractors {
         return NoteDetailInteractors(
-            DeleteNote(
-                noteRepository
-            ),
-            UpdateNote(
-                noteRepository
-            )
+            DeleteNote(noteRepository),
+            UpdateNote(noteRepository)
         )
     }
 

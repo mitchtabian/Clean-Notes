@@ -11,8 +11,10 @@ import androidx.navigation.fragment.findNavController
 import com.codingwithmitch.cleannotes.R.drawable
 import com.codingwithmitch.cleannotes.core.business.state.*
 import com.codingwithmitch.cleannotes.core.framework.*
+import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
-import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.DeleteNote.Companion.DELETE_ARE_YOU_SURE
+import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNote.Companion.DELETE_ARE_YOU_SURE
+import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_SUCCESS
 import com.codingwithmitch.cleannotes.notes.business.interactors.notedetailfragment.UpdateNote.Companion.UPDATE_NOTE_FAILED_PK
 import com.codingwithmitch.cleannotes.notes.business.interactors.notedetailfragment.UpdateNote.Companion.UPDATE_NOTE_SUCCESS
 import com.codingwithmitch.cleannotes.notes.framework.presentation.BaseNoteFragment
@@ -50,23 +52,26 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // get Note after a rotation
-        savedInstanceState?.let { inState ->
-            (inState.getParcelable(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY) as Note?)?.let{ note ->
-                viewModel.setNoteFromBundle(note)
-            }
-        }
+//        // get Note after a rotation
+//        savedInstanceState?.let { inState ->
+//            (inState.getParcelable(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY) as Note?)?.let{ note ->
+//                viewModel.setNoteFromBundle(note)
+//            }
+//        }
 
         // get Note after navigation
-        if(viewModel.getNote() == null){
-            arguments?.let { args ->
-                args.getParcelable<Note>(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY)?.let { note ->
-                    viewModel.setNoteFromBundle(note)
-                }?: onErrorRetrievingNoteFromBundle()
-            }
+        arguments?.let { args ->
+            args.getParcelable<Note>(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY)?.let { note ->
+                viewModel.setNote(note)
+                clearArgs()
+            }?: onErrorRetrievingNoteFromBundle()
         }
 
         viewModel.setupChannel()
+    }
+
+    private fun clearArgs(){
+        arguments?.clear()
     }
 
     private fun onErrorRetrievingNoteFromBundle(){
@@ -161,6 +166,8 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
                     setNoteTitle(note.title)
                     setNoteBody(note.body)
                 }
+
+                printLogD("DetailFragment", "is update pending?: ${viewState.isUpdatePending}")
             }
         })
 
@@ -169,35 +176,48 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         })
 
         viewModel.stateMessage.observe(viewLifecycleOwner, Observer { stateMessage ->
-            stateMessage?.let { message ->
-                if(!message.response.message.equals(UPDATE_NOTE_SUCCESS)){
-                    uiController.onResponseReceived(
-                        response = message.response,
-                        stateMessageCallback = object: StateMessageCallback {
-                            override fun removeMessageFromStack() {
-                                viewModel.clearStateMessage()
+
+            stateMessage?.response?.let { response ->
+
+                when(response.message){
+
+                    UPDATE_NOTE_SUCCESS -> {
+                        viewModel.setIsUpdatePending(false)
+                        viewModel.clearStateMessage()
+                    }
+
+                    DELETE_NOTE_SUCCESS -> {
+                        viewModel.clearStateMessage()
+                        onDeleteSuccess()
+                    }
+
+                    else -> {
+                        uiController.onResponseReceived(
+                            response = stateMessage.response,
+                            stateMessageCallback = object: StateMessageCallback {
+                                override fun removeMessageFromStack() {
+                                    viewModel.clearStateMessage()
+                                }
                             }
-                        }
-                    )
-                    when(message.response.message){
+                        )
+                        when(response.message){
 
-                        UPDATE_NOTE_FAILED_PK -> {
-                            findNavController().popBackStack()
-                        }
+                            UPDATE_NOTE_FAILED_PK -> {
+                                findNavController().popBackStack()
+                            }
 
-                        NOTE_DETAIL_ERROR_RETRIEVEING_SELECTED_NOTE -> {
-                            findNavController().popBackStack()
-                        }
+                            NOTE_DETAIL_ERROR_RETRIEVEING_SELECTED_NOTE -> {
+                                findNavController().popBackStack()
+                            }
 
-                        else -> {
-                            // do nothing
+                            else -> {
+                                // do nothing
+                            }
                         }
                     }
                 }
-                else{
-                    viewModel.clearStateMessage()
-                }
             }
+
         })
 
         viewModel.collapsingToolbarState.observe(viewLifecycleOwner, Observer { state ->
@@ -222,6 +242,7 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
                     note_title.enableContentInteraction()
                     view?.showKeyboard()
                     displayEditStateToolbar()
+                    viewModel.setIsUpdatePending(true)
                 }
 
                 is DefaultState -> {
@@ -238,6 +259,7 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
                     note_body.enableContentInteraction()
                     view?.showKeyboard()
                     displayEditStateToolbar()
+                    viewModel.setIsUpdatePending(true)
                 }
 
                 is DefaultState -> {
@@ -388,9 +410,7 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
                             object: AreYouSureCallback{
                                 override fun proceed() {
                                     viewModel.getNote()?.let{ note ->
-                                        // Create bundle arg containing note to be deleted
-                                        // nav to NoteListFragment and clear backstack
-                                        initiateDeleteTransaction()
+                                        initiateDeleteTransaction(note)
                                     }
                                 }
 
@@ -406,8 +426,14 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         )
     }
 
-    private fun initiateDeleteTransaction(){
+    private fun initiateDeleteTransaction(note: Note){
+        viewModel.beginPendingDelete(note)
+    }
+
+    private fun onDeleteSuccess(){
         val bundle = bundleOf(NOTE_PENDING_DELETE_BUNDLE_KEY to viewModel.getNote())
+        viewModel.setNote(null) // clear note from ViewState
+        viewModel.setIsUpdatePending(false) // prevent update onPause
         findNavController().navigate(
             R.id.action_note_detail_fragment_to_noteListFragment,
             bundle
@@ -425,9 +451,11 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
 
 
     private fun updateNote() {
-        viewModel.setStateEvent(
-            UpdateNoteEvent()
-        )
+        if(viewModel.getIsUpdatePending()){
+            viewModel.setStateEvent(
+                UpdateNoteEvent()
+            )
+        }
     }
 
     private fun transitionToCollapsedMode() {
@@ -452,7 +480,7 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putParcelable(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY, viewModel.getNote())
+//        outState.putParcelable(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY, viewModel.getNote())
 
         val viewState = viewModel.getCurrentViewStateOrNew()
         outState.putParcelable(NOTE_DETAIL_STATE_BUNDLE_KEY, viewState)

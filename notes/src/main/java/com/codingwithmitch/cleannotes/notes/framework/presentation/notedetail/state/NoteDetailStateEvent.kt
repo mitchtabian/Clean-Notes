@@ -19,6 +19,20 @@ sealed class NoteDetailStateEvent: StateEvent {
         override fun shouldDisplayProgressBar() = true
     }
 
+    class DeleteNoteEvent(
+        val primaryKey: Int
+    ): NoteDetailStateEvent(){
+
+        override fun errorInfo(): String {
+            return "Error deleting note."
+        }
+
+        override fun eventName(): String {
+            return "DeleteNoteEvent"
+        }
+
+        override fun shouldDisplayProgressBar() = true
+    }
 
     class CreateStateMessageEvent(
         val stateMessage: StateMessage

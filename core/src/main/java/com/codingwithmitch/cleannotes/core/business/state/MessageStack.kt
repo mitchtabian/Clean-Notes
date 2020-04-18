@@ -52,6 +52,7 @@ class MessageStack: ArrayList<StateMessage>() {
             }
             return transaction
         }catch (e: IndexOutOfBoundsException){
+            setStateMessage(null)
             e.printStackTrace()
         }
         return StateMessage( // this does nothing

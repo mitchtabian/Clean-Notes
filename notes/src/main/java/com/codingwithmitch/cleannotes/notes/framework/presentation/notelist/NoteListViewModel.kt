@@ -48,6 +48,9 @@ constructor(
             }
 
             viewState.notePendingDelete?.let { restoredNote ->
+                restoredNote.note?.let { note ->
+                    setRestoredNoteId(note)
+                }
                 setNotePendingDelete(null)
             }
         }
@@ -169,6 +172,23 @@ constructor(
         setViewState(update)
     }
 
+    // if a note is deleted and then restored, the id will be incorrect.
+    // So need to reset it here.
+    private fun setRestoredNoteId(restoredNote: Note){
+        val update = getCurrentViewStateOrNew()
+        update.noteList?.let { noteList ->
+            for((index, note) in noteList.withIndex()){
+                if(note.title.equals(restoredNote.title)){
+                    noteList.remove(note)
+                    noteList.add(index, restoredNote)
+                    update.noteList = noteList
+                    break
+                }
+            }
+        }
+        setViewState(update)
+    }
+
     fun isDeletePending(): Boolean{
         if(isJobAlreadyActive(DeleteNoteEvent(primaryKey = 0))){
             setStateEvent(
@@ -199,7 +219,7 @@ constructor(
         )
     }
 
-    fun removePendingNoteFromList(note: Note?){
+    private fun removePendingNoteFromList(note: Note?){
         val update = getCurrentViewStateOrNew()
         val list = update.noteList
         if(list?.contains(note) == true){
@@ -214,7 +234,6 @@ constructor(
         val update = getCurrentViewStateOrNew()
         update.notePendingDelete?.let { note ->
             if(note.listPosition != null && note.note != null){
-                printLogD("ListViewModel", "undo delete ${note.note?.title}")
                 update.noteList?.add(
                     note.listPosition as Int,
                     note.note as Note
@@ -266,11 +285,11 @@ constructor(
 
     fun getNoteListSize() = getCurrentViewStateOrNew().noteList?.size?: 0
 
-    fun getNumNotesInCache() = getCurrentViewStateOrNew().numNotesInCache?: 0
+    private fun getNumNotesInCache() = getCurrentViewStateOrNew().numNotesInCache?: 0
 
     fun isPaginationExhausted() = getNoteListSize() >= getNumNotesInCache()
 
-    fun resetPage(){
+    private fun resetPage(){
         val update = getCurrentViewStateOrNew()
         update.page = 1
         setViewState(update)

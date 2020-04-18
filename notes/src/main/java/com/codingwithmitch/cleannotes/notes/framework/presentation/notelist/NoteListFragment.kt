@@ -20,8 +20,8 @@ import com.codingwithmitch.cleannotes.core.framework.hideKeyboard
 import com.codingwithmitch.cleannotes.core.util.TodoCallback
 import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
-import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.DeleteNote.Companion.DELETE_NOTE_PENDING
-import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.DeleteNote.Companion.DELETE_NOTE_SUCCESS
+import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_PENDING
+import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_SUCCESS
 import com.codingwithmitch.cleannotes.notes.framework.presentation.BaseNoteFragment
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListStateEvent.*
@@ -55,6 +55,12 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.setupChannel()
+        arguments?.let { args ->
+            args.getParcelable<Note>(NOTE_PENDING_DELETE_BUNDLE_KEY)?.let { note ->
+                viewModel.setNotePendingDelete(note)
+                showUndoSnackbar_deleteNote()
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

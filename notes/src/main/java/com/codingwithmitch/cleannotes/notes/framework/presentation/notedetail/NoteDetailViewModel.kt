@@ -72,6 +72,13 @@ constructor(
                     }
                 }
 
+                is DeleteNoteEvent -> {
+                    noteInteractors.deleteNote.deleteNote(
+                        primaryKey = stateEvent.primaryKey,
+                        stateEvent = stateEvent
+                    )
+                }
+
                 is CreateStateMessageEvent -> {
                     emitStateMessageEvent(
                         stateMessage = stateEvent.stateMessage,
@@ -85,6 +92,14 @@ constructor(
             }
             launchJob(stateEvent, job)
         }
+    }
+
+    fun beginPendingDelete(note: Note){
+        setStateEvent(
+            DeleteNoteEvent(
+                primaryKey = note.id
+            )
+        )
     }
 
     private fun isNoteTitleNull(): Boolean {
@@ -119,20 +134,10 @@ constructor(
         return NoteDetailViewState()
     }
 
-    fun getCollapsingToolbarState(): CollapsingToolbarState? {
-        return collapsingToolbarState.value
-    }
-
     fun setNote(note: Note?){
         val update = getCurrentViewStateOrNew()
         update.note = note
         setViewState(update)
-    }
-
-    fun setNoteFromBundle(note: Note?){
-        if(getCurrentViewStateOrNew().note == null){
-            setNote(note)
-        }
     }
 
     fun setCollapsingToolbarState(
@@ -188,6 +193,16 @@ constructor(
 
     fun isToolbarCollapsed() = collapsingToolbarState.toString()
         .equals(Collapsed().toString())
+
+    fun setIsUpdatePending(isPending: Boolean){
+        val update = getCurrentViewStateOrNew()
+        update.isUpdatePending = isPending
+        setViewState(update)
+    }
+
+    fun getIsUpdatePending(): Boolean{
+        return getCurrentViewStateOrNew().isUpdatePending?: false
+    }
 
     fun isToolbarExpanded() = collapsingToolbarState.toString()
         .equals(Expanded().toString())

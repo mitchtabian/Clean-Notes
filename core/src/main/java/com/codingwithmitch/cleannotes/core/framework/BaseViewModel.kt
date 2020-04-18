@@ -93,6 +93,10 @@ abstract class BaseViewModel<ViewState> : ViewModel()
         dataChannelManager.clearStateMessage(index)
     }
 
+    fun clearAllStateMessages() = dataChannelManager.clearAllStateMessages()
+
+    fun printStateMessages() = dataChannelManager.printStateMessages()
+
     fun cancelActiveJobs() = dataChannelManager.cancelJobs()
 
     abstract fun initNewViewState(): ViewState

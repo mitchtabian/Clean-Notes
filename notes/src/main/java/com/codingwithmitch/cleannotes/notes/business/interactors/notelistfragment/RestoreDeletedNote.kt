@@ -37,10 +37,17 @@ class RestoreDeletedNote(
             ){
                 override suspend fun handleSuccess(resultObj: Long): DataState<NoteListViewState> {
                     return if(resultObj > 0){
+                        val restoredNote = Note(
+                            id = resultObj.toInt(),
+                            title = note.title,
+                            body =  note.body,
+                            created_at = note.created_at,
+                            updated_at = note.updated_at
+                        )
                         val viewState =
                             NoteListViewState(
                                 notePendingDelete = NotePendingDelete(
-                                    note = note
+                                    note = restoredNote
                                 )
                             )
                         DataState.data(

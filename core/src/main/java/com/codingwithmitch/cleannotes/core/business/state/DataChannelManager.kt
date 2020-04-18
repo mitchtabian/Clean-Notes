@@ -90,8 +90,14 @@ abstract class DataChannelManager<ViewState> {
         messageStack.add(stateMessage)
     }
 
-    fun clearStateMessage(index: Int = 0){
-        messageStack.removeAt(index)
+    fun clearStateMessage(index: Int = 0) = messageStack.removeAt(index)
+
+    fun clearAllStateMessages() = messageStack.clear()
+
+    fun printStateMessages(){
+        for(message in messageStack){
+            printLogD("DCM", "${message.response.message}")
+        }
     }
 
     // for debugging
@@ -108,39 +114,6 @@ abstract class DataChannelManager<ViewState> {
 
     private fun isStateEventActive(stateEvent: StateEvent)
             = stateEventManager.isStateEventActive(stateEvent)
-
-
-//    private fun clearActiveStateEventCounter(){
-//        _activeStateEvents.clear()
-//        syncNumActiveStateEvents()
-//    }
-//
-//    private fun addStateEvent(stateEvent: StateEvent){
-//        printLogD("DCM",
-//            "adding state event: ${stateEvent.eventName()}")
-//        _activeStateEvents.add(stateEvent)
-//        syncNumActiveStateEvents()
-//    }
-//
-//    private fun removeStateEvent(stateEvent: StateEvent?){
-//        printLogD("DCM",
-//            "removing state event: ${stateEvent?.eventName()}")
-//        _activeStateEvents.remove(stateEvent)
-//        syncNumActiveStateEvents()
-//    }
-//
-//    private fun isStateEventActive(stateEvent: StateEvent): Boolean{
-//        for(event in _activeStateEvents){
-//            if(stateEvent.eventName().equals(event.eventName())){
-//                return true
-//            }
-//        }
-//        return false
-//    }
-//
-//    private fun syncNumActiveStateEvents(){
-//        _numActiveJobs.value = _activeStateEvents.size
-//    }
 
     fun isJobAlreadyActive(stateEvent: StateEvent): Boolean {
         return isStateEventActive(stateEvent)

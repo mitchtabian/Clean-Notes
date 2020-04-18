@@ -1,6 +1,6 @@
 package com.codingwithmitch.cleannotes.notes.business.interactors.notedetailfragment
 
-import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.DeleteNote
+import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNote
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteDetailViewState
 
 // Use cases
