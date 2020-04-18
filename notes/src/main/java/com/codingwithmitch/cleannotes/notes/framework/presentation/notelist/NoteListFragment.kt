@@ -5,6 +5,7 @@ import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
@@ -198,6 +199,7 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
             .findViewById<ImageView>(R.id.action_delete_notes)
             .setOnClickListener {
                 // TODO("execute multi-delete")
+                Toast.makeText(context, "TODO: Delete all selected note", Toast.LENGTH_SHORT).show()
             }
     }
 
