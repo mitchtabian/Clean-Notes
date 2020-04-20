@@ -6,24 +6,33 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.codingwithmitch.cleannotes.notes.business.data.repository.NoteRepositoryImpl
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteEntityMapper
-import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.notes.business.domain.repository.NoteRepository
 import com.codingwithmitch.cleannotes.core.business.DateUtil
-import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.NoteListInteractors
+import com.codingwithmitch.cleannotes.core.business.state.DataState
+import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNote
+import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.*
+import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteFactory
+import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.ORDER_BY_ASC_DATE_UPDATED
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListStateEvent.*
+import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState
 import com.codingwithmitch.notes.datasource.cache.db.NoteDatabase
 import com.codingwithmitch.notes.datasource.cache.repository.NoteCacheDataSourceImpl
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
-import kotlin.test.assertEquals
 
 /**
  * BUG WITH TESTING DYNAMIC FEATURES:
  * https://issuetracker.google.com/issues/145191501
  */
+@InternalCoroutinesApi
 @RunWith(AndroidJUnit4ClassRunner::class)
 class BasicDbTests {
 
@@ -48,10 +57,11 @@ class BasicDbTests {
         )
         interactors =
             NoteListInteractors(
-                InsertNewNote(noteRepository),
+                InsertNewNote(noteRepository, NoteFactory(dateUtil)),
                 DeleteNote(noteRepository),
-                UpdateNote(noteRepository),
-                GetNotes(noteRepository)
+                SearchNotes(noteRepository),
+                GetNumNotes(noteRepository),
+                RestoreDeletedNote(noteRepository)
             )
     }
 
@@ -62,51 +72,50 @@ class BasicDbTests {
     }
 
     @Test
-    fun writeNote_readList_updateNote_deleteNote() {
+    fun writeNewNote_confirmInserted() {
 
         val newTitle = "first note"
         val newBody = "something I should not forget!"
+        val stateEvent = SearchNotesEvent()
         runBlocking {
-
             interactors
                 .insertNewNote
                 .insertNewNote(
                     title = newTitle,
-                    body = newBody
+                    body = newBody,
+                    stateEvent = stateEvent
                 )
         }
-        var notes: List<Note>? = null
         runBlocking {
-            notes = interactors.getNotes.getNotes()
-        }
-        assertEquals(newTitle, notes?.get(0)?.title)
-        assertEquals(newBody, notes?.get(0)?.body)
-
-        val updatedTitle = "new title baby"
-        val updatedBody = "and some new content"
-
-        runBlocking {
-            interactors
-                .updateNote
-                .updateNote(
-                    notes!!.get(0),
-                    updatedTitle,
-                    updatedBody
+            val notesFlow: Flow<DataState<NoteListViewState>>? = flow{
+                interactors.searchNotes.searchNotes(
+                    query = "",
+                    filterAndOrder = ORDER_BY_ASC_DATE_UPDATED,
+                    page = 0,
+                    stateEvent = stateEvent
                 )
-            notes = interactors.getNotes.getNotes()
+            }
+            notesFlow?.collect(object: FlowCollector<DataState<NoteListViewState>>{
+                override suspend fun emit(value: DataState<NoteListViewState>) {
+
+                    // loop through results and make sure one of them is the new note
+                    val notesList = value.data?.noteList
+                    if(notesList != null){
+                        for((index, note) in notesList.withIndex()){
+                            if(note.title.equals(newTitle)
+                                && note.body.equals(newBody)){
+                                assert(true)
+                                break
+                            }
+                            if(index == notesList.size - 1){
+                                assert(false)
+                                break
+                            }
+                        }
+                    }
+                }
+            })
         }
-        assertEquals(updatedTitle, notes?.get(0)?.title)
-        assertEquals(updatedBody, notes?.get(0)?.body)
-
-        runBlocking {
-            interactors
-                .deleteNote
-                .deleteNote(notes!!.get(0).id)
-            notes = interactors.getNotes.getNotes()
-        }
-        assertEquals(notes?.size, 0)
-
-
     }
 }
 
