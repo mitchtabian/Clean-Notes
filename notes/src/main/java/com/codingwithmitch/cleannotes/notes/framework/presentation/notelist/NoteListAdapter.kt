@@ -96,6 +96,8 @@ class NoteListAdapter(
     ) : RecyclerView.ViewHolder(itemView)
     {
 
+        private val COLOR_GREY = com.codingwithmitch.cleannotes.R.color.app_background_color
+        private val COLOR_PRIMARY = com.codingwithmitch.cleannotes.R.color.colorPrimary
         private lateinit var note: Note
 
         fun bind(item: Note) = with(itemView) {
@@ -117,17 +119,17 @@ class NoteListAdapter(
                 if(notes != null){
                     if(notes.contains(note)){
                         itemView.changeColor(
-                            newColor = com.codingwithmitch.cleannotes.R.color.app_background_color
+                            newColor = COLOR_GREY
                         )
                     }
                     else{
                         itemView.changeColor(
-                            newColor = com.codingwithmitch.cleannotes.R.color.colorPrimary
+                            newColor = COLOR_PRIMARY
                         )
                     }
                 }else{
                     itemView.changeColor(
-                        newColor = com.codingwithmitch.cleannotes.R.color.colorPrimary
+                        newColor = COLOR_PRIMARY
                     )
                 }
             })

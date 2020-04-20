@@ -9,11 +9,11 @@ class NoteListInteractionManager {
 
     private val _selectedNotes: MutableLiveData<ArrayList<Note>> = MutableLiveData()
 
-    val selectedNotes: LiveData<ArrayList<Note>>
-            get() = _selectedNotes
-
     private val _toolbarState: MutableLiveData<NoteListToolbarState>
             = MutableLiveData(SearchViewState())
+
+    val selectedNotes: LiveData<ArrayList<Note>>
+            get() = _selectedNotes
 
     val toolbarState: LiveData<NoteListToolbarState>
             get() = _toolbarState

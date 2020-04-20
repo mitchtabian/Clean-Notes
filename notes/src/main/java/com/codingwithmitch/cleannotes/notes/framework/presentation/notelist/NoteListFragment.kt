@@ -461,7 +461,9 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
     }
 
     private fun setupFilterButton(){
-        action_filter.setOnClickListener {
+        val searchViewToolbar: Toolbar? = toolbar_content_container
+            .findViewById<Toolbar>(R.id.searchview_toolbar)
+        searchViewToolbar?.findViewById<ImageView>(R.id.action_filter)?.setOnClickListener {
             showFilterDialog()
         }
     }
