@@ -49,6 +49,8 @@ constructor(
     }
 
     override suspend fun getNumNotes() = noteCacheDataSource.getNumNotes()
+
+    override suspend fun insertNotes(notes: List<Note>) = noteCacheDataSource.insertNotes(notes)
 }
 
 

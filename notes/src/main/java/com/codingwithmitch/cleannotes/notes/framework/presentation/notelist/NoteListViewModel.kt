@@ -79,6 +79,10 @@ constructor(
                     )
                 }
 
+                is InsertMultipleNotesEvent -> {
+                    noteInteractors.insertMultipleNotes.insertNotes(stateEvent)
+                }
+
                 is DeleteNoteEvent -> {
                     noteInteractors.deleteNote.deleteNote(
                         primaryKey = stateEvent.primaryKey,

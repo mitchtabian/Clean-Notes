@@ -78,23 +78,6 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
         setupFAB()
         subscribeObservers()
 
-        add_new_note_fab.setOnClickListener {
-            uiController.displayInputCaptureDialog(
-                getString(com.codingwithmitch.cleannotes.R.string.text_enter_a_title),
-                object: DialogInputCaptureCallback{
-                    override fun onTextCaptured(text: String) {
-                        val newNote = viewModel.createNewNote(title = text)
-                        viewModel.setStateEvent(
-                            InsertNewNoteEvent(
-                                title = newNote.title,
-                                body = ""
-                            )
-                        )
-                    }
-                }
-            )
-        }
-
         restoreInstanceState(savedInstanceState)
     }
 
@@ -437,8 +420,15 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
         }
     }
 
+
+
     private fun setupFAB(){
         add_new_note_fab.setOnClickListener {
+
+//            viewModel.setStateEvent(
+//                InsertMultipleNotesEvent()
+//            )
+
             uiController.displayInputCaptureDialog(
                 getString(com.codingwithmitch.cleannotes.R.string.text_enter_a_title),
                 object: DialogInputCaptureCallback{

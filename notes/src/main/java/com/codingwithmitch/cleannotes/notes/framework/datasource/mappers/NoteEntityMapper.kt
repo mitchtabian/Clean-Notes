@@ -53,4 +53,18 @@ constructor(
         return list
     }
 
+    fun noteListToEntityList(notes: List<Note>): List<NoteEntity>{
+        val entities: ArrayList<NoteEntity> = ArrayList()
+        for(note in notes){
+            entities.add(noteToEntity(note))
+        }
+        return entities
+    }
 }
+
+
+
+
+
+
+

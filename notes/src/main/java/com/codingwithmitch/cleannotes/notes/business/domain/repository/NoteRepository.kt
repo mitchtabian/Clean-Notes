@@ -25,4 +25,6 @@ interface NoteRepository {
     ): List<Note>
 
     suspend fun getNumNotes(): Int
+
+    suspend fun insertNotes(notes: List<Note>): LongArray
 }

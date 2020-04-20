@@ -22,6 +22,20 @@ sealed class NoteListStateEvent: StateEvent {
         override fun shouldDisplayProgressBar() = true
     }
 
+    // for testing
+    class InsertMultipleNotesEvent: NoteListStateEvent() {
+
+        override fun errorInfo(): String {
+            return "Error inserting the notes."
+        }
+
+        override fun eventName(): String {
+            return "InsertMultipleNotesEvent"
+        }
+
+        override fun shouldDisplayProgressBar() = true
+    }
+
     class DeleteNoteEvent(
         val primaryKey: Int
     ): NoteListStateEvent(){

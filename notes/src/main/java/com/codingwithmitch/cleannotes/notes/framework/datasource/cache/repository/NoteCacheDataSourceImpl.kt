@@ -73,7 +73,11 @@ constructor(
 
     override suspend fun getNumNotes() = noteDao.getNumNotes()
 
-
+    override suspend fun insertNotes(notes: List<Note>): LongArray{
+        return noteDao.insertNotes(
+            noteEntityMapper.noteListToEntityList(notes)
+        )
+    }
 }
 
 
