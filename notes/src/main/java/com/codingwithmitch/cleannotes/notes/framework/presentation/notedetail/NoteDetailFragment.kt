@@ -11,7 +11,6 @@ import androidx.navigation.fragment.findNavController
 import com.codingwithmitch.cleannotes.R.drawable
 import com.codingwithmitch.cleannotes.core.business.state.*
 import com.codingwithmitch.cleannotes.core.framework.*
-import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNote.Companion.DELETE_ARE_YOU_SURE
 import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_SUCCESS
@@ -55,7 +54,7 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
             args.getParcelable<Note>(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY)?.let { note ->
                 viewModel.setNote(note)
                 clearArgs()
-            }?: onErrorRetrievingNoteFromBundle()
+            }
         }
 
         viewModel.setupChannel()
@@ -81,6 +80,10 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if(viewModel.getNote() == null){
+            onErrorRetrievingNoteFromBundle()
+        }
 
         onRestoreInstanceState(savedInstanceState)
         setupUI()
@@ -461,19 +464,13 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         getNoteComponent()?.inject(this)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        viewModel.setNote(null) // clear out the note when leaving
-        viewModel.resetCollapsingToolbarState()
-    }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-//        outState.putParcelable(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY, viewModel.getNote())
-
         val viewState = viewModel.getCurrentViewStateOrNew()
         outState.putParcelable(NOTE_DETAIL_STATE_BUNDLE_KEY, viewState)
     }
+
+
 }
 
 

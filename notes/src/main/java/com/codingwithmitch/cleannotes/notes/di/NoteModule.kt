@@ -1,5 +1,7 @@
 package com.codingwithmitch.notes.di
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.room.Room
 import com.codingwithmitch.cleannotes.core.di.scopes.FeatureScope
 import com.codingwithmitch.cleannotes.di.features.notes.NotesFeature
@@ -15,6 +17,7 @@ import com.codingwithmitch.cleannotes.notes.business.interactors.notedetailfragm
 import com.codingwithmitch.cleannotes.notes.business.interactors.notedetailfragment.UpdateNote
 import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.*
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteFactory
+import com.codingwithmitch.cleannotes.notes.framework.datasource.preferences.PreferenceKeys
 import com.codingwithmitch.notes.datasource.cache.db.NoteDao
 import com.codingwithmitch.notes.datasource.cache.db.NoteDatabase
 import com.codingwithmitch.notes.datasource.cache.db.NoteDatabase.Companion.DATABASE_NAME
@@ -34,6 +37,28 @@ object NoteModule {
     @JvmStatic
     fun provideFeatureImpl(featureImpl: NotesFeatureImpl): NotesFeature {
         return featureImpl
+    }
+
+    @JvmStatic
+    @FeatureScope
+    @Provides
+    fun provideSharedPreferences(
+        application: BaseApplication
+    ): SharedPreferences {
+        return application
+            .getSharedPreferences(
+                PreferenceKeys.NOTE_PREFERENCES,
+                Context.MODE_PRIVATE
+            )
+    }
+
+    @JvmStatic
+    @FeatureScope
+    @Provides
+    fun provideSharedPrefsEditor(
+        sharedPreferences: SharedPreferences
+    ): SharedPreferences.Editor {
+        return sharedPreferences.edit()
     }
 
     @JvmStatic

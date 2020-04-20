@@ -1,5 +1,6 @@
 package com.codingwithmitch.cleannotes.notes.framework.presentation.notelist
 
+import android.content.SharedPreferences
 import android.os.Parcelable
 import androidx.lifecycle.LiveData
 import com.codingwithmitch.cleannotes.core.business.state.*
@@ -12,6 +13,8 @@ import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragmen
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_FILTER_DATE_CREATED
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_ORDER_DESC
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteFactory
+import com.codingwithmitch.cleannotes.notes.framework.datasource.preferences.PreferenceKeys.Companion.NOTE_FILTER
+import com.codingwithmitch.cleannotes.notes.framework.datasource.preferences.PreferenceKeys.Companion.NOTE_ORDER
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListInteractionManager
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListStateEvent.*
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListToolbarState
@@ -32,7 +35,9 @@ class NoteListViewModel
 @Inject
 constructor(
     private val noteInteractors: NoteListInteractors,
-    private val noteFactory: NoteFactory
+    private val noteFactory: NoteFactory,
+    private val editor: SharedPreferences.Editor,
+    sharedPreferences: SharedPreferences
 ): BaseViewModel<NoteListViewState>(){
 
 
@@ -40,6 +45,21 @@ constructor(
 
     val toolbarState: LiveData<NoteListToolbarState>
             get() = noteListInteractionManager.toolbarState
+
+    init {
+        setNoteFilter(
+            sharedPreferences.getString(
+                NOTE_FILTER,
+                NOTE_FILTER_DATE_CREATED
+            )
+        )
+        setNoteOrder(
+            sharedPreferences.getString(
+                NOTE_ORDER,
+                NOTE_ORDER_DESC
+            )
+        )
+    }
 
     override fun handleNewData(data: NoteListViewState) {
 
@@ -180,12 +200,12 @@ constructor(
         return NoteListViewState()
     }
 
-    private fun getFilter(): String {
+    fun getFilter(): String {
         return getCurrentViewStateOrNew().filter
             ?: NOTE_FILTER_DATE_CREATED
     }
 
-    private fun getOrder(): String {
+    fun getOrder(): String {
         return getCurrentViewStateOrNew().order
             ?: NOTE_ORDER_DESC
     }
@@ -364,6 +384,12 @@ constructor(
         return getCurrentViewStateOrNew().isQueryExhausted?: true
     }
 
+    fun clearList(){
+        val update = getCurrentViewStateOrNew()
+        update.noteList = ArrayList()
+        setViewState(update)
+    }
+
     fun loadFirstPage() {
         if(!isJobAlreadyActive(SearchNotesEvent())){
             setQueryExhausted(false)
@@ -412,7 +438,27 @@ constructor(
 
     fun clearSelectedNotes() = noteListInteractionManager.clearSelectedNotes()
 
+    fun setNoteFilter(filter: String?){
+        filter?.let{
+            val update = getCurrentViewStateOrNew()
+            update.filter = filter
+            setViewState(update)
+        }
+    }
 
+    fun setNoteOrder(order: String?){
+        val update = getCurrentViewStateOrNew()
+        update.order = order
+        setViewState(update)
+    }
+
+    fun saveFilterOptions(filter: String, order: String){
+        editor.putString(NOTE_FILTER, filter)
+        editor.apply()
+
+        editor.putString(NOTE_ORDER, order)
+        editor.apply()
+    }
 }
 
 
