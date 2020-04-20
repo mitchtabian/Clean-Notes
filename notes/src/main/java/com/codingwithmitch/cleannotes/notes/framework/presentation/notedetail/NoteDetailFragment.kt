@@ -51,15 +51,6 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-//        // get Note after a rotation
-//        savedInstanceState?.let { inState ->
-//            (inState.getParcelable(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY) as Note?)?.let{ note ->
-//                viewModel.setNoteFromBundle(note)
-//            }
-//        }
-
-        // get Note after navigation
         arguments?.let { args ->
             args.getParcelable<Note>(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY)?.let { note ->
                 viewModel.setNote(note)
@@ -166,8 +157,6 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
                     setNoteTitle(note.title)
                     setNoteBody(note.body)
                 }
-
-                printLogD("DetailFragment", "is update pending?: ${viewState.isUpdatePending}")
             }
         })
 
