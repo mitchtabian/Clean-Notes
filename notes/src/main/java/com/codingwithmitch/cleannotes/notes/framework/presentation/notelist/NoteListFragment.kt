@@ -424,11 +424,6 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
 
     private fun setupFAB(){
         add_new_note_fab.setOnClickListener {
-
-//            viewModel.setStateEvent(
-//                InsertMultipleNotesEvent()
-//            )
-
             uiController.displayInputCaptureDialog(
                 getString(com.codingwithmitch.cleannotes.R.string.text_enter_a_title),
                 object: DialogInputCaptureCallback{
