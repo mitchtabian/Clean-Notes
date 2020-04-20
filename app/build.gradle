@@ -67,7 +67,7 @@ dependencies {
     implementation Dependencies.material_dialogs
     implementation Dependencies.material_dialogs_input
     implementation Dependencies.play_core
-//    implementation Dependencies.leak_canary
+    implementation Dependencies.leak_canary
     implementation Dependencies.dagger
     implementation Dependencies.firestore
 

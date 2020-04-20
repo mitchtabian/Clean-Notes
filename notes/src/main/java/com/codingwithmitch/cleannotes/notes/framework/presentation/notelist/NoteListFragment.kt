@@ -25,6 +25,8 @@ import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_PENDING
 import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_SUCCESS
+import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.DeleteMultipleNotes.Companion.DELETE_NOTES_ARE_YOU_SURE
+import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.DeleteMultipleNotes.Companion.DELETE_NOTES_SUCCESS
 import com.codingwithmitch.cleannotes.notes.framework.presentation.BaseNoteFragment
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListStateEvent.*
@@ -198,9 +200,32 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
         parentView
             .findViewById<ImageView>(R.id.action_delete_notes)
             .setOnClickListener {
-                // TODO("execute multi-delete")
-                Toast.makeText(context, "TODO: Delete all selected notes", Toast.LENGTH_SHORT).show()
+                deleteNotes()
             }
+    }
+
+    private fun deleteNotes(){
+        viewModel.setStateEvent(
+            CreateStateMessageEvent(
+                stateMessage = StateMessage(
+                    response = Response(
+                        message = DELETE_NOTES_ARE_YOU_SURE,
+                        uiComponentType = UIComponentType.AreYouSureDialog(
+                            object : AreYouSureCallback {
+                                override fun proceed() {
+                                    viewModel.deleteNotes()
+                                }
+
+                                override fun cancel() {
+                                    // do nothing
+                                }
+                            }
+                        ),
+                        messageType = MessageType.Info()
+                    )
+                )
+            )
+        )
     }
 
     private fun enableSearchViewToolbarState(){

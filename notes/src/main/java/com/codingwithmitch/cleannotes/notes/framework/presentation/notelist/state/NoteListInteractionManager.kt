@@ -22,6 +22,8 @@ class NoteListInteractionManager {
         _toolbarState.value = state
     }
 
+    fun getSelectedNotes():ArrayList<Note> = _selectedNotes.value?: ArrayList()
+
     fun isMultiSelectionStateActive(): Boolean{
         return _toolbarState.value.toString() == MultiSelectionState().toString()
     }

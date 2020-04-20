@@ -7,6 +7,7 @@ import com.codingwithmitch.cleannotes.core.di.scopes.FeatureScope
 import com.codingwithmitch.cleannotes.core.framework.BaseViewModel
 import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
+import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.DeleteMultipleNotes.Companion.DELETE_NOTES_YOU_MUST_SELECT
 import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.NoteListInteractors
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_FILTER_DATE_CREATED
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_ORDER_DESC
@@ -85,6 +86,13 @@ constructor(
                     )
                 }
 
+                is DeleteMultipleNotesEvent -> {
+                    noteInteractors.deleteMultipleNotes.deleteNotes(
+                        primaryKeys = stateEvent.primaryKeys,
+                        stateEvent = stateEvent
+                    )
+                }
+
                 is RestoreDeletedNoteEvent -> {
                     noteInteractors.restoreDeletedNote.restoreDeletedNote(
                         note = stateEvent.note,
@@ -124,6 +132,39 @@ constructor(
             launchJob(stateEvent, job)
         }
     }
+
+    private fun removeSelectedNotesFromList(){
+        val update = getCurrentViewStateOrNew()
+        update.noteList?.removeAll(getSelectedNotes())
+        setViewState(update)
+        clearSelectedNotes()
+    }
+
+    fun deleteNotes(){
+        if(getSelectedNotes().size > 0){
+            val pks = IntArray(getSelectedNotes().size)
+            for((index,note) in getSelectedNotes().withIndex()){
+                pks[index] = note.id
+            }
+            setStateEvent(DeleteMultipleNotesEvent(pks))
+            removeSelectedNotesFromList()
+        }
+        else{
+            setStateEvent(
+                CreateStateMessageEvent(
+                    stateMessage = StateMessage(
+                        response = Response(
+                            message = DELETE_NOTES_YOU_MUST_SELECT,
+                            uiComponentType = UIComponentType.Toast(),
+                            messageType = MessageType.Info()
+                        )
+                    )
+                )
+            )
+        }
+    }
+
+    fun getSelectedNotes() = noteListInteractionManager.getSelectedNotes()
 
     fun setToolbarState(state: NoteListToolbarState)
             = noteListInteractionManager.setToolbarState(state)

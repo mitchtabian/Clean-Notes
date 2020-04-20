@@ -120,7 +120,8 @@ object NoteModule {
             DeleteNote(noteRepository),
             SearchNotes(noteRepository),
             GetNumNotes(noteRepository),
-            RestoreDeletedNote(noteRepository)
+            RestoreDeletedNote(noteRepository),
+            DeleteMultipleNotes(noteRepository)
         )
     }
 
