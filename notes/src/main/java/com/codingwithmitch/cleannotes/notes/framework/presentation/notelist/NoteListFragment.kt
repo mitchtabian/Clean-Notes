@@ -5,7 +5,8 @@ import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.RadioGroup
+import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
@@ -16,6 +17,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.customview.customView
+import com.afollestad.materialdialogs.customview.getCustomView
 import com.codingwithmitch.cleannotes.core.business.state.*
 import com.codingwithmitch.cleannotes.core.framework.DialogInputCaptureCallback
 import com.codingwithmitch.cleannotes.core.framework.TopSpacingItemDecoration
@@ -26,7 +30,10 @@ import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_PENDING
 import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_SUCCESS
 import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.DeleteMultipleNotes.Companion.DELETE_NOTES_ARE_YOU_SURE
-import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.DeleteMultipleNotes.Companion.DELETE_NOTES_SUCCESS
+import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_FILTER_DATE_CREATED
+import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_FILTER_TITLE
+import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_ORDER_ASC
+import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_ORDER_DESC
 import com.codingwithmitch.cleannotes.notes.framework.presentation.BaseNoteFragment
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListStateEvent.*
@@ -34,6 +41,7 @@ import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.stat
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState
 import com.codingwithmitch.notes.R
 import kotlinx.android.synthetic.main.fragment_note_list.*
+import kotlinx.android.synthetic.main.layout_searchview_toolbar.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import javax.inject.Inject
@@ -77,23 +85,6 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
         setupSwipeRefresh()
         setupFAB()
         subscribeObservers()
-
-        add_new_note_fab.setOnClickListener {
-            uiController.displayInputCaptureDialog(
-                getString(com.codingwithmitch.cleannotes.R.string.text_enter_a_title),
-                object: DialogInputCaptureCallback{
-                    override fun onTextCaptured(text: String) {
-                        val newNote = viewModel.createNewNote(title = text)
-                        viewModel.setStateEvent(
-                            InsertNewNoteEvent(
-                                title = newNote.title,
-                                body = ""
-                            )
-                        )
-                    }
-                }
-            )
-        }
 
         restoreInstanceState(savedInstanceState)
     }
@@ -204,30 +195,6 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
             }
     }
 
-    private fun deleteNotes(){
-        viewModel.setStateEvent(
-            CreateStateMessageEvent(
-                stateMessage = StateMessage(
-                    response = Response(
-                        message = DELETE_NOTES_ARE_YOU_SURE,
-                        uiComponentType = UIComponentType.AreYouSureDialog(
-                            object : AreYouSureCallback {
-                                override fun proceed() {
-                                    viewModel.deleteNotes()
-                                }
-
-                                override fun cancel() {
-                                    // do nothing
-                                }
-                            }
-                        ),
-                        messageType = MessageType.Info()
-                    )
-                )
-            )
-        )
-    }
-
     private fun enableSearchViewToolbarState(){
         view?.let { v ->
             val view = View.inflate(
@@ -241,6 +208,7 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
             )
             toolbar_content_container.addView(view)
             setupSearchView()
+            setupFilterButton()
         }
     }
 
@@ -413,6 +381,30 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
         }
     }
 
+    private fun deleteNotes(){
+        viewModel.setStateEvent(
+            CreateStateMessageEvent(
+                stateMessage = StateMessage(
+                    response = Response(
+                        message = DELETE_NOTES_ARE_YOU_SURE,
+                        uiComponentType = UIComponentType.AreYouSureDialog(
+                            object : AreYouSureCallback {
+                                override fun proceed() {
+                                    viewModel.deleteNotes()
+                                }
+
+                                override fun cancel() {
+                                    // do nothing
+                                }
+                            }
+                        ),
+                        messageType = MessageType.Info()
+                    )
+                )
+            )
+        )
+    }
+
     private fun setupSearchView(){
 
         val searchViewToolbar: Toolbar? = toolbar_content_container
@@ -456,12 +448,81 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
         }
     }
 
-    private fun startNewSearch() = viewModel.loadFirstPage()
+    private fun startNewSearch(){
+        viewModel.clearList()
+        viewModel.loadFirstPage()
+    }
 
     private fun setupSwipeRefresh(){
         swipe_refresh.setOnRefreshListener {
             startNewSearch()
             swipe_refresh.isRefreshing = false
+        }
+    }
+
+    private fun setupFilterButton(){
+        action_filter.setOnClickListener {
+            showFilterDialog()
+        }
+    }
+
+    fun showFilterDialog(){
+
+        activity?.let {
+            val dialog = MaterialDialog(it)
+                .noAutoDismiss()
+                .customView(R.layout.layout_filter)
+
+            val view = dialog.getCustomView()
+
+            val filter = viewModel.getFilter()
+            val order = viewModel.getOrder()
+
+            view.findViewById<RadioGroup>(R.id.filter_group).apply {
+                when (filter) {
+                    NOTE_FILTER_DATE_CREATED -> check(R.id.filter_date)
+                    NOTE_FILTER_TITLE -> check(R.id.filter_title)
+                }
+            }
+
+            view.findViewById<RadioGroup>(R.id.order_group).apply {
+                when (order) {
+                    NOTE_ORDER_ASC -> check(R.id.filter_asc)
+                    NOTE_ORDER_DESC -> check(R.id.filter_desc)
+                }
+            }
+
+            view.findViewById<TextView>(R.id.positive_button).setOnClickListener {
+
+                val newFilter =
+                    when (view.findViewById<RadioGroup>(R.id.filter_group).checkedRadioButtonId) {
+                        R.id.filter_title -> NOTE_FILTER_TITLE
+                        R.id.filter_date -> NOTE_FILTER_DATE_CREATED
+                        else -> NOTE_FILTER_DATE_CREATED
+                    }
+
+                val newOrder =
+                    when (view.findViewById<RadioGroup>(R.id.order_group).checkedRadioButtonId) {
+                        R.id.filter_desc -> "-"
+                        else -> ""
+                    }
+
+                viewModel.apply {
+                    saveFilterOptions(newFilter, newOrder)
+                    setNoteFilter(newFilter)
+                    setNoteOrder(newOrder)
+                }
+
+                startNewSearch()
+
+                dialog.dismiss()
+            }
+
+            view.findViewById<TextView>(R.id.negative_button).setOnClickListener {
+                dialog.dismiss()
+            }
+
+            dialog.show()
         }
     }
 

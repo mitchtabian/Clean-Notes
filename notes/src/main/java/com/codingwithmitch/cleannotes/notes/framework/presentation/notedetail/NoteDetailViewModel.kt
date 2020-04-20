@@ -126,10 +126,6 @@ constructor(
         return getCurrentViewStateOrNew().note
     }
 
-    fun resetCollapsingToolbarState(){
-        setCollapsingToolbarState(Expanded())
-    }
-
     override fun initNewViewState(): NoteDetailViewState {
         return NoteDetailViewState()
     }
@@ -150,7 +146,6 @@ constructor(
     }
 
     fun updateNoteTitle(title: String?){
-        printLogD("DetailViewModel", "updating title: ${title}")
         if(title == null){
             setStateEvent(
                 CreateStateMessageEvent(

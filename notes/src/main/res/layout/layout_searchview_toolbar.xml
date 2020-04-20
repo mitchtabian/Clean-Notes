@@ -1,18 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.appcompat.widget.Toolbar
-    android:layout_width="match_parent"
+<androidx.appcompat.widget.Toolbar android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/searchview_toolbar"
     android:background="@color/colorPrimary"
     android:elevation="10dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/search_view"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:iconifiedByDefault="false"
-        android:queryHint="@string/text_Search"
-        android:layout_centerHorizontal="true" />
+        android:layout_height="match_parent"
+        >
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/search_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/action_filter"
+            android:iconifiedByDefault="false"
+            android:queryHint="@string/text_Search"
+            android:layout_marginEnd="@dimen/toolbar_item_margin"
+            />
+
+        <ImageView
+            android:layout_width="@dimen/toolbar_item_margin"
+            android:layout_height="@dimen/toolbar_item_margin"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/search_view"
+            app:layout_constraintRight_toRightOf="parent"
+            android:src="@drawable/ic_filter_list_grey_24dp"
+            android:layout_gravity="end"
+            android:id="@+id/action_filter"
+            android:layout_marginEnd="@dimen/toolbar_item_margin"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 
 </androidx.appcompat.widget.Toolbar>

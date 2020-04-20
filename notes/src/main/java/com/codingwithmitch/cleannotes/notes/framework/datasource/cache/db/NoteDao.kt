@@ -10,6 +10,9 @@ interface NoteDao {
     @Insert
     suspend fun insertNote(note: NoteEntity): Long
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertNotes(notes: List<NoteEntity>): LongArray
+
     @Query("""
         INSERT INTO notes
         (title, body, created_at, updated_at)
