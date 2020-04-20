@@ -232,12 +232,6 @@ constructor(
         setViewState(update)
     }
 
-    private fun clearLayoutManagerState(){
-        val update = getCurrentViewStateOrNew()
-        update.layoutManagerState = null
-        setViewState(update)
-    }
-
     // can be selected from Recyclerview or created new from dialog
     fun setNote(note: Note?){
         val update = getCurrentViewStateOrNew()
@@ -400,6 +394,17 @@ constructor(
         }
     }
 
+    fun nextPage(){
+        if(!isJobAlreadyActive(SearchNotesEvent())
+            && !isQueryExhausted()
+        ){
+            printLogD("NoteListViewModel", "attempting to load next page...")
+            clearLayoutManagerState()
+            incrementPageNumber()
+            setStateEvent(SearchNotesEvent())
+        }
+    }
+
     private fun incrementPageNumber(){
         val update = getCurrentViewStateOrNew()
         val page = update.copy().page ?: 1
@@ -414,20 +419,20 @@ constructor(
         }
     }
 
+    fun getLayoutManagerState(): Parcelable? {
+        return getCurrentViewStateOrNew().layoutManagerState
+    }
+
     fun setLayoutManagerState(layoutManagerState: Parcelable){
         val update = getCurrentViewStateOrNew()
         update.layoutManagerState = layoutManagerState
         setViewState(update)
     }
 
-    fun nextPage(){
-        if(!isJobAlreadyActive(SearchNotesEvent())
-            && !isQueryExhausted()
-        ){
-            printLogD("NoteListViewModel", "attempting to load next page...")
-            incrementPageNumber()
-            setStateEvent(SearchNotesEvent())
-        }
+    fun clearLayoutManagerState(){
+        val update = getCurrentViewStateOrNew()
+        update.layoutManagerState = null
+        setViewState(update)
     }
 
     fun addOrRemoveNoteFromSelectedList(note: Note)

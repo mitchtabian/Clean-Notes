@@ -123,7 +123,7 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
     }
 
     override fun restoreListPosition() {
-        viewModel.viewState.value?.layoutManagerState?.let { lmState ->
+        viewModel.getLayoutManagerState()?.let { lmState ->
             recycler_view?.layoutManager?.onRestoreInstanceState(lmState)
         }
     }
