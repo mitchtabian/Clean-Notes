@@ -68,13 +68,6 @@ object NoteModule {
         return NoteFactory(dateUtil)
     }
 
-//    @JvmStatic
-//    @FeatureScope
-//    @Provides
-//    fun provideNoteFragmentFactory(someString: String): FragmentFactory{
-//        return NotesFragmentFactory(someString)
-//    }
-
     @JvmStatic
     @FeatureScope
     @Provides

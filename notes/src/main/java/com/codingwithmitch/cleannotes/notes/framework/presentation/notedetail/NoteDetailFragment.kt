@@ -48,44 +48,10 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         viewModelFactory
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let { args ->
-            args.getParcelable<Note>(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY)?.let { note ->
-                viewModel.setNote(note)
-                clearArgs()
-            }
-        }
-
-        viewModel.setupChannel()
-    }
-
-    private fun clearArgs(){
-        arguments?.clear()
-    }
-
-    private fun onErrorRetrievingNoteFromBundle(){
-        viewModel.setStateEvent(
-            CreateStateMessageEvent(
-                stateMessage = StateMessage(
-                    response = Response(
-                        message = NOTE_DETAIL_ERROR_RETRIEVEING_SELECTED_NOTE,
-                        uiComponentType = UIComponentType.Dialog(),
-                        messageType = MessageType.Error()
-                    )
-                )
-            )
-        )
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(viewModel.getNote() == null){
-            onErrorRetrievingNoteFromBundle()
-        }
-
-        onRestoreInstanceState(savedInstanceState)
+        restoreInstanceState()
         setupUI()
         setupOnBackPressDispatcher()
         subscribeObservers()
@@ -103,6 +69,40 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         }
 
         setupMarkdown()
+        getSelectedNoteFromPreviousFragment()
+    }
+
+    private fun getSelectedNoteFromPreviousFragment(){
+        findNavController()
+            .previousBackStackEntry
+            ?.savedStateHandle
+            ?.getLiveData<Note>(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY)
+            ?.observe(viewLifecycleOwner, Observer { selectedNote ->
+                if(selectedNote == null){
+                    onErrorRetrievingNoteFromPreviousFragment()
+                }
+                else{
+                    viewModel.setNote(selectedNote)
+                    findNavController()
+                        .previousBackStackEntry
+                        ?.savedStateHandle
+                        ?.remove<Note>(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY)
+                }
+            })
+    }
+
+    private fun onErrorRetrievingNoteFromPreviousFragment(){
+        viewModel.setStateEvent(
+            CreateStateMessageEvent(
+                stateMessage = StateMessage(
+                    response = Response(
+                        message = NOTE_DETAIL_ERROR_RETRIEVEING_SELECTED_NOTE,
+                        uiComponentType = UIComponentType.Dialog(),
+                        messageType = MessageType.Error()
+                    )
+                )
+            )
+        )
     }
 
     private fun setupMarkdown(){
@@ -311,22 +311,25 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
         note_body.setText(body)
     }
 
-    private fun onRestoreInstanceState(savedInstanceState: Bundle?){
-        savedInstanceState?.let { inState ->
-            (inState[NOTE_DETAIL_STATE_BUNDLE_KEY] as NoteDetailViewState?)?.let { viewState ->
-                viewModel.setViewState(viewState)
-            }
-        }
+    private fun restoreInstanceState(){
 
-        // One-time check after rotation
-        if(viewModel.isToolbarCollapsed()){
-            app_bar.setExpanded(false)
-            transitionToCollapsedMode()
-        }
-        else{
-            app_bar.setExpanded(true)
-            transitionToExpandedMode()
-        }
+        findNavController()
+            .currentBackStackEntry
+            ?.savedStateHandle
+            ?.getLiveData<NoteDetailViewState>(NOTE_DETAIL_STATE_BUNDLE_KEY)
+            ?.observe(viewLifecycleOwner, Observer { viewState ->
+                viewModel.setViewState(viewState)
+
+                // One-time check after rotation
+                if(viewModel.isToolbarCollapsed()){
+                    app_bar.setExpanded(false)
+                    transitionToCollapsedMode()
+                }
+                else{
+                    app_bar.setExpanded(true)
+                    transitionToExpandedMode()
+                }
+            })
     }
 
     private fun updateTitleInViewModel(){
@@ -467,7 +470,10 @@ class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         val viewState = viewModel.getCurrentViewStateOrNew()
-        outState.putParcelable(NOTE_DETAIL_STATE_BUNDLE_KEY, viewState)
+        findNavController()
+            .currentBackStackEntry
+            ?.savedStateHandle
+            ?.set(NOTE_DETAIL_STATE_BUNDLE_KEY, viewState)
     }
 
 

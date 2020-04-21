@@ -41,7 +41,6 @@ import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.stat
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState
 import com.codingwithmitch.notes.R
 import kotlinx.android.synthetic.main.fragment_note_list.*
-import kotlinx.android.synthetic.main.layout_searchview_toolbar.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import javax.inject.Inject
@@ -73,8 +72,13 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
             args.getParcelable<Note>(NOTE_PENDING_DELETE_BUNDLE_KEY)?.let { note ->
                 viewModel.setNotePendingDelete(note)
                 showUndoSnackbar_deleteNote()
+                clearArgs()
             }
         }
+    }
+
+    private fun clearArgs(){
+        arguments?.clear()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -88,7 +92,6 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
 
         restoreInstanceState(savedInstanceState)
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -109,6 +112,9 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
         }
     }
 
+    // Why didn't I use the "SavedStateHandle" here?
+    // It doesn't seem to work in this fragment. I'm guessing because the backstack is empty
+    // at this point.
     override fun onSaveInstanceState(outState: Bundle) {
         val viewState = viewModel.viewState.value
 
@@ -333,10 +339,12 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
     }
 
     private fun navigateToDetailFragment(selectedNote: Note){
-        val bundle = bundleOf(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY to selectedNote)
+        findNavController()
+            .currentBackStackEntry
+            ?.savedStateHandle
+            ?.set(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY, selectedNote)
         findNavController().navigate(
-            R.id.action_note_list_fragment_to_noteDetailFragment,
-            bundle
+            R.id.action_note_list_fragment_to_noteDetailFragment
         )
         viewModel.setNote(null)
     }
