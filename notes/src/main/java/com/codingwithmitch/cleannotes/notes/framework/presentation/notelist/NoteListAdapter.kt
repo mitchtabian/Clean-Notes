@@ -96,15 +96,16 @@ class NoteListAdapter(
     ) : RecyclerView.ViewHolder(itemView)
     {
 
+
         private val COLOR_GREY = com.codingwithmitch.cleannotes.R.color.app_background_color
         private val COLOR_PRIMARY = com.codingwithmitch.cleannotes.R.color.colorPrimary
         private lateinit var note: Note
 
         fun bind(item: Note) = with(itemView) {
-            itemView.setOnClickListener {
+            setOnClickListener {
                 interaction?.onItemSelected(adapterPosition, note)
             }
-            itemView.setOnLongClickListener {
+            setOnLongClickListener {
                 interaction?.activateMultiSelectionMode()
                 interaction?.onItemSelected(adapterPosition, note)
                 true
@@ -113,22 +114,21 @@ class NoteListAdapter(
             note_title.text = item.title
             note_timestamp.text = item.updated_at
 
-
             selectedNotes.observe(lifecycleOwner, Observer { notes ->
 
                 if(notes != null){
                     if(notes.contains(note)){
-                        itemView.changeColor(
+                        changeColor(
                             newColor = COLOR_GREY
                         )
                     }
                     else{
-                        itemView.changeColor(
+                        changeColor(
                             newColor = COLOR_PRIMARY
                         )
                     }
                 }else{
-                    itemView.changeColor(
+                    changeColor(
                         newColor = COLOR_PRIMARY
                     )
                 }
