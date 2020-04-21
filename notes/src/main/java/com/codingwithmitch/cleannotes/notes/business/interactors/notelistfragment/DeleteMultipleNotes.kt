@@ -3,8 +3,7 @@ package com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragme
 import com.codingwithmitch.cleannotes.core.business.cache.CacheResponseHandler
 import com.codingwithmitch.cleannotes.core.business.safeCacheCall
 import com.codingwithmitch.cleannotes.core.business.state.*
-import com.codingwithmitch.cleannotes.core.util.printLogD
-import com.codingwithmitch.cleannotes.notes.business.domain.repository.NoteRepository
+import com.codingwithmitch.cleannotes.notes.business.domain.abstraction.NoteRepository
 import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_FAILED
 import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_SUCCESS
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState

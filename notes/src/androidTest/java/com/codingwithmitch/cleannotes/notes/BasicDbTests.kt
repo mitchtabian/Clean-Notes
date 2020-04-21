@@ -4,9 +4,9 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.codingwithmitch.cleannotes.notes.business.data.repository.NoteRepositoryImpl
-import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteEntityMapper
-import com.codingwithmitch.cleannotes.notes.business.domain.repository.NoteRepository
+import com.codingwithmitch.cleannotes.notes.business.data.implementation.NoteRepositoryImpl
+import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteMapper
+import com.codingwithmitch.cleannotes.notes.business.domain.abstraction.NoteRepository
 import com.codingwithmitch.cleannotes.core.business.DateUtil
 import com.codingwithmitch.cleannotes.core.business.state.DataState
 import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNote
@@ -51,7 +51,7 @@ class BasicDbTests {
         noteRepository = NoteRepositoryImpl(
             NoteCacheDataSourceImpl(
                 noteDao = db.noteDao(),
-                noteEntityMapper = NoteEntityMapper(dateUtil),
+                noteEntityMapper = NoteMapper(dateUtil),
                 dateUtil = dateUtil
             )
         )

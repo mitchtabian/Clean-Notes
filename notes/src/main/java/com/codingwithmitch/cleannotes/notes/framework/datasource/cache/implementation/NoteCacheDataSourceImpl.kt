@@ -1,7 +1,7 @@
 package com.codingwithmitch.notes.datasource.cache.repository
 
-import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteEntityMapper
-import com.codingwithmitch.cleannotes.notes.business.data.datasource.NoteCacheDataSource
+import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteMapper
+import com.codingwithmitch.cleannotes.notes.business.data.abstraction.NoteCacheDataSource
 import com.codingwithmitch.cleannotes.notes.framework.datasource.model.NoteEntity
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.core.business.DateUtil
@@ -15,7 +15,7 @@ class NoteCacheDataSourceImpl
 @Inject
 constructor(
     private val noteDao: NoteDao,
-    private val noteEntityMapper: NoteEntityMapper,
+    private val noteEntityMapper: NoteMapper,
     private val dateUtil: DateUtil
 ): NoteCacheDataSource {
 
