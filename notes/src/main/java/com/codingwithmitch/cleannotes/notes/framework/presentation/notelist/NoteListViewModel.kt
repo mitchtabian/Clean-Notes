@@ -10,8 +10,6 @@ import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.DeleteMultipleNotes.Companion.DELETE_NOTES_YOU_MUST_SELECT
 import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.NoteListInteractors
-import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_FILTER_DATE_CREATED
-import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_ORDER_DESC
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteFactory
 import com.codingwithmitch.cleannotes.notes.framework.datasource.preferences.PreferenceKeys.Companion.NOTE_FILTER
 import com.codingwithmitch.cleannotes.notes.framework.datasource.preferences.PreferenceKeys.Companion.NOTE_ORDER
@@ -20,6 +18,8 @@ import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.stat
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListToolbarState
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState.*
+import com.codingwithmitch.notes.datasource.cache.db.NOTE_FILTER_DATE_CREATED
+import com.codingwithmitch.notes.datasource.cache.db.NOTE_ORDER_DESC
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

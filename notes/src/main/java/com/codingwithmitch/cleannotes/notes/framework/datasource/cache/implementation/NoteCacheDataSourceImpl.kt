@@ -7,7 +7,7 @@ import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.core.business.DateUtil
 import com.codingwithmitch.notes.datasource.cache.db.NoteDao
 import com.codingwithmitch.cleannotes.core.di.scopes.FeatureScope
-import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.returnOrderedQuery
+import com.codingwithmitch.notes.datasource.cache.db.returnOrderedQuery
 import javax.inject.Inject
 
 @FeatureScope
