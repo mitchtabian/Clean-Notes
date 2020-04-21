@@ -11,7 +11,7 @@ import com.codingwithmitch.cleannotes.core.business.DateUtil
 import com.codingwithmitch.cleannotes.core.business.state.DataState
 import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNote
 import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.*
-import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteFactory
+import com.codingwithmitch.cleannotes.notes.business.domain.model.NoteFactory
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.ORDER_BY_ASC_DATE_UPDATED
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListStateEvent.*
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState
@@ -57,7 +57,11 @@ class BasicDbTests {
         )
         interactors =
             NoteListInteractors(
-                InsertNewNote(noteRepository, NoteFactory(dateUtil)),
+                InsertNewNote(noteRepository,
+                    NoteFactory(
+                        dateUtil
+                    )
+                ),
                 DeleteNote(noteRepository),
                 SearchNotes(noteRepository),
                 GetNumNotes(noteRepository),
