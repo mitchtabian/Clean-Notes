@@ -28,17 +28,6 @@ interface NoteCacheDataSource{
     suspend fun insertNotes(notes: List<Note>): LongArray
 }
 
-interface NoteNetworkDataSource{
-
-    suspend fun insert(note: Note): Long
-
-    suspend fun delete(note: Note): Int
-
-    suspend fun update(note: Note): Int
-
-    suspend fun get(): List<Note>
-
-}
 
 
 

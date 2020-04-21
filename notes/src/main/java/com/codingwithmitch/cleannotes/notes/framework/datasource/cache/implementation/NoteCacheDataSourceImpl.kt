@@ -15,7 +15,7 @@ class NoteCacheDataSourceImpl
 @Inject
 constructor(
     private val noteDao: NoteDao,
-    private val noteEntityMapper: NoteMapper,
+    private val noteMapper: NoteMapper,
     private val dateUtil: DateUtil
 ): NoteCacheDataSource {
 
@@ -62,7 +62,7 @@ constructor(
         filterAndOrder: String,
         page: Int
     ): List<Note> {
-        return noteEntityMapper.entityListToNoteList(
+        return noteMapper.entityListToNoteList(
             noteDao.returnOrderedQuery(
                 query = query,
                 filterAndOrder = filterAndOrder,
@@ -75,7 +75,7 @@ constructor(
 
     override suspend fun insertNotes(notes: List<Note>): LongArray{
         return noteDao.insertNotes(
-            noteEntityMapper.noteListToEntityList(notes)
+            noteMapper.noteListToEntityList(notes)
         )
     }
 }
