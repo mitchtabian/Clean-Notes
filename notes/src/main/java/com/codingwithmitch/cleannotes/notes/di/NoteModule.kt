@@ -10,7 +10,7 @@ import com.codingwithmitch.cleannotes.notes.business.data.implementation.NoteRep
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteMapper
 import com.codingwithmitch.cleannotes.notes.di.NotesFeatureImpl
 import com.codingwithmitch.cleannotes.notes.business.domain.abstraction.NoteRepository
-import com.codingwithmitch.cleannotes.presentation.BaseApplication
+import com.codingwithmitch.cleannotes.framework.presentation.BaseApplication
 import com.codingwithmitch.cleannotes.core.business.DateUtil
 import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNote
 import com.codingwithmitch.cleannotes.notes.business.interactors.notedetailfragment.NoteDetailInteractors

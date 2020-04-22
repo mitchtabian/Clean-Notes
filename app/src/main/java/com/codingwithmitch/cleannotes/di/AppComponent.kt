@@ -4,8 +4,8 @@ import com.codingwithmitch.cleannotes.di.features.notes.NotesFeature
 import com.codingwithmitch.cleannotes.di.features.notes.NotesFeatureModule
 import com.codingwithmitch.cleannotes.di.features.reminders.RemindersFeature
 import com.codingwithmitch.cleannotes.di.features.reminders.RemindersFeatureModule
-import com.codingwithmitch.cleannotes.presentation.BaseApplication
-import com.codingwithmitch.cleannotes.presentation.MainActivity
+import com.codingwithmitch.cleannotes.framework.presentation.BaseApplication
+import com.codingwithmitch.cleannotes.framework.presentation.MainActivity
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton

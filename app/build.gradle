@@ -56,7 +56,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(Modules.core)
     implementation Dependencies.kotlin_standard_library
     implementation Dependencies.kotlin_reflect
     implementation Dependencies.ktx
@@ -70,6 +69,9 @@ dependencies {
     implementation Dependencies.leak_canary
     implementation Dependencies.dagger
     implementation Dependencies.firestore
+    implementation Dependencies.room_runtime
+    implementation Dependencies.room_ktx
+    implementation Dependencies.markdown_processor
 
     implementation SupportDependencies.appcompat
     implementation SupportDependencies.constraintlayout
