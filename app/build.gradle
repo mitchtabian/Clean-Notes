@@ -1,6 +1,5 @@
 import dependencies.ApplicationId
 import dependencies.Dependencies
-import dependencies.Modules
 import dependencies.Releases
 import dependencies.SupportDependencies
 import dependencies.TestDependencies
@@ -49,9 +48,6 @@ android {
     }
 
 
-    dynamicFeatures = [Modules.notes, Modules.settings, Modules.reminders]
-
-
 }
 
 dependencies {
@@ -72,7 +68,10 @@ dependencies {
     implementation Dependencies.room_runtime
     implementation Dependencies.room_ktx
     implementation Dependencies.markdown_processor
+    implementation Dependencies.retrofit
+    implementation Dependencies.retrofit_gson
 
+    implementation SupportDependencies.swipe_refresh_layout
     implementation SupportDependencies.appcompat
     implementation SupportDependencies.constraintlayout
     implementation SupportDependencies.material_design

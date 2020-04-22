@@ -1,6 +1,7 @@
 package com.codingwithmitch.cleannotes.business.interactors.notelist
 
 import com.codingwithmitch.cleannotes.business.interactors.common.DeleteNote
+import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListViewState
 
 
 // Use cases

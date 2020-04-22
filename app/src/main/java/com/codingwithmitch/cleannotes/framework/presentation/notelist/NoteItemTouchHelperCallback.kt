@@ -3,9 +3,6 @@ package com.codingwithmitch.cleannotes.framework.presentation.notelist
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListInteractionManager
-import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteInteractionManager
-import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.NoteListFragment.*
-import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListInteractionManager
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 

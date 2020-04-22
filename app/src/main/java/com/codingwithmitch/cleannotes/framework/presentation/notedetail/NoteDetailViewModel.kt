@@ -1,21 +1,20 @@
 package com.codingwithmitch.cleannotes.framework.presentation.notedetail
 
 import androidx.lifecycle.LiveData
-import com.codingwithmitch.cleannotes.core.business.state.*
-import com.codingwithmitch.cleannotes.core.di.scopes.FeatureScope
-import com.codingwithmitch.cleannotes.core.framework.BaseViewModel
-import com.codingwithmitch.cleannotes.core.util.printLogD
-import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
-import com.codingwithmitch.cleannotes.notes.business.interactors.notedetailfragment.NoteDetailInteractors
-import com.codingwithmitch.cleannotes.notes.business.interactors.notedetailfragment.UpdateNote.Companion.UPDATE_NOTE_FAILED
-import com.codingwithmitch.cleannotes.notes.framework.datasource.model.NoteEntity
-import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.*
-import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.CollapsingToolbarState.*
-import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state.NoteDetailStateEvent.*
+import com.codingwithmitch.cleannotes.business.domain.model.Note
+import com.codingwithmitch.cleannotes.business.interactors.notedetail.NoteDetailInteractors
+import com.codingwithmitch.cleannotes.business.interactors.notedetail.UpdateNote.Companion.UPDATE_NOTE_FAILED
+import com.codingwithmitch.cleannotes.business.state.*
+import com.codingwithmitch.cleannotes.framework.datasource.model.NoteEntity
+import com.codingwithmitch.cleannotes.framework.presentation.common.BaseViewModel
+import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.*
+import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.CollapsingToolbarState.*
+import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.NoteDetailStateEvent.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
+import javax.inject.Singleton
 
 
 const val NOTE_DETAIL_ERROR_RETRIEVEING_SELECTED_NOTE = "Error retrieving selected note from bundle."
@@ -24,7 +23,7 @@ const val NOTE_TITLE_CANNOT_BE_EMPTY = "Note title can not be empty."
 
 @ExperimentalCoroutinesApi
 @FlowPreview
-@FeatureScope
+@Singleton
 class NoteDetailViewModel
 @Inject
 constructor(

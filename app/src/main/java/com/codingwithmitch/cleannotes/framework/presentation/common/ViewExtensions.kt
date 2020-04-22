@@ -9,9 +9,8 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.codingwithmitch.cleannotes.core.business.state.StateMessageCallback
-import com.codingwithmitch.cleannotes.core.util.TodoCallback
+import com.codingwithmitch.cleannotes.business.state.StateMessageCallback
+import com.codingwithmitch.cleannotes.util.TodoCallback
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -105,14 +104,6 @@ fun EditText.enableContentInteraction() {
     }
 }
 
-
-fun SwipeRefreshLayout.startRefreshing() {
-    isRefreshing = true
-}
-
-fun SwipeRefreshLayout.stopRefreshing() {
-    isRefreshing = false
-}
 
 
 fun Activity.displayToast(

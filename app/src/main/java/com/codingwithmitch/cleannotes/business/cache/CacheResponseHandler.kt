@@ -1,7 +1,7 @@
 package com.codingwithmitch.cleannotes.business.cache
 
-import com.codingwithmitch.cleannotes.core.business.cache.CacheErrors.CACHE_DATA_NULL
-import com.codingwithmitch.cleannotes.core.business.state.*
+import com.codingwithmitch.cleannotes.business.cache.CacheErrors.CACHE_DATA_NULL
+import com.codingwithmitch.cleannotes.business.state.*
 
 
 abstract class CacheResponseHandler <ViewState, Data>(

@@ -9,8 +9,6 @@ object Versions {
     val ktx = "1.2.0"
     val dagger = "2.25.4"
     val nav_components = "2.3.0-alpha04"
-    val recyclerview = "1.2.0-alpha01"
-    val recyclerview_selection = "1.0.0"
     val material_dialogs = "3.2.1"
     val room = "2.1.0"
     val appcompat = "1.1.0-rc01"
@@ -73,16 +71,6 @@ object ApplicationId {
     val id = "com.codingwithmitch.cleannotes"
 }
 
-object Modules {
-    val app = ":app"
-    val core = ":core"
-    val notes = ":notes"
-    val reminders = ":reminders"
-    val settings = ":settings"
-
-}
-
-
 
 object Build {
     val build_tools = "com.android.tools.build:gradle:${Versions.gradle}"
@@ -111,8 +99,6 @@ object SupportDependencies {
 
     val appcompat = "androidx.appcompat:appcompat:${Versions.appcompat}"
     val constraintlayout = "androidx.constraintlayout:constraintlayout:${Versions.constraintlayout}"
-    val recyclerview = "androidx.recyclerview:recyclerview:${Versions.recyclerview}"
-    val recyclerview_selection = "androidx.recyclerview:recyclerview-selection:${Versions.recyclerview_selection}"
     val material_design = "com.google.android.material:material:${Versions.material_design}"
     val swipe_refresh_layout = "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swipe_refresh_layout}"
 }

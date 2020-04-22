@@ -19,29 +19,27 @@ import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.customview.customView
 import com.afollestad.materialdialogs.customview.getCustomView
-import com.codingwithmitch.cleannotes.core.business.state.*
-import com.codingwithmitch.cleannotes.core.framework.DialogInputCaptureCallback
-import com.codingwithmitch.cleannotes.core.framework.TopSpacingItemDecoration
-import com.codingwithmitch.cleannotes.core.framework.hideKeyboard
-import com.codingwithmitch.cleannotes.core.util.TodoCallback
-import com.codingwithmitch.cleannotes.core.util.printLogD
-import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NOTE_PENDING_DELETE_BUNDLE_KEY
-import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListViewModel
-import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListViewState
-import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
-import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_PENDING
-import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_SUCCESS
-import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.DeleteMultipleNotes.Companion.DELETE_NOTES_ARE_YOU_SURE
-import com.codingwithmitch.cleannotes.notes.framework.presentation.BaseNoteFragment
-import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY
-import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListStateEvent.*
-import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListToolbarState.*
-import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState
-import com.codingwithmitch.notes.R
-import com.codingwithmitch.notes.datasource.cache.db.NOTE_FILTER_DATE_CREATED
-import com.codingwithmitch.notes.datasource.cache.db.NOTE_FILTER_TITLE
-import com.codingwithmitch.notes.datasource.cache.db.NOTE_ORDER_ASC
-import com.codingwithmitch.notes.datasource.cache.db.NOTE_ORDER_DESC
+import com.codingwithmitch.cleannotes.R
+import com.codingwithmitch.cleannotes.business.domain.model.Note
+import com.codingwithmitch.cleannotes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_PENDING
+import com.codingwithmitch.cleannotes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_SUCCESS
+import com.codingwithmitch.cleannotes.business.interactors.notelist.DeleteMultipleNotes.Companion.DELETE_NOTES_ARE_YOU_SURE
+import com.codingwithmitch.cleannotes.business.state.*
+import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NOTE_FILTER_DATE_CREATED
+import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NOTE_FILTER_TITLE
+import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NOTE_ORDER_ASC
+import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NOTE_ORDER_DESC
+import com.codingwithmitch.cleannotes.framework.presentation.BaseApplication
+import com.codingwithmitch.cleannotes.framework.presentation.common.BaseNoteFragment
+import com.codingwithmitch.cleannotes.framework.presentation.common.TopSpacingItemDecoration
+import com.codingwithmitch.cleannotes.framework.presentation.common.hideKeyboard
+import com.codingwithmitch.cleannotes.framework.presentation.notedetail.NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY
+import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.*
+import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListStateEvent.*
+import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListToolbarState.*
+import com.codingwithmitch.cleannotes.util.TodoCallback
+import com.codingwithmitch.cleannotes.util.printLogD
+import kotlinx.android.synthetic.main.fragment_note_list.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import javax.inject.Inject
@@ -314,7 +312,7 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
                             viewModel.undoDelete()
                         }
                     },
-                    onDismissCallback = object: TodoCallback{
+                    onDismissCallback = object: TodoCallback {
                         override fun execute() {
                             // if the note is not restored, clear pending note
                             viewModel.setNotePendingDelete(null)
@@ -352,12 +350,10 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
 
     private fun setupUI(){
         view?.hideKeyboard()
-        uiController.checkBottomNav(getString(com.codingwithmitch.cleannotes.R.string.module_notes_name))
-        uiController.displayBottomNav(true)
     }
 
     override fun inject() {
-        getNoteComponent()?.inject(this)
+        getAppComponent().inject(this)
     }
 
     override fun onItemSelected(position: Int, item: Note) {

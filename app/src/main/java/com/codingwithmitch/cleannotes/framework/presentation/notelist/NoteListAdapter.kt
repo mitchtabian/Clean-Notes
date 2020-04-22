@@ -7,9 +7,9 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
-import com.codingwithmitch.cleannotes.core.framework.changeColor
-import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
-import com.codingwithmitch.notes.R
+import com.codingwithmitch.cleannotes.R
+import com.codingwithmitch.cleannotes.business.domain.model.Note
+import com.codingwithmitch.cleannotes.framework.presentation.common.changeColor
 import kotlinx.android.synthetic.main.layout_note_list_item.view.*
 import java.lang.IndexOutOfBoundsException
 

@@ -1,8 +1,8 @@
 package com.codingwithmitch.cleannotes.business.network
 
-import com.codingwithmitch.cleannotes.core.business.network.NetworkErrors.NETWORK_DATA_NULL
-import com.codingwithmitch.cleannotes.core.business.network.NetworkErrors.NETWORK_ERROR
-import com.codingwithmitch.cleannotes.core.business.state.*
+import com.codingwithmitch.cleannotes.business.network.NetworkErrors.NETWORK_DATA_NULL
+import com.codingwithmitch.cleannotes.business.network.NetworkErrors.NETWORK_ERROR
+import com.codingwithmitch.cleannotes.business.state.*
 
 
 abstract class ApiResponseHandler <ViewState, Data>(

@@ -8,9 +8,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
+import com.codingwithmitch.cleannotes.di.AppComponent
 import com.codingwithmitch.cleannotes.framework.presentation.BaseApplication
 import com.codingwithmitch.cleannotes.framework.presentation.MainActivity
 import com.codingwithmitch.cleannotes.framework.presentation.UIController
+import com.codingwithmitch.cleannotes.util.TodoCallback
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import java.lang.ClassCastException
@@ -71,14 +73,13 @@ constructor(
         }
     }
 
-    fun getNoteComponent(): NoteComponent? {
-        val appComponent = (activity?.application as BaseApplication).appComponent
-        val noteComponent = (appComponent.notesFeature() as NotesFeatureImpl)
-            .getProvider().noteComponent
-        return noteComponent
-    }
-
     abstract fun inject()
+
+    fun getAppComponent(): AppComponent{
+        return activity?.run {
+            (application as BaseApplication).appComponent
+        }?: throw Exception("AppComponent is null.")
+    }
 
     override fun onAttach(context: Context) {
         inject()

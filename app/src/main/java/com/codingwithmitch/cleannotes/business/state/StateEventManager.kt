@@ -2,7 +2,6 @@ package com.codingwithmitch.cleannotes.business.state
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.codingwithmitch.cleannotes.core.util.printLogD
 
 /**
  * - Keeps track of active StateEvents in DataChannelManager
@@ -28,15 +27,11 @@ class StateEventManager {
     }
 
     fun addStateEvent(stateEvent: StateEvent){
-        printLogD("SEM",
-            "adding state event: ${stateEvent.eventName()}")
         activeStateEvents.put(stateEvent.eventName(), stateEvent)
         syncNumActiveStateEvents()
     }
 
     fun removeStateEvent(stateEvent: StateEvent?){
-        printLogD("SEM",
-            "removing state event: ${stateEvent?.eventName()}")
         activeStateEvents.remove(stateEvent?.eventName())
         syncNumActiveStateEvents()
     }

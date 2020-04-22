@@ -3,26 +3,23 @@ package com.codingwithmitch.cleannotes.framework.presentation.notelist.state
 import android.content.SharedPreferences
 import android.os.Parcelable
 import androidx.lifecycle.LiveData
-import com.codingwithmitch.cleannotes.core.business.state.*
-import com.codingwithmitch.cleannotes.core.di.scopes.FeatureScope
-import com.codingwithmitch.cleannotes.core.framework.BaseViewModel
-import com.codingwithmitch.cleannotes.core.util.printLogD
-import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
-import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.DeleteMultipleNotes.Companion.DELETE_NOTES_YOU_MUST_SELECT
-import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.NoteListInteractors
-import com.codingwithmitch.cleannotes.notes.business.domain.model.NoteFactory
-import com.codingwithmitch.cleannotes.notes.framework.datasource.preferences.PreferenceKeys.Companion.NOTE_FILTER
-import com.codingwithmitch.cleannotes.notes.framework.datasource.preferences.PreferenceKeys.Companion.NOTE_ORDER
-import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListInteractionManager
-import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListStateEvent.*
-import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListToolbarState
-import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState
-import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState.*
-import com.codingwithmitch.notes.datasource.cache.db.NOTE_FILTER_DATE_CREATED
-import com.codingwithmitch.notes.datasource.cache.db.NOTE_ORDER_DESC
+import com.codingwithmitch.cleannotes.business.domain.model.Note
+import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
+import com.codingwithmitch.cleannotes.business.interactors.notelist.DeleteMultipleNotes.Companion.DELETE_NOTES_YOU_MUST_SELECT
+import com.codingwithmitch.cleannotes.business.interactors.notelist.NoteListInteractors
+import com.codingwithmitch.cleannotes.business.state.*
+import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NOTE_FILTER_DATE_CREATED
+import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NOTE_ORDER_DESC
+import com.codingwithmitch.cleannotes.framework.datasource.preferences.PreferenceKeys.Companion.NOTE_FILTER
+import com.codingwithmitch.cleannotes.framework.datasource.preferences.PreferenceKeys.Companion.NOTE_ORDER
+import com.codingwithmitch.cleannotes.framework.presentation.common.BaseViewModel
+import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListStateEvent.*
+import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListViewState.*
+import com.codingwithmitch.cleannotes.util.printLogD
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
+import javax.inject.Singleton
 
 
 const val DELETE_PENDING_ERROR = "There is already a pending delete operation."
@@ -30,7 +27,7 @@ const val NOTE_PENDING_DELETE_BUNDLE_KEY = "pending_delete"
 
 @ExperimentalCoroutinesApi
 @FlowPreview
-@FeatureScope
+@Singleton
 class NoteListViewModel
 @Inject
 constructor(

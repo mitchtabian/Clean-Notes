@@ -1,7 +1,7 @@
 package com.codingwithmitch.cleannotes.business.state
 
 import android.view.View
-import com.codingwithmitch.cleannotes.core.util.TodoCallback
+import com.codingwithmitch.cleannotes.util.TodoCallback
 
 
 data class StateMessage(val response: Response)
@@ -70,6 +70,18 @@ class SnackbarUndoListener
     }
 
 }
+
+
+interface DialogInputCaptureCallback {
+
+    fun onTextCaptured(text: String)
+}
+
+
+
+
+
+
 
 
 

@@ -4,6 +4,7 @@ import com.codingwithmitch.cleannotes.business.cache.CacheResponseHandler
 import com.codingwithmitch.cleannotes.business.domain.abstraction.NoteRepository
 import com.codingwithmitch.cleannotes.business.state.*
 import com.codingwithmitch.cleannotes.business.util.safeCacheCall
+import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.NoteDetailViewState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

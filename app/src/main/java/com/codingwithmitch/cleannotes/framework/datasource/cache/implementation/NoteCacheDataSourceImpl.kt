@@ -1,16 +1,14 @@
 package com.codingwithmitch.cleannotes.framework.datasource.cache.implementation
 
-import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteMapper
-import com.codingwithmitch.cleannotes.notes.business.data.abstraction.NoteCacheDataSource
-import com.codingwithmitch.cleannotes.notes.framework.datasource.model.NoteEntity
-import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
-import com.codingwithmitch.cleannotes.core.business.DateUtil
-import com.codingwithmitch.notes.datasource.cache.db.NoteDao
-import com.codingwithmitch.cleannotes.core.di.scopes.FeatureScope
-import com.codingwithmitch.notes.datasource.cache.db.returnOrderedQuery
+import com.codingwithmitch.cleannotes.business.data.abstraction.NoteCacheDataSource
+import com.codingwithmitch.cleannotes.business.domain.model.Note
+import com.codingwithmitch.cleannotes.business.util.DateUtil
+import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NoteDao
+import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.returnOrderedQuery
+import com.codingwithmitch.cleannotes.framework.datasource.mappers.NoteMapper
+import com.codingwithmitch.cleannotes.framework.datasource.model.NoteEntity
 import javax.inject.Inject
 
-@FeatureScope
 class NoteCacheDataSourceImpl
 @Inject
 constructor(

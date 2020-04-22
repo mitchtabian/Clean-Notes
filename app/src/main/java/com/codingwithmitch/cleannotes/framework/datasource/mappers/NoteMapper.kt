@@ -1,10 +1,9 @@
 package com.codingwithmitch.cleannotes.framework.datasource.mappers
 
-import com.codingwithmitch.cleannotes.notes.framework.datasource.model.NoteEntity
-import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
-import com.codingwithmitch.cleannotes.core.business.DateUtil
-import com.codingwithmitch.cleannotes.core.business.EntityMapper
-import com.codingwithmitch.cleannotes.core.di.scopes.FeatureScope
+import com.codingwithmitch.cleannotes.business.domain.model.Note
+import com.codingwithmitch.cleannotes.business.util.DateUtil
+import com.codingwithmitch.cleannotes.business.util.EntityMapper
+import com.codingwithmitch.cleannotes.framework.datasource.model.NoteEntity
 import java.lang.Exception
 import javax.inject.Inject
 

@@ -1,6 +1,7 @@
 package com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction
 
 import androidx.room.*
+import com.codingwithmitch.cleannotes.framework.datasource.model.NoteEntity
 
 const val NOTE_ORDER_ASC: String = ""
 const val NOTE_ORDER_DESC: String = "-"

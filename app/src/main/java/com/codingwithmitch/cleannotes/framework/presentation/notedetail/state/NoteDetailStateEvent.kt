@@ -1,7 +1,8 @@
 package com.codingwithmitch.cleannotes.framework.presentation.notedetail.state
 
-import com.codingwithmitch.cleannotes.core.business.state.StateEvent
-import com.codingwithmitch.cleannotes.core.business.state.StateMessage
+import com.codingwithmitch.cleannotes.business.state.StateEvent
+import com.codingwithmitch.cleannotes.business.state.StateMessage
+
 
 sealed class NoteDetailStateEvent: StateEvent {
 
