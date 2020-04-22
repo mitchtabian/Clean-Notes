@@ -12,7 +12,6 @@ import com.codingwithmitch.cleannotes.core.business.state.DataState
 import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNote
 import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.*
 import com.codingwithmitch.cleannotes.notes.business.domain.model.NoteFactory
-import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.ORDER_BY_ASC_DATE_UPDATED
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListStateEvent.*
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState
 import com.codingwithmitch.notes.datasource.cache.db.NoteDatabase
@@ -37,92 +36,92 @@ import java.io.IOException
 class BasicDbTests {
 
 
-    private val dateUtil: DateUtil =
-        DateUtil()
-    private lateinit var db: NoteDatabase
-    private lateinit var noteRepository: NoteRepository
-    private lateinit var interactors: NoteListInteractors
+//    private val dateUtil: DateUtil =
+//        DateUtil()
+//    private lateinit var db: NoteDatabase
+//    private lateinit var noteRepository: NoteRepository
+//    private lateinit var interactors: NoteListInteractors
 
-    @Before
-    fun setupInteractors() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        db = Room.inMemoryDatabaseBuilder(
-            context, NoteDatabase::class.java).build()
-        noteRepository = NoteRepositoryImpl(
-            NoteCacheDataSourceImpl(
-                noteDao = db.noteDao(),
-                noteEntityMapper = NoteMapper(dateUtil),
-                dateUtil = dateUtil
-            )
-        )
-        interactors =
-            NoteListInteractors(
-                InsertNewNote(noteRepository,
-                    NoteFactory(
-                        dateUtil
-                    )
-                ),
-                DeleteNote(noteRepository),
-                SearchNotes(noteRepository),
-                GetNumNotes(noteRepository),
-                RestoreDeletedNote(noteRepository),
-                DeleteMultipleNotes(noteRepository),
-                InsertMultipleNotes(noteRepository)
-            )
-    }
-
-    @After
-    @Throws(IOException::class)
-    fun closeDb() {
-        db.close()
-    }
-
-    @Test
-    fun writeNewNote_confirmInserted() {
-
-        val newTitle = "first note"
-        val newBody = "something I should not forget!"
-        val stateEvent = SearchNotesEvent()
-        runBlocking {
-            interactors
-                .insertNewNote
-                .insertNewNote(
-                    title = newTitle,
-                    body = newBody,
-                    stateEvent = stateEvent
-                )
-        }
-        runBlocking {
-            val notesFlow: Flow<DataState<NoteListViewState>>? = flow{
-                interactors.searchNotes.searchNotes(
-                    query = "",
-                    filterAndOrder = ORDER_BY_ASC_DATE_UPDATED,
-                    page = 0,
-                    stateEvent = stateEvent
-                )
-            }
-            notesFlow?.collect(object: FlowCollector<DataState<NoteListViewState>>{
-                override suspend fun emit(value: DataState<NoteListViewState>) {
-
-                    // loop through results and make sure one of them is the new note
-                    val notesList = value.data?.noteList
-                    if(notesList != null){
-                        for((index, note) in notesList.withIndex()){
-                            if(note.title.equals(newTitle)
-                                && note.body.equals(newBody)){
-                                assert(true)
-                                break
-                            }
-                            if(index == notesList.size - 1){
-                                assert(false)
-                                break
-                            }
-                        }
-                    }
-                }
-            })
-        }
-    }
+//    @Before
+//    fun setupInteractors() {
+//        val context = ApplicationProvider.getApplicationContext<Context>()
+//        db = Room.inMemoryDatabaseBuilder(
+//            context, NoteDatabase::class.java).build()
+//        noteRepository = NoteRepositoryImpl(
+//            NoteCacheDataSourceImpl(
+//                noteDao = db.noteDao(),
+//                noteEntityMapper = NoteMapper(dateUtil),
+//                dateUtil = dateUtil
+//            )
+//        )
+//        interactors =
+//            NoteListInteractors(
+//                InsertNewNote(noteRepository,
+//                    NoteFactory(
+//                        dateUtil
+//                    )
+//                ),
+//                DeleteNote(noteRepository),
+//                SearchNotes(noteRepository),
+//                GetNumNotes(noteRepository),
+//                RestoreDeletedNote(noteRepository),
+//                DeleteMultipleNotes(noteRepository),
+//                InsertMultipleNotes(noteRepository)
+//            )
+//    }
+//
+//    @After
+//    @Throws(IOException::class)
+//    fun closeDb() {
+//        db.close()
+//    }
+//
+//    @Test
+//    fun writeNewNote_confirmInserted() {
+//
+//        val newTitle = "first note"
+//        val newBody = "something I should not forget!"
+//        val stateEvent = SearchNotesEvent()
+//        runBlocking {
+//            interactors
+//                .insertNewNote
+//                .insertNewNote(
+//                    title = newTitle,
+//                    body = newBody,
+//                    stateEvent = stateEvent
+//                )
+//        }
+//        runBlocking {
+//            val notesFlow: Flow<DataState<NoteListViewState>>? = flow{
+//                interactors.searchNotes.searchNotes(
+//                    query = "",
+//                    filterAndOrder = ORDER_BY_ASC_DATE_UPDATED,
+//                    page = 0,
+//                    stateEvent = stateEvent
+//                )
+//            }
+//            notesFlow?.collect(object: FlowCollector<DataState<NoteListViewState>>{
+//                override suspend fun emit(value: DataState<NoteListViewState>) {
+//
+//                    // loop through results and make sure one of them is the new note
+//                    val notesList = value.data?.noteList
+//                    if(notesList != null){
+//                        for((index, note) in notesList.withIndex()){
+//                            if(note.title.equals(newTitle)
+//                                && note.body.equals(newBody)){
+//                                assert(true)
+//                                break
+//                            }
+//                            if(index == notesList.size - 1){
+//                                assert(false)
+//                                break
+//                            }
+//                        }
+//                    }
+//                }
+//            })
+//        }
+//    }
 }
 
 

@@ -1,24 +1,16 @@
 package com.codingwithmitch.cleannotes.notes.framework.presentation.notelist
 
-import android.annotation.SuppressLint
 import android.view.*
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
-import androidx.recyclerview.selection.ItemDetailsLookup
-import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ItemTouchHelper
 import com.codingwithmitch.cleannotes.core.framework.changeColor
-import com.codingwithmitch.cleannotes.core.framework.onSelectChangeColor
-import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.notes.R
 import kotlinx.android.synthetic.main.layout_note_list_item.view.*
-import kotlinx.coroutines.CoroutineScope
 import java.lang.IndexOutOfBoundsException
 
 
