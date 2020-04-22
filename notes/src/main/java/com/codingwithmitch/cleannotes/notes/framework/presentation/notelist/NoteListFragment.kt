@@ -30,18 +30,17 @@ import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_PENDING
 import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_SUCCESS
 import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.DeleteMultipleNotes.Companion.DELETE_NOTES_ARE_YOU_SURE
-import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_FILTER_DATE_CREATED
-import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_FILTER_TITLE
-import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_ORDER_ASC
-import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NOTE_ORDER_DESC
 import com.codingwithmitch.cleannotes.notes.framework.presentation.BaseNoteFragment
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListStateEvent.*
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListToolbarState.*
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState
 import com.codingwithmitch.notes.R
+import com.codingwithmitch.notes.datasource.cache.db.NOTE_FILTER_DATE_CREATED
+import com.codingwithmitch.notes.datasource.cache.db.NOTE_FILTER_TITLE
+import com.codingwithmitch.notes.datasource.cache.db.NOTE_ORDER_ASC
+import com.codingwithmitch.notes.datasource.cache.db.NOTE_ORDER_DESC
 import kotlinx.android.synthetic.main.fragment_note_list.*
-import kotlinx.android.synthetic.main.layout_searchview_toolbar.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import javax.inject.Inject
@@ -73,8 +72,13 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
             args.getParcelable<Note>(NOTE_PENDING_DELETE_BUNDLE_KEY)?.let { note ->
                 viewModel.setNotePendingDelete(note)
                 showUndoSnackbar_deleteNote()
+                clearArgs()
             }
         }
+    }
+
+    private fun clearArgs(){
+        arguments?.clear()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -88,7 +92,6 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
 
         restoreInstanceState(savedInstanceState)
     }
-
 
     override fun onResume() {
         super.onResume()
@@ -109,6 +112,9 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
         }
     }
 
+    // Why didn't I use the "SavedStateHandle" here?
+    // It doesn't seem to work in this fragment. I'm guessing because the backstack is empty
+    // at this point.
     override fun onSaveInstanceState(outState: Bundle) {
         val viewState = viewModel.viewState.value
 
@@ -333,10 +339,12 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
     }
 
     private fun navigateToDetailFragment(selectedNote: Note){
-        val bundle = bundleOf(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY to selectedNote)
+        findNavController()
+            .currentBackStackEntry
+            ?.savedStateHandle
+            ?.set(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY, selectedNote)
         findNavController().navigate(
-            R.id.action_note_list_fragment_to_noteDetailFragment,
-            bundle
+            R.id.action_note_list_fragment_to_noteDetailFragment
         )
         viewModel.setNote(null)
     }

@@ -1,8 +1,8 @@
-package com.codingwithmitch.cleannotes.notes.business.data.repository
+package com.codingwithmitch.cleannotes.notes.business.data.implementation
 
-import com.codingwithmitch.cleannotes.notes.business.data.datasource.NoteCacheDataSource
+import com.codingwithmitch.cleannotes.notes.business.data.abstraction.NoteCacheDataSource
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
-import com.codingwithmitch.cleannotes.notes.business.domain.repository.NoteRepository
+import com.codingwithmitch.cleannotes.notes.business.domain.abstraction.NoteRepository
 import com.codingwithmitch.cleannotes.core.di.scopes.FeatureScope
 import javax.inject.Inject
 

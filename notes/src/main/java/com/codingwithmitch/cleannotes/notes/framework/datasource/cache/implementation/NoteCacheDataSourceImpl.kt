@@ -1,13 +1,13 @@
 package com.codingwithmitch.notes.datasource.cache.repository
 
-import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteEntityMapper
-import com.codingwithmitch.cleannotes.notes.business.data.datasource.NoteCacheDataSource
+import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteMapper
+import com.codingwithmitch.cleannotes.notes.business.data.abstraction.NoteCacheDataSource
 import com.codingwithmitch.cleannotes.notes.framework.datasource.model.NoteEntity
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.core.business.DateUtil
 import com.codingwithmitch.notes.datasource.cache.db.NoteDao
 import com.codingwithmitch.cleannotes.core.di.scopes.FeatureScope
-import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.returnOrderedQuery
+import com.codingwithmitch.notes.datasource.cache.db.returnOrderedQuery
 import javax.inject.Inject
 
 @FeatureScope
@@ -15,7 +15,7 @@ class NoteCacheDataSourceImpl
 @Inject
 constructor(
     private val noteDao: NoteDao,
-    private val noteEntityMapper: NoteEntityMapper,
+    private val noteMapper: NoteMapper,
     private val dateUtil: DateUtil
 ): NoteCacheDataSource {
 
@@ -62,7 +62,7 @@ constructor(
         filterAndOrder: String,
         page: Int
     ): List<Note> {
-        return noteEntityMapper.entityListToNoteList(
+        return noteMapper.entityListToNoteList(
             noteDao.returnOrderedQuery(
                 query = query,
                 filterAndOrder = filterAndOrder,
@@ -75,7 +75,7 @@ constructor(
 
     override suspend fun insertNotes(notes: List<Note>): LongArray{
         return noteDao.insertNotes(
-            noteEntityMapper.noteListToEntityList(notes)
+            noteMapper.noteListToEntityList(notes)
         )
     }
 }

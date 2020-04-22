@@ -1,8 +1,7 @@
-package com.codingwithmitch.cleannotes.notes.framework.datasource.mappers
+package com.codingwithmitch.cleannotes.notes.business.domain.model
 
 import com.codingwithmitch.cleannotes.core.business.DateUtil
 import com.codingwithmitch.cleannotes.core.di.scopes.FeatureScope
-import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
 import javax.inject.Inject
 
 @FeatureScope

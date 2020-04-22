@@ -2,7 +2,6 @@ package com.codingwithmitch.cleannotes.core.business
 
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton

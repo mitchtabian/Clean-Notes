@@ -5,7 +5,7 @@ import com.codingwithmitch.cleannotes.core.business.safeCacheCall
 import com.codingwithmitch.cleannotes.core.business.state.*
 import com.codingwithmitch.cleannotes.core.util.printLogD
 import com.codingwithmitch.cleannotes.notes.business.domain.model.Note
-import com.codingwithmitch.cleannotes.notes.business.domain.repository.NoteRepository
+import com.codingwithmitch.cleannotes.notes.business.domain.abstraction.NoteRepository
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

@@ -5,18 +5,18 @@ import android.content.SharedPreferences
 import androidx.room.Room
 import com.codingwithmitch.cleannotes.core.di.scopes.FeatureScope
 import com.codingwithmitch.cleannotes.di.features.notes.NotesFeature
-import com.codingwithmitch.cleannotes.notes.business.data.datasource.NoteCacheDataSource
-import com.codingwithmitch.cleannotes.notes.business.data.repository.NoteRepositoryImpl
-import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteEntityMapper
+import com.codingwithmitch.cleannotes.notes.business.data.abstraction.NoteCacheDataSource
+import com.codingwithmitch.cleannotes.notes.business.data.implementation.NoteRepositoryImpl
+import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteMapper
 import com.codingwithmitch.cleannotes.notes.di.NotesFeatureImpl
-import com.codingwithmitch.cleannotes.notes.business.domain.repository.NoteRepository
+import com.codingwithmitch.cleannotes.notes.business.domain.abstraction.NoteRepository
 import com.codingwithmitch.cleannotes.presentation.BaseApplication
 import com.codingwithmitch.cleannotes.core.business.DateUtil
 import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNote
 import com.codingwithmitch.cleannotes.notes.business.interactors.notedetailfragment.NoteDetailInteractors
 import com.codingwithmitch.cleannotes.notes.business.interactors.notedetailfragment.UpdateNote
 import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.*
-import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteFactory
+import com.codingwithmitch.cleannotes.notes.business.domain.model.NoteFactory
 import com.codingwithmitch.cleannotes.notes.framework.datasource.preferences.PreferenceKeys
 import com.codingwithmitch.notes.datasource.cache.db.NoteDao
 import com.codingwithmitch.notes.datasource.cache.db.NoteDatabase
@@ -64,16 +64,11 @@ object NoteModule {
     @JvmStatic
     @FeatureScope
     @Provides
-    fun provideNoteFactory(dateUtil: DateUtil): NoteFactory{
-        return NoteFactory(dateUtil)
+    fun provideNoteFactory(dateUtil: DateUtil): NoteFactory {
+        return NoteFactory(
+            dateUtil
+        )
     }
-
-//    @JvmStatic
-//    @FeatureScope
-//    @Provides
-//    fun provideNoteFragmentFactory(someString: String): FragmentFactory{
-//        return NotesFragmentFactory(someString)
-//    }
 
     @JvmStatic
     @FeatureScope
@@ -96,8 +91,8 @@ object NoteModule {
     @JvmStatic
     @FeatureScope
     @Provides
-    fun provideNoteEntityMapper(dateUtil: DateUtil): NoteEntityMapper{
-        return NoteEntityMapper(dateUtil)
+    fun provideNoteEntityMapper(dateUtil: DateUtil): NoteMapper{
+        return NoteMapper(dateUtil)
     }
 
     @JvmStatic
@@ -105,7 +100,7 @@ object NoteModule {
     @Provides
     fun provideNoteCacheDataSource(
         noteDao: NoteDao,
-        noteEntityMapper: NoteEntityMapper,
+        noteEntityMapper: NoteMapper,
         dateUtil: DateUtil
     ): NoteCacheDataSource {
         return NoteCacheDataSourceImpl(noteDao, noteEntityMapper, dateUtil)

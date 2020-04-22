@@ -4,14 +4,14 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.codingwithmitch.cleannotes.notes.business.data.repository.NoteRepositoryImpl
-import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteEntityMapper
-import com.codingwithmitch.cleannotes.notes.business.domain.repository.NoteRepository
+import com.codingwithmitch.cleannotes.notes.business.data.implementation.NoteRepositoryImpl
+import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteMapper
+import com.codingwithmitch.cleannotes.notes.business.domain.abstraction.NoteRepository
 import com.codingwithmitch.cleannotes.core.business.DateUtil
 import com.codingwithmitch.cleannotes.core.business.state.DataState
 import com.codingwithmitch.cleannotes.notes.business.interactors.common.DeleteNote
 import com.codingwithmitch.cleannotes.notes.business.interactors.notelistfragment.*
-import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.NoteFactory
+import com.codingwithmitch.cleannotes.notes.business.domain.model.NoteFactory
 import com.codingwithmitch.cleannotes.notes.framework.datasource.mappers.ORDER_BY_ASC_DATE_UPDATED
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListStateEvent.*
 import com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state.NoteListViewState
@@ -51,13 +51,17 @@ class BasicDbTests {
         noteRepository = NoteRepositoryImpl(
             NoteCacheDataSourceImpl(
                 noteDao = db.noteDao(),
-                noteEntityMapper = NoteEntityMapper(dateUtil),
+                noteEntityMapper = NoteMapper(dateUtil),
                 dateUtil = dateUtil
             )
         )
         interactors =
             NoteListInteractors(
-                InsertNewNote(noteRepository, NoteFactory(dateUtil)),
+                InsertNewNote(noteRepository,
+                    NoteFactory(
+                        dateUtil
+                    )
+                ),
                 DeleteNote(noteRepository),
                 SearchNotes(noteRepository),
                 GetNumNotes(noteRepository),
