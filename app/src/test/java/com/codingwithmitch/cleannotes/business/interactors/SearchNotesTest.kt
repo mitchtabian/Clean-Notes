@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test
 // test cases:
 // 1) Returns data=List<Note>(non-empty) and message=SEARCH_NOTES_SUCCESS
 // 2) Returns data=List<Note>(empty) and message=SEARCH_NOTES_NO_MATCHING_RESULTS
-// 3) Returns data=null (due to error) and message=? (doesn't matter)
+// 3) Returns stateMessage=ERROR due to exception
 
 // Testing things like 'making sure correct data is returned given a specific
 // query' can be done in Espresso tests when using DAO
@@ -102,7 +102,7 @@ class SearchNotesTest {
 
 
 
-    // 3) Returns data=null (due to error) and message=? (doesn't matter)
+    // 3) Returns stateMessage=ERROR due to exception
     @Test
     fun searchNotes_throwException_showErrorMessage() = runBlocking {
         val noteRepository = mockk<NoteRepository>()
