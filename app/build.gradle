@@ -47,8 +47,18 @@ android {
         jvmTarget = JavaVersion.version_1_8.toString()
     }
 
+    sourceSets {
+        test.resources.srcDirs += 'src/test/res'
+    }
+
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+        }
+    }
 
 }
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -79,13 +89,10 @@ dependencies {
     kapt AnnotationProcessorsDependencies.room_compiler
     kapt AnnotationProcessorsDependencies.dagger_compiler
 
-    androidTestImplementation TestDependencies.kotlin_test
-    androidTestImplementation TestDependencies.espresso_core
-    androidTestImplementation TestDependencies.idling_resource
-    androidTestImplementation TestDependencies.mockk
-    androidTestImplementation TestDependencies.test_runner
-    androidTestImplementation TestDependencies.test_rules
-    androidTestImplementation TestDependencies.text_core_ktx
-
+    testImplementation TestDependencies.mockk
+    testImplementation TestDependencies.jupiter_api
+    testImplementation TestDependencies.jupiter_params
+    testImplementation TestDependencies.junit4
+    testRuntimeOnly TestDependencies.jupiter_engine
 }
 apply plugin: 'com.google.gms.google-services'

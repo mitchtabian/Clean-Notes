@@ -28,7 +28,8 @@ object Versions {
     val lifecycle_version = "2.2.0-alpha03"
     val retrofit2_version = "2.6.0"
     val markdown_processor = "0.1.3"
-
+    val junit_jupiter_version = "5.6.0"
+    val junit_4_version = "4.12"
 }
 
 object Dependencies {
@@ -56,15 +57,24 @@ object Dependencies {
     val markdown_processor = "com.yydcdut:markdown-processor:${Versions.markdown_processor}"
 }
 
-object TestDependencies{
+object AndroidTestDependencies{
 
     val kotlin_test = "org.jetbrains.kotlin:kotlin-test-junit:${Versions.kotlin}"
     val espresso_core = "androidx.test.espresso:espresso-core:${Versions.espresso_core}"
     val idling_resource = "androidx.test.espresso:espresso-idling-resource:${Versions.espresso_idling_resource}"
-    val mockk = "io.mockk:mockk-android:${Versions.mockk_version}"
     val test_runner = "androidx.test:runner:${Versions.test_runner}"
     val test_rules = "androidx.test:rules:${Versions.test_runner}"
     val text_core_ktx = "androidx.test:core-ktx:${Versions.test_core}"
+    val mockk_android = "io.mockk:mockk-android:${Versions.mockk_version}"
+}
+
+object TestDependencies {
+
+    val jupiter_api = "org.junit.jupiter:junit-jupiter-api:${Versions.junit_jupiter_version}"
+    val jupiter_params = "org.junit.jupiter:junit-jupiter-params:${Versions.junit_jupiter_version}"
+    val jupiter_engine = "org.junit.jupiter:junit-jupiter-engine:${Versions.junit_jupiter_version}"
+    val mockk = "io.mockk:mockk:${Versions.mockk_version}"
+    val junit4 = "junit:junit:${Versions.junit_4_version}"
 }
 
 object ApplicationId {
@@ -76,7 +86,7 @@ object Build {
     val build_tools = "com.android.tools.build:gradle:${Versions.gradle}"
     val kotlin_gradle_plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     val google_services = "com.google.gms:google-services:${Versions.play_services}"
-
+    val junit5 = "de.mannodermaus.gradle.plugins:android-junit5:1.3.2.0"
 }
 
 object JavaVersion {
@@ -102,5 +112,7 @@ object SupportDependencies {
     val material_design = "com.google.android.material:material:${Versions.material_design}"
     val swipe_refresh_layout = "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swipe_refresh_layout}"
 }
+
+
 
 
