@@ -1,6 +1,6 @@
 package com.codingwithmitch.cleannotes.business.interactors
 
-import com.codingwithmitch.cleannotes.business.domain.abstraction.NoteRepository
+import com.codingwithmitch.cleannotes.business.data.abstraction.NoteRepository
 import com.codingwithmitch.cleannotes.business.interactors.notelist.SearchNotes
 import com.codingwithmitch.cleannotes.business.state.DataState
 import com.codingwithmitch.cleannotes.data.NoteDataFactory

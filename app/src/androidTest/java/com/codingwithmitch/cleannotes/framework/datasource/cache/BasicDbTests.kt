@@ -5,7 +5,7 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.codingwithmitch.cleannotes.business.data.implementation.NoteRepositoryImpl
-import com.codingwithmitch.cleannotes.business.domain.abstraction.NoteRepository
+import com.codingwithmitch.cleannotes.business.data.abstraction.NoteRepository
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
 import com.codingwithmitch.cleannotes.business.interactors.common.DeleteNote

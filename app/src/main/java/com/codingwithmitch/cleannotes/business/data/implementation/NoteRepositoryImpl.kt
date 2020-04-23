@@ -1,7 +1,7 @@
 package com.codingwithmitch.cleannotes.business.data.implementation
 
 import com.codingwithmitch.cleannotes.business.data.abstraction.NoteCacheDataSource
-import com.codingwithmitch.cleannotes.business.domain.abstraction.NoteRepository
+import com.codingwithmitch.cleannotes.business.data.abstraction.NoteRepository
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import javax.inject.Inject
 

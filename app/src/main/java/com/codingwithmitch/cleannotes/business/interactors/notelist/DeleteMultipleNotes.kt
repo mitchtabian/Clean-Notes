@@ -1,7 +1,7 @@
 package com.codingwithmitch.cleannotes.business.interactors.notelist
 
 import com.codingwithmitch.cleannotes.business.cache.CacheResponseHandler
-import com.codingwithmitch.cleannotes.business.domain.abstraction.NoteRepository
+import com.codingwithmitch.cleannotes.business.data.abstraction.NoteRepository
 import com.codingwithmitch.cleannotes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_FAILED
 import com.codingwithmitch.cleannotes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_SUCCESS
 import com.codingwithmitch.cleannotes.business.state.*

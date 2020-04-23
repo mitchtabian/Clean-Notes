@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import androidx.room.Room
 import com.codingwithmitch.cleannotes.business.data.abstraction.NoteCacheDataSource
 import com.codingwithmitch.cleannotes.business.data.implementation.NoteRepositoryImpl
-import com.codingwithmitch.cleannotes.business.domain.abstraction.NoteRepository
+import com.codingwithmitch.cleannotes.business.data.abstraction.NoteRepository
 import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
 import com.codingwithmitch.cleannotes.business.interactors.common.DeleteNote
 import com.codingwithmitch.cleannotes.business.interactors.notedetail.NoteDetailInteractors

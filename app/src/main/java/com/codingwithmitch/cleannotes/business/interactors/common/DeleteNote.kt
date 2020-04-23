@@ -1,7 +1,7 @@
 package com.codingwithmitch.cleannotes.business.interactors.common
 
 import com.codingwithmitch.cleannotes.business.cache.CacheResponseHandler
-import com.codingwithmitch.cleannotes.business.domain.abstraction.NoteRepository
+import com.codingwithmitch.cleannotes.business.data.abstraction.NoteRepository
 import com.codingwithmitch.cleannotes.business.state.*
 import com.codingwithmitch.cleannotes.business.util.safeCacheCall
 import kotlinx.coroutines.Dispatchers.IO
