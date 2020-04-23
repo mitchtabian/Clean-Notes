@@ -24,7 +24,9 @@ sealed class NoteListStateEvent: StateEvent {
     }
 
     // for testing
-    class InsertMultipleNotesEvent: NoteListStateEvent() {
+    class InsertMultipleNotesEvent(
+        val numNotes: Int
+    ): NoteListStateEvent() {
 
         override fun errorInfo(): String {
             return "Error inserting the notes."

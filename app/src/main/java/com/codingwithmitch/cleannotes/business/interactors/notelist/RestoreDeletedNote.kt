@@ -20,7 +20,6 @@ class RestoreDeletedNote(
         stateEvent: StateEvent
     ): Flow<DataState<NoteListViewState>> = flow {
 
-
         val cacheResult = safeCacheCall(IO){
             noteRepository.restoreDeletedNote(
                 title = note.title,

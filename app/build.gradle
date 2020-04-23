@@ -1,3 +1,4 @@
+import dependencies.AndroidTestDependencies
 import dependencies.ApplicationId
 import dependencies.Dependencies
 import dependencies.Releases
@@ -81,6 +82,7 @@ dependencies {
     implementation Dependencies.retrofit
     implementation Dependencies.retrofit_gson
 
+
     implementation SupportDependencies.swipe_refresh_layout
     implementation SupportDependencies.appcompat
     implementation SupportDependencies.constraintlayout
@@ -94,5 +96,14 @@ dependencies {
     testImplementation TestDependencies.jupiter_params
     testImplementation TestDependencies.junit4
     testRuntimeOnly TestDependencies.jupiter_engine
+
+    androidTestImplementation AndroidTestDependencies.kotlin_test
+    androidTestImplementation AndroidTestDependencies.coroutines_test
+    androidTestImplementation AndroidTestDependencies.espresso_core
+    androidTestImplementation AndroidTestDependencies.idling_resource
+    androidTestImplementation AndroidTestDependencies.mockk_android
+    androidTestImplementation AndroidTestDependencies.test_runner
+    androidTestImplementation AndroidTestDependencies.test_rules
+    androidTestImplementation AndroidTestDependencies.text_core_ktx
 }
 apply plugin: 'com.google.gms.google-services'

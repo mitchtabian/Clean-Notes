@@ -17,15 +17,14 @@ class InsertMultipleNotes(
 ){
 
     fun insertNotes(
+        numNotes: Int,
         stateEvent: StateEvent
     ): Flow<DataState<NoteListViewState>> = flow {
 
-        val noteList = NoteListTester.generateNoteList(1000)
+        val noteList = NoteListTester.generateNoteList(numNotes)
         val cacheResult = safeCacheCall(IO){
             noteRepository.insertNotes(noteList)
         }
-
-        printLogD("CacheResult", "${cacheResult}")
 
         emit(
             DataState.data<NoteListViewState>(

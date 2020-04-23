@@ -21,11 +21,15 @@ class SearchNotes(
         stateEvent: StateEvent
     ): Flow<DataState<NoteListViewState>> = flow {
 
+        var updatedPage = page
+        if(page <= 0){
+            updatedPage = 1
+        }
         val cacheResult = safeCacheCall(Dispatchers.IO){
             noteRepository.searchNotes(
                 query = query,
                 filterAndOrder = filterAndOrder,
-                page = page
+                page = updatedPage
             )
         }
 

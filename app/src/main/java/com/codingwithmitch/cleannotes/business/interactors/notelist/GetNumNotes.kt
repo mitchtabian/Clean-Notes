@@ -20,7 +20,6 @@ class GetNumNotes(
         val cacheResult = safeCacheCall(IO){
             noteRepository.getNumNotes()
         }
-
         emit(
             object: CacheResponseHandler<NoteListViewState, Int>(
                 response = cacheResult,

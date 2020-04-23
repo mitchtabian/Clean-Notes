@@ -98,7 +98,10 @@ constructor(
                 }
 
                 is InsertMultipleNotesEvent -> {
-                    noteInteractors.insertMultipleNotes.insertNotes(stateEvent)
+                    noteInteractors.insertMultipleNotes.insertNotes(
+                        numNotes = stateEvent.numNotes,
+                        stateEvent = stateEvent
+                    )
                 }
 
                 is DeleteNoteEvent -> {

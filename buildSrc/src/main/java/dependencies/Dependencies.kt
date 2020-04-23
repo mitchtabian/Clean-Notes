@@ -60,6 +60,7 @@ object Dependencies {
 object AndroidTestDependencies{
 
     val kotlin_test = "org.jetbrains.kotlin:kotlin-test-junit:${Versions.kotlin}"
+    val coroutines_test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines_version}"
     val espresso_core = "androidx.test.espresso:espresso-core:${Versions.espresso_core}"
     val idling_resource = "androidx.test.espresso:espresso-idling-resource:${Versions.espresso_idling_resource}"
     val test_runner = "androidx.test:runner:${Versions.test_runner}"

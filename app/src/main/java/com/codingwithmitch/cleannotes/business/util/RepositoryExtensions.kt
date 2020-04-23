@@ -11,6 +11,7 @@ import com.codingwithmitch.cleannotes.business.network.NetworkErrors.NETWORK_ERR
 import com.codingwithmitch.cleannotes.business.state.*
 import com.codingwithmitch.cleannotes.business.util.GenericErrors.ERROR_UNKNOWN
 import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
 import retrofit2.HttpException
 import java.io.IOException
 
