@@ -6,7 +6,6 @@ import com.codingwithmitch.cleannotes.business.util.DateUtil
 import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NoteDao
 import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.returnOrderedQuery
 import com.codingwithmitch.cleannotes.framework.datasource.mappers.NoteMapper
-import com.codingwithmitch.cleannotes.framework.datasource.model.NoteEntity
 import javax.inject.Inject
 
 class NoteCacheDataSourceImpl
@@ -17,36 +16,15 @@ constructor(
     private val dateUtil: DateUtil
 ): NoteCacheDataSource {
 
-    override suspend fun insertNewNote(title: String, body: String): Long {
-        val note = NoteEntity(
-            id = null,
-            title = title,
-            body = body,
-            created_at = dateUtil.convertServerStringDateToLong(dateUtil.getCurrentTimestamp()),
-            updated_at = dateUtil.convertServerStringDateToLong(dateUtil.getCurrentTimestamp())
-        )
-        return noteDao.insertNote(note)
+    override suspend fun insertNote(note: Note): Long {
+        return noteDao.insertNote(noteMapper.mapToEntity(note))
     }
 
-    override suspend fun restoreDeletedNote(
-        title: String,
-        body: String,
-        created_at: String,
-        updated_at: String
-    ): Long {
-        return noteDao.restoreDeletedNote(
-            title = title,
-            body = body,
-            created_at = dateUtil.convertServerStringDateToLong(created_at),
-            updated_at = dateUtil.convertServerStringDateToLong(updated_at)
-        )
-    }
-
-    override suspend fun deleteNote(primaryKey: Int): Int {
+    override suspend fun deleteNote(primaryKey: String): Int {
         return noteDao.deleteNote(primaryKey)
     }
 
-    override suspend fun updateNote(primaryKey: Int, newTitle: String, newBody: String?): Int {
+    override suspend fun updateNote(primaryKey: String, newTitle: String, newBody: String?): Int {
         return noteDao.updateNote(
             primaryKey = primaryKey,
             title = newTitle,

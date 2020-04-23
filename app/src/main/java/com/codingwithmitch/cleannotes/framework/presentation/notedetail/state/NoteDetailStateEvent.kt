@@ -21,7 +21,7 @@ sealed class NoteDetailStateEvent: StateEvent {
     }
 
     class DeleteNoteEvent(
-        val primaryKey: Int
+        val primaryKey: String
     ): NoteDetailStateEvent(){
 
         override fun errorInfo(): String {

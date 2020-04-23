@@ -9,6 +9,8 @@ import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.Note
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.util.*
+import kotlin.collections.ArrayList
 
 // For testing
 class InsertMultipleNotes(
@@ -48,16 +50,16 @@ private object NoteListTester {
     fun generateNoteList(numNotes: Int): List<Note>{
         val list: ArrayList<Note> = ArrayList()
         for(id in 0..numNotes){
-            list.add(generateNote(id))
+            list.add(generateNote())
         }
         return list
     }
 
-    fun generateNote(id: Int): Note {
+    fun generateNote(): Note {
         val note = Note(
-            id = id,
-            title = id.toString(),
-            body = "",
+            id = UUID.randomUUID().toString(),
+            title = UUID.randomUUID().toString(),
+            body = UUID.randomUUID().toString(),
             created_at = dateUtil.getCurrentTimestamp(),
             updated_at = dateUtil.getCurrentTimestamp()
         )

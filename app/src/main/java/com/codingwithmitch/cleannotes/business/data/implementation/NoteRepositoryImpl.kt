@@ -11,26 +11,15 @@ constructor(
     private val noteCacheDataSource: NoteCacheDataSource
 ): NoteRepository {
 
-    override suspend fun insertNewNote(title: String, body: String): Long {
-        return noteCacheDataSource.insertNewNote(title, body)
+    override suspend fun insertNote(note: Note): Long {
+        return noteCacheDataSource.insertNote(note)
     }
 
-    override suspend fun restoreDeletedNote(
-        title: String,
-        body: String,
-        created_at: String,
-        updated_at: String
-    ): Long {
-        return noteCacheDataSource.restoreDeletedNote(
-            title, body, created_at, updated_at
-        )
-    }
-
-    override suspend fun deleteNote(primaryKey: Int): Int {
+    override suspend fun deleteNote(primaryKey: String): Int {
         return noteCacheDataSource.deleteNote(primaryKey)
     }
 
-    override suspend fun updateNote(primaryKey: Int, newTitle: String, newBody: String?): Int {
+    override suspend fun updateNote(primaryKey: String, newTitle: String, newBody: String?): Int {
         return noteCacheDataSource.updateNote(primaryKey, newTitle, newBody)
     }
 

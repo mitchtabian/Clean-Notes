@@ -13,7 +13,7 @@ class DeleteNote<ViewState>(
 ){
 
     fun deleteNote(
-        primaryKey: Int,
+        primaryKey: String,
         stateEvent: StateEvent
     ): Flow<DataState<ViewState>> = flow {
 

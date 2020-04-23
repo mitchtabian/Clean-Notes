@@ -3,6 +3,7 @@ package com.codingwithmitch.cleannotes.framework.presentation.notelist.state
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.state.StateEvent
 import com.codingwithmitch.cleannotes.business.state.StateMessage
+import com.google.protobuf.LazyStringArrayList
 
 
 sealed class NoteListStateEvent: StateEvent {
@@ -40,7 +41,7 @@ sealed class NoteListStateEvent: StateEvent {
     }
 
     class DeleteNoteEvent(
-        val primaryKey: Int
+        val primaryKey: String
     ): NoteListStateEvent(){
 
         override fun errorInfo(): String {
@@ -55,7 +56,7 @@ sealed class NoteListStateEvent: StateEvent {
     }
 
     class DeleteMultipleNotesEvent(
-        val primaryKeys: IntArray
+        val primaryKeys: LazyStringArrayList
     ): NoteListStateEvent(){
 
         override fun errorInfo(): String {

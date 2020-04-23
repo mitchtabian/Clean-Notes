@@ -5,18 +5,11 @@ import com.codingwithmitch.cleannotes.business.domain.model.Note
 
 interface NoteRepository {
 
-    suspend fun insertNewNote(title: String, body: String): Long
+    suspend fun insertNote(note: Note): Long
 
-    suspend fun restoreDeletedNote(
-        title: String,
-        body: String,
-        created_at: String,
-        updated_at: String
-    ): Long
+    suspend fun deleteNote(primaryKey: String): Int
 
-    suspend fun deleteNote(primaryKey: Int): Int
-
-    suspend fun updateNote(primaryKey: Int, newTitle: String, newBody: String?): Int
+    suspend fun updateNote(primaryKey: String, newTitle: String, newBody: String?): Int
 
     suspend fun searchNotes(
         query: String,

@@ -14,7 +14,7 @@ class UpdateNote(
 ){
 
     fun updateNote(
-        primaryKey: Int,
+        primaryKey: String,
         newTitle: String,
         newBody: String?,
         stateEvent: StateEvent

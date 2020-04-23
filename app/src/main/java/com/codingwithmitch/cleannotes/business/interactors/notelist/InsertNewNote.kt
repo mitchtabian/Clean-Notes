@@ -9,6 +9,7 @@ import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.Note
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.util.*
 
 class InsertNewNote(
     private val noteRepository: NoteRepository,
@@ -16,13 +17,19 @@ class InsertNewNote(
 ){
 
     fun insertNewNote(
+        id: String? = null,
         title: String,
         body: String,
         stateEvent: StateEvent
     ): Flow<DataState<NoteListViewState>> = flow {
 
+        val newNote = noteFactory.createSingleNote(
+            id = id ?: UUID.randomUUID().toString(),
+            title = title,
+            body = body
+        )
         val cacheResult = safeCacheCall(Dispatchers.IO){
-            noteRepository.insertNewNote(title, body)
+            noteRepository.insertNote(newNote)
         }
 
         emit(
@@ -34,11 +41,7 @@ class InsertNewNote(
                     return if(resultObj > 0){
                         val viewState =
                             NoteListViewState(
-                                newNote = noteFactory.create(
-                                    id = resultObj.toInt(),
-                                    title = title,
-                                    body = body
-                                )
+                                newNote = newNote
                             )
                         DataState.data(
                             response = Response(

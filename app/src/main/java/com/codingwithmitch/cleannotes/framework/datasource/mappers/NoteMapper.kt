@@ -34,11 +34,8 @@ constructor(
     }
 
     override fun mapFromEntity(entity: NoteEntity): Note {
-        if(entity.id == null){
-            throw Exception(NoteEntity.nullIdError())
-        }
         return Note(
-            id = entity.id!!,
+            id = entity.id,
             title = entity.title,
             body = entity.body,
             updated_at = dateUtil.convertLongToStringDate(entity.updated_at),
@@ -47,12 +44,8 @@ constructor(
     }
 
     override fun mapToEntity(domainModel: Note): NoteEntity {
-        var id: Int? = null
-        if(domainModel.id > 0){
-            id = domainModel.id
-        }
         return NoteEntity(
-            id = id,
+            id = domainModel.id,
             title = domainModel.title,
             body = domainModel.body,
             updated_at = dateUtil.convertServerStringDateToLong(domainModel.updated_at),

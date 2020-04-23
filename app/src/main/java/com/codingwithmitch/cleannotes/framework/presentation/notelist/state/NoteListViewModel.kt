@@ -16,6 +16,7 @@ import com.codingwithmitch.cleannotes.framework.presentation.common.BaseViewMode
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListStateEvent.*
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListViewState.*
 import com.codingwithmitch.cleannotes.util.printLogD
+import com.google.protobuf.LazyStringArrayList
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -167,7 +168,7 @@ constructor(
 
     fun deleteNotes(){
         if(getSelectedNotes().size > 0){
-            val pks = IntArray(getSelectedNotes().size)
+            val pks = LazyStringArrayList(getSelectedNotes().size)
             for((index,note) in getSelectedNotes().withIndex()){
                 pks[index] = note.id
             }
@@ -353,10 +354,10 @@ constructor(
     }
 
     fun createNewNote(
-        id: Int = -1,
+        id: String? = null,
         title: String,
         body: String? = null
-    ) = noteFactory.create(id, title, body)
+    ) = noteFactory.createSingleNote(id, title, body)
 
     fun getNoteListSize() = getCurrentViewStateOrNew().noteList?.size?: 0
 

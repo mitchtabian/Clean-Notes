@@ -7,6 +7,7 @@ import com.codingwithmitch.cleannotes.business.interactors.common.DeleteNote.Com
 import com.codingwithmitch.cleannotes.business.state.*
 import com.codingwithmitch.cleannotes.business.util.safeCacheCall
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListViewState
+import com.google.protobuf.LazyStringArrayList
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -22,7 +23,7 @@ class DeleteMultipleNotes(
      * 2b. If all success, emit success response
      */
     fun deleteNotes(
-        primaryKeys: IntArray,
+        primaryKeys: LazyStringArrayList,
         stateEvent: StateEvent
     ): Flow<DataState<NoteListViewState>> = flow {
 

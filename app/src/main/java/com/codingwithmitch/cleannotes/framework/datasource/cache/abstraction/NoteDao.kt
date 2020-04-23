@@ -25,18 +25,6 @@ interface NoteDao {
     suspend fun insertNotes(notes: List<NoteEntity>): LongArray
 
     @Query("""
-        INSERT INTO notes
-        (title, body, created_at, updated_at)
-        VALUES (:title, :body, :created_at, :updated_at)
-    """)
-    suspend fun restoreDeletedNote(
-        title: String,
-        body: String,
-        created_at: Long,
-        updated_at: Long
-    ): Long
-
-    @Query("""
         UPDATE notes 
         SET 
         title = :title, 
@@ -45,14 +33,14 @@ interface NoteDao {
         WHERE id = :primaryKey
         """)
     suspend fun updateNote(
-        primaryKey: Int,
+        primaryKey: String,
         title: String,
         body: String?,
         updated_at: Long
     ): Int
 
     @Query("DELETE FROM notes WHERE id = :primaryKey")
-    suspend fun deleteNote(primaryKey: Int): Int
+    suspend fun deleteNote(primaryKey: String): Int
 
     @Query("SELECT * FROM notes")
     suspend fun searchNotes(): List<NoteEntity>
