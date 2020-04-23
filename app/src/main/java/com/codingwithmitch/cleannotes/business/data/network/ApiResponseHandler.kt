@@ -1,7 +1,7 @@
-package com.codingwithmitch.cleannotes.business.network
+package com.codingwithmitch.cleannotes.business.data.network
 
-import com.codingwithmitch.cleannotes.business.network.NetworkErrors.NETWORK_DATA_NULL
-import com.codingwithmitch.cleannotes.business.network.NetworkErrors.NETWORK_ERROR
+import com.codingwithmitch.cleannotes.business.data.network.NetworkErrors.NETWORK_DATA_NULL
+import com.codingwithmitch.cleannotes.business.data.network.NetworkErrors.NETWORK_ERROR
 import com.codingwithmitch.cleannotes.business.state.*
 
 

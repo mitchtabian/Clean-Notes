@@ -1,4 +1,4 @@
-package com.codingwithmitch.cleannotes.business.network
+package com.codingwithmitch.cleannotes.business.data.network
 
 object NetworkErrors {
 

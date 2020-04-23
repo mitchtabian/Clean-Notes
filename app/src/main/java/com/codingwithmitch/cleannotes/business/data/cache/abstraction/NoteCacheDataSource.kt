@@ -1,9 +1,9 @@
-package com.codingwithmitch.cleannotes.business.data.abstraction
+package com.codingwithmitch.cleannotes.business.data.cache.abstraction
 
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 
 
-interface NoteRepository {
+interface NoteCacheDataSource{
 
     suspend fun insertNote(note: Note): Long
 
@@ -21,3 +21,9 @@ interface NoteRepository {
 
     suspend fun insertNotes(notes: List<Note>): LongArray
 }
+
+
+
+
+
+

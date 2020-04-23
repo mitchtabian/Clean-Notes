@@ -1,6 +1,6 @@
-package com.codingwithmitch.cleannotes.business.cache
+package com.codingwithmitch.cleannotes.business.data.cache
 
-import com.codingwithmitch.cleannotes.business.cache.CacheErrors.CACHE_DATA_NULL
+import com.codingwithmitch.cleannotes.business.data.cache.CacheErrors.CACHE_DATA_NULL
 import com.codingwithmitch.cleannotes.business.state.*
 
 

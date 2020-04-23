@@ -1,6 +1,6 @@
-package com.codingwithmitch.cleannotes.business.data.implementation
+package com.codingwithmitch.cleannotes.business.data.network.implementation
 
-import com.codingwithmitch.cleannotes.business.data.abstraction.NoteNetworkDataSource
+import com.codingwithmitch.cleannotes.business.data.network.abstraction.NoteNetworkDataSource
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.framework.datasource.network.abstraction.NoteFirestoreService
 import com.google.android.gms.tasks.Task

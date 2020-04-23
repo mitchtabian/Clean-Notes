@@ -1,7 +1,7 @@
 package com.codingwithmitch.cleannotes.business.interactors.notelist
 
-import com.codingwithmitch.cleannotes.business.cache.CacheResponseHandler
-import com.codingwithmitch.cleannotes.business.data.abstraction.NoteRepository
+import com.codingwithmitch.cleannotes.business.data.cache.CacheResponseHandler
+import com.codingwithmitch.cleannotes.business.data.cache.abstraction.NoteCacheDataSource
 import com.codingwithmitch.cleannotes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_FAILED
 import com.codingwithmitch.cleannotes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_SUCCESS
 import com.codingwithmitch.cleannotes.business.state.*
@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class DeleteMultipleNotes(
-    private val noteRepository: NoteRepository
+    private val noteCacheDataSource: NoteCacheDataSource
 ){
 
     /**
@@ -30,7 +30,7 @@ class DeleteMultipleNotes(
         val results: ArrayList<DataState<NoteListViewState>> = ArrayList()
         for(pk in primaryKeys){
             val cacheResult = safeCacheCall(IO){
-                noteRepository.deleteNote(pk)
+                noteCacheDataSource.deleteNote(pk)
             }
             results.add(
                 object: CacheResponseHandler<NoteListViewState, Int>(

@@ -1,7 +1,7 @@
 package com.codingwithmitch.cleannotes.business.interactors.notelist
 
-import com.codingwithmitch.cleannotes.business.cache.CacheResponseHandler
-import com.codingwithmitch.cleannotes.business.data.abstraction.NoteRepository
+import com.codingwithmitch.cleannotes.business.data.cache.CacheResponseHandler
+import com.codingwithmitch.cleannotes.business.data.cache.abstraction.NoteCacheDataSource
 import com.codingwithmitch.cleannotes.business.state.*
 import com.codingwithmitch.cleannotes.business.util.safeCacheCall
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListViewState
@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class GetNumNotes(
-    private val noteRepository: NoteRepository
+    private val noteCacheDataSource: NoteCacheDataSource
 ){
 
     fun getNumNotes(
@@ -18,7 +18,7 @@ class GetNumNotes(
     ): Flow<DataState<NoteListViewState>> = flow {
 
         val cacheResult = safeCacheCall(IO){
-            noteRepository.getNumNotes()
+            noteCacheDataSource.getNumNotes()
         }
         emit(
             object: CacheResponseHandler<NoteListViewState, Int>(

@@ -1,7 +1,7 @@
 package com.codingwithmitch.cleannotes.business.interactors.common
 
-import com.codingwithmitch.cleannotes.business.cache.CacheResponseHandler
-import com.codingwithmitch.cleannotes.business.data.abstraction.NoteRepository
+import com.codingwithmitch.cleannotes.business.data.cache.CacheResponseHandler
+import com.codingwithmitch.cleannotes.business.data.cache.abstraction.NoteCacheDataSource
 import com.codingwithmitch.cleannotes.business.state.*
 import com.codingwithmitch.cleannotes.business.util.safeCacheCall
 import kotlinx.coroutines.Dispatchers.IO
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class DeleteNote<ViewState>(
-    private val noteRepository: NoteRepository
+    private val noteCacheDataSource: NoteCacheDataSource
 ){
 
     fun deleteNote(
@@ -18,7 +18,7 @@ class DeleteNote<ViewState>(
     ): Flow<DataState<ViewState>> = flow {
 
         val cacheResult = safeCacheCall(IO){
-            noteRepository.deleteNote(primaryKey)
+            noteCacheDataSource.deleteNote(primaryKey)
         }
 
         emit(

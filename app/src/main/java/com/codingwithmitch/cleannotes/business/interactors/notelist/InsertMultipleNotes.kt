@@ -1,6 +1,6 @@
 package com.codingwithmitch.cleannotes.business.interactors.notelist
 
-import com.codingwithmitch.cleannotes.business.data.abstraction.NoteRepository
+import com.codingwithmitch.cleannotes.business.data.cache.abstraction.NoteCacheDataSource
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.state.*
 import com.codingwithmitch.cleannotes.business.util.DateUtil
@@ -15,7 +15,7 @@ import kotlin.collections.ArrayList
 
 // For testing
 class InsertMultipleNotes(
-    private val noteRepository: NoteRepository
+    private val noteCacheDataSource: NoteCacheDataSource
 ){
 
     fun insertNotes(
@@ -25,7 +25,7 @@ class InsertMultipleNotes(
 
         val noteList = NoteListTester.generateNoteList(numNotes)
         val cacheResult = safeCacheCall(IO){
-            noteRepository.insertNotes(noteList)
+            noteCacheDataSource.insertNotes(noteList)
         }
 
         emit(

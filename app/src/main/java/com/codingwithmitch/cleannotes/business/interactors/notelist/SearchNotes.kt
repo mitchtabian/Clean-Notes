@@ -1,7 +1,7 @@
 package com.codingwithmitch.cleannotes.business.interactors.notelist
 
-import com.codingwithmitch.cleannotes.business.cache.CacheResponseHandler
-import com.codingwithmitch.cleannotes.business.data.abstraction.NoteRepository
+import com.codingwithmitch.cleannotes.business.data.cache.CacheResponseHandler
+import com.codingwithmitch.cleannotes.business.data.cache.abstraction.NoteCacheDataSource
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.state.*
 import com.codingwithmitch.cleannotes.business.util.safeCacheCall
@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class SearchNotes(
-    private val noteRepository: NoteRepository
+    private val noteCacheDataSource: NoteCacheDataSource
 ){
 
     fun searchNotes(
@@ -26,7 +26,7 @@ class SearchNotes(
             updatedPage = 1
         }
         val cacheResult = safeCacheCall(Dispatchers.IO){
-            noteRepository.searchNotes(
+            noteCacheDataSource.searchNotes(
                 query = query,
                 filterAndOrder = filterAndOrder,
                 page = updatedPage

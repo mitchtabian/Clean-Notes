@@ -1,7 +1,7 @@
 package com.codingwithmitch.cleannotes.business.interactors.notedetail
 
-import com.codingwithmitch.cleannotes.business.cache.CacheResponseHandler
-import com.codingwithmitch.cleannotes.business.data.abstraction.NoteRepository
+import com.codingwithmitch.cleannotes.business.data.cache.CacheResponseHandler
+import com.codingwithmitch.cleannotes.business.data.cache.abstraction.NoteCacheDataSource
 import com.codingwithmitch.cleannotes.business.state.*
 import com.codingwithmitch.cleannotes.business.util.safeCacheCall
 import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.NoteDetailViewState
@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class UpdateNote(
-    private val noteRepository: NoteRepository
+    private val noteCacheDataSource: NoteCacheDataSource
 ){
 
     fun updateNote(
@@ -21,7 +21,7 @@ class UpdateNote(
     ): Flow<DataState<NoteDetailViewState>> = flow {
 
         val cacheResult = safeCacheCall(Dispatchers.IO){
-            noteRepository.updateNote(
+            noteCacheDataSource.updateNote(
                 primaryKey = primaryKey,
                 newTitle = newTitle,
                 newBody = newBody

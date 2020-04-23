@@ -1,7 +1,7 @@
 package com.codingwithmitch.cleannotes.business.interactors.notelist
 
-import com.codingwithmitch.cleannotes.business.cache.CacheResponseHandler
-import com.codingwithmitch.cleannotes.business.data.abstraction.NoteRepository
+import com.codingwithmitch.cleannotes.business.data.cache.CacheResponseHandler
+import com.codingwithmitch.cleannotes.business.data.cache.abstraction.NoteCacheDataSource
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.state.*
 import com.codingwithmitch.cleannotes.business.util.safeCacheCall
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class RestoreDeletedNote(
-    private val noteRepository: NoteRepository
+    private val noteCacheDataSource: NoteCacheDataSource
 ){
 
     fun restoreDeletedNote(
@@ -21,7 +21,7 @@ class RestoreDeletedNote(
     ): Flow<DataState<NoteListViewState>> = flow {
 
         val cacheResult = safeCacheCall(IO){
-            noteRepository.insertNote(note)
+            noteCacheDataSource.insertNote(note)
         }
 
         emit(

@@ -1,4 +1,4 @@
-package com.codingwithmitch.cleannotes.business.data.abstraction
+package com.codingwithmitch.cleannotes.business.data.network.abstraction
 
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.google.android.gms.tasks.Task

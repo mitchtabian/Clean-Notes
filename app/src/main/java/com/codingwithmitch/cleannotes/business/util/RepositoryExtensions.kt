@@ -1,17 +1,16 @@
 package com.codingwithmitch.cleannotes.business.util
 
-import com.codingwithmitch.cleannotes.business.cache.CacheConstants.CACHE_TIMEOUT
-import com.codingwithmitch.cleannotes.business.cache.CacheErrors.CACHE_ERROR_TIMEOUT
-import com.codingwithmitch.cleannotes.business.cache.CacheErrors.CACHE_ERROR_UNKNOWN
-import com.codingwithmitch.cleannotes.business.cache.CacheResult
-import com.codingwithmitch.cleannotes.business.network.ApiResult
-import com.codingwithmitch.cleannotes.business.network.NetworkConstants.NETWORK_TIMEOUT
-import com.codingwithmitch.cleannotes.business.network.NetworkErrors.NETWORK_ERROR_TIMEOUT
-import com.codingwithmitch.cleannotes.business.network.NetworkErrors.NETWORK_ERROR_UNKNOWN
+import com.codingwithmitch.cleannotes.business.data.cache.CacheConstants.CACHE_TIMEOUT
+import com.codingwithmitch.cleannotes.business.data.cache.CacheErrors.CACHE_ERROR_TIMEOUT
+import com.codingwithmitch.cleannotes.business.data.cache.CacheErrors.CACHE_ERROR_UNKNOWN
+import com.codingwithmitch.cleannotes.business.data.cache.CacheResult
+import com.codingwithmitch.cleannotes.business.data.network.ApiResult
+import com.codingwithmitch.cleannotes.business.data.network.NetworkConstants.NETWORK_TIMEOUT
+import com.codingwithmitch.cleannotes.business.data.network.NetworkErrors.NETWORK_ERROR_TIMEOUT
+import com.codingwithmitch.cleannotes.business.data.network.NetworkErrors.NETWORK_ERROR_UNKNOWN
 import com.codingwithmitch.cleannotes.business.state.*
 import com.codingwithmitch.cleannotes.business.util.GenericErrors.ERROR_UNKNOWN
 import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.IO
 import retrofit2.HttpException
 import java.io.IOException
 
