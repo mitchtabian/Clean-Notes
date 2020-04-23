@@ -6,8 +6,11 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
 import com.codingwithmitch.cleannotes.business.util.DateUtil
-import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NoteDao
+import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NoteCacheDataSource
+import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NOTE_FILTER_DATE_CREATED
+import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NoteDao
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NoteDatabase
+import com.codingwithmitch.cleannotes.framework.datasource.cache.implementation.NoteCacheDataSourceImpl
 import com.codingwithmitch.cleannotes.framework.datasource.cache.mappers.CacheMapper
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -16,6 +19,7 @@ import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.random.Random
 import kotlin.test.assertEquals
@@ -25,14 +29,16 @@ import kotlin.test.assertEquals
 // https://github.com/Kotlin/kotlinx.coroutines/issues/1204
 @RunWith(AndroidJUnit4ClassRunner::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-class NoteDaoTests {
+class NoteCacheDataSourceTests {
 
 
     // system in test
-    private lateinit var dao: NoteDao
+    private lateinit var dataSource: NoteCacheDataSource
 
+    private lateinit var dao: NoteDao
     private lateinit var db: NoteDatabase
-    private val dateUtil: DateUtil = DateUtil()
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+    private val dateUtil: DateUtil = DateUtil(dateFormat)
     private val noteFactory = NoteFactory(dateUtil)
     private val mapper = CacheMapper(dateUtil)
 
@@ -44,6 +50,11 @@ class NoteDaoTests {
             NoteDatabase::class.java
         ).build()
         dao = db.noteDao()
+        dataSource = NoteCacheDataSourceImpl(
+            noteDao = dao,
+            noteMapper = mapper,
+            dateUtil = dateUtil
+        )
     }
 
     @After
@@ -59,30 +70,38 @@ class NoteDaoTests {
             "Super cool title",
             "Some content for the note"
             )
-        dao.insertNote(mapper.mapToEntity(newNote))
+        dataSource.insertNote(newNote)
 
-        val notes = dao.searchNotes()
-        assert(notes.contains(mapper.mapToEntity(newNote)))
+        val notes = dataSource.searchNotes(
+            "",
+            NOTE_FILTER_DATE_CREATED,
+            1
+        )
+        assert(notes.contains(newNote))
     }
 
     @Test
     fun searchNotes_returnList() = runBlocking {
 
         val noteList = noteFactory.createNoteList(10)
-        dao.insertNotes(mapper.noteListToEntityList(noteList))
+        dataSource.insertNotes(noteList)
 
-        val queriedNotes = dao.searchNotes()
+        val queriedNotes = dataSource.searchNotes(
+            "",
+            NOTE_FILTER_DATE_CREATED,
+            1
+        )
         for((index,note) in queriedNotes.withIndex()){
             assertEquals(noteList.get(index).id, note.id)
             assertEquals(noteList.get(index).title, note.title)
             assertEquals(noteList.get(index).body, note.body)
             assertEquals(
                 noteList.get(index).updated_at,
-                mapper.mapFromEntity(note).updated_at
+                note.updated_at
             )
             assertEquals(
                 noteList.get(index).created_at,
-                mapper.mapFromEntity(note).created_at
+                note.created_at
             )
         }
     }
@@ -92,7 +111,7 @@ class NoteDaoTests {
 
         // insert 1000 notes
         val noteList = noteFactory.createNoteList(1000)
-        dao.insertNotes(mapper.noteListToEntityList(noteList))
+        dataSource.insertNotes(noteList)
 
         // query 50 notes by specific title
         repeat(50){
@@ -117,14 +136,22 @@ class NoteDaoTests {
             "Super cool title",
             "Some content for the note"
         )
-        dao.insertNote(mapper.mapToEntity(newNote))
+        dataSource.insertNote(newNote)
 
-        var notes = dao.searchNotes()
-        assert(notes.contains(mapper.mapToEntity(newNote)))
+        var notes = dataSource.searchNotes(
+            "",
+            NOTE_FILTER_DATE_CREATED,
+            1
+        )
+        assert(notes.contains(newNote))
 
-        dao.deleteNote(newNote.id)
-        notes = dao.searchNotes()
-        assert(!notes.contains(mapper.mapToEntity(newNote)))
+        dataSource.deleteNote(newNote.id)
+        notes = dataSource.searchNotes(
+            "",
+            NOTE_FILTER_DATE_CREATED,
+            1
+        )
+        assert(!notes.contains(newNote))
     }
 
     @Test
@@ -134,29 +161,28 @@ class NoteDaoTests {
             "Super cool title",
             "Some content for the note"
         )
-        dao.insertNote(mapper.mapToEntity(newNote))
+        dataSource.insertNote(newNote)
 
         val newTitle = UUID.randomUUID().toString()
         val newBody = UUID.randomUUID().toString()
-        val newTimestamp = dateUtil.convertServerStringDateToLong(dateUtil.getCurrentTimestamp())
-        dao.updateNote(
+        dataSource.updateNote(
             primaryKey = newNote.id,
-            title = newTitle,
-            body = newBody,
-            updated_at = newTimestamp
+            newTitle = newTitle,
+            newBody = newBody
         )
 
-        val updatedNote = dao.searchNotes().get(0)
+        val updatedNote = dataSource.searchNotes(
+            "",
+            NOTE_FILTER_DATE_CREATED,
+            1
+        ).get(0)
         assertEquals(newNote.id, updatedNote.id)
         assertEquals(newTitle, updatedNote.title)
         assertEquals(newBody, updatedNote.body)
-        assertEquals(
-            newTimestamp,
-            dateUtil.convertServerStringDateToLong(newNote.updated_at)
-        )
+        assert(newNote.updated_at != updatedNote.updated_at)
         assertEquals(
             newNote.created_at,
-            mapper.mapFromEntity(updatedNote).created_at
+            updatedNote.created_at
         )
     }
 
@@ -164,9 +190,9 @@ class NoteDaoTests {
     fun insert1000Notes_confirmNumNotesInDb() = runBlocking {
         // insert 1000 notes
         val noteList = noteFactory.createNoteList(1000)
-        dao.insertNotes(mapper.noteListToEntityList(noteList))
+        dataSource.insertNotes(noteList)
 
-        val numNotes = dao.getNumNotes()
+        val numNotes = dataSource.getNumNotes()
         assertEquals(1000, numNotes)
     }
 

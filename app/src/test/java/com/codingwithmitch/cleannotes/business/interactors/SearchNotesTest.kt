@@ -29,6 +29,7 @@ class SearchNotesTest {
 
     // use-case in test
     private var searchNotes: SearchNotes? = null
+
     private lateinit var noteFactory: NoteDataFactory
 
     init {

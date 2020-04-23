@@ -31,7 +31,7 @@ constructor(
     private val config: FirebaseFirestoreConfig,
     private val networkMapper: NetworkMapper,
     private val dateUtil: DateUtil
-): NoteNetworkDataSource{
+): NoteNetworkDataSource {
 
     override suspend fun insertNote(note: Note): Task<Void> {
         val entity = networkMapper.mapToEntity(note)

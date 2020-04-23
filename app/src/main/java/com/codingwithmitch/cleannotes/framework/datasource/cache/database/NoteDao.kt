@@ -1,4 +1,4 @@
-package com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction
+package com.codingwithmitch.cleannotes.framework.datasource.cache.database
 
 import androidx.room.*
 import com.codingwithmitch.cleannotes.framework.datasource.cache.model.NoteCacheEntity

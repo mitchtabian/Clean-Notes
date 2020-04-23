@@ -8,8 +8,8 @@ import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
 import com.codingwithmitch.cleannotes.business.interactors.notelist.DeleteMultipleNotes.Companion.DELETE_NOTES_YOU_MUST_SELECT
 import com.codingwithmitch.cleannotes.business.interactors.notelist.NoteListInteractors
 import com.codingwithmitch.cleannotes.business.state.*
-import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NOTE_FILTER_DATE_CREATED
-import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NOTE_ORDER_DESC
+import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NOTE_FILTER_DATE_CREATED
+import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NOTE_ORDER_DESC
 import com.codingwithmitch.cleannotes.framework.datasource.preferences.PreferenceKeys.Companion.NOTE_FILTER
 import com.codingwithmitch.cleannotes.framework.datasource.preferences.PreferenceKeys.Companion.NOTE_ORDER
 import com.codingwithmitch.cleannotes.framework.presentation.common.BaseViewModel

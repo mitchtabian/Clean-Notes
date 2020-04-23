@@ -9,6 +9,7 @@ import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.Note
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -45,7 +46,8 @@ class InsertMultipleNotes(
 
 private object NoteListTester {
 
-    private val dateUtil = DateUtil()
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+    private val dateUtil = DateUtil(dateFormat)
 
     fun generateNoteList(numNotes: Int): List<Note>{
         val list: ArrayList<Note> = ArrayList()

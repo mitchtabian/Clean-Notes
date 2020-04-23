@@ -1,10 +1,10 @@
 package com.codingwithmitch.cleannotes.framework.datasource.cache.implementation
 
-import com.codingwithmitch.cleannotes.business.data.abstraction.NoteCacheDataSource
+import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NoteCacheDataSource
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.util.DateUtil
-import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NoteDao
-import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.returnOrderedQuery
+import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NoteDao
+import com.codingwithmitch.cleannotes.framework.datasource.cache.database.returnOrderedQuery
 import com.codingwithmitch.cleannotes.framework.datasource.cache.mappers.CacheMapper
 import javax.inject.Inject
 import javax.inject.Singleton

@@ -3,7 +3,7 @@ package com.codingwithmitch.cleannotes.di
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
-import com.codingwithmitch.cleannotes.business.data.abstraction.NoteCacheDataSource
+import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NoteCacheDataSource
 import com.codingwithmitch.cleannotes.business.data.abstraction.NoteNetworkDataSource
 import com.codingwithmitch.cleannotes.business.data.implementation.NoteRepositoryImpl
 import com.codingwithmitch.cleannotes.business.data.abstraction.NoteRepository
@@ -13,7 +13,7 @@ import com.codingwithmitch.cleannotes.business.interactors.notedetail.NoteDetail
 import com.codingwithmitch.cleannotes.business.interactors.notedetail.UpdateNote
 import com.codingwithmitch.cleannotes.business.interactors.notelist.*
 import com.codingwithmitch.cleannotes.business.util.DateUtil
-import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NoteDao
+import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NoteDao
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NoteDatabase
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NoteDatabase.Companion.DATABASE_NAME
 import com.codingwithmitch.cleannotes.framework.datasource.cache.implementation.NoteCacheDataSourceImpl
