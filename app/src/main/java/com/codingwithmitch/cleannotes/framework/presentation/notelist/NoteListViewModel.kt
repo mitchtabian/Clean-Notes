@@ -1,4 +1,4 @@
-package com.codingwithmitch.cleannotes.framework.presentation.notelist.state
+package com.codingwithmitch.cleannotes.framework.presentation.notelist
 
 import android.content.SharedPreferences
 import android.os.Parcelable
@@ -13,7 +13,10 @@ import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NOTE_O
 import com.codingwithmitch.cleannotes.framework.datasource.preferences.PreferenceKeys.Companion.NOTE_FILTER
 import com.codingwithmitch.cleannotes.framework.datasource.preferences.PreferenceKeys.Companion.NOTE_ORDER
 import com.codingwithmitch.cleannotes.framework.presentation.common.BaseViewModel
+import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListInteractionManager
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListStateEvent.*
+import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListToolbarState
+import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListViewState
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListViewState.*
 import com.codingwithmitch.cleannotes.util.printLogD
 import com.google.protobuf.LazyStringArrayList

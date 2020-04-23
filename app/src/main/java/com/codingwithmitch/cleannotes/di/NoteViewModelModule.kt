@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.codingwithmitch.cleannotes.framework.presentation.common.NoteViewModelFactory
 import com.codingwithmitch.cleannotes.framework.presentation.notedetail.NoteDetailViewModel
-import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListViewModel
+import com.codingwithmitch.cleannotes.framework.presentation.notelist.NoteListViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

@@ -21,7 +21,7 @@ import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.Co
 import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.NoteDetailStateEvent.*
 import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.NoteDetailViewState
 import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.NoteInteractionState.*
-import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NOTE_PENDING_DELETE_BUNDLE_KEY
+import com.codingwithmitch.cleannotes.framework.presentation.notelist.NOTE_PENDING_DELETE_BUNDLE_KEY
 import com.google.android.material.appbar.AppBarLayout
 import com.yydcdut.markdown.MarkdownProcessor
 import com.yydcdut.markdown.syntax.edit.EditFactory

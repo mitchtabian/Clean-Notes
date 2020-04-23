@@ -1,11 +1,15 @@
 package com.codingwithmitch.cleannotes.business.data.implementation
 
-import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NoteCacheDataSource
+import com.codingwithmitch.cleannotes.business.data.abstraction.NoteCacheDataSource
 import com.codingwithmitch.cleannotes.business.data.abstraction.NoteNetworkDataSource
 import com.codingwithmitch.cleannotes.business.data.abstraction.NoteRepository
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import javax.inject.Inject
 
+
+/**
+ * I can probably eliminate this...
+ */
 class NoteRepositoryImpl
 @Inject
 constructor(

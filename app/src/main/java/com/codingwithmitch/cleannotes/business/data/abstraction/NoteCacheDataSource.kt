@@ -1,4 +1,4 @@
-package com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction
+package com.codingwithmitch.cleannotes.business.data.abstraction
 
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 

@@ -3,7 +3,7 @@ package com.codingwithmitch.cleannotes.di
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
-import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NoteCacheDataSource
+import com.codingwithmitch.cleannotes.business.data.abstraction.NoteCacheDataSource
 import com.codingwithmitch.cleannotes.business.data.abstraction.NoteNetworkDataSource
 import com.codingwithmitch.cleannotes.business.data.implementation.NoteRepositoryImpl
 import com.codingwithmitch.cleannotes.business.data.abstraction.NoteRepository
@@ -16,10 +16,10 @@ import com.codingwithmitch.cleannotes.business.util.DateUtil
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NoteDao
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NoteDatabase
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NoteDatabase.Companion.DATABASE_NAME
-import com.codingwithmitch.cleannotes.framework.datasource.cache.implementation.NoteCacheDataSourceImpl
+import com.codingwithmitch.cleannotes.business.data.implementation.NoteCacheDataSourceImpl
 import com.codingwithmitch.cleannotes.framework.datasource.cache.mappers.CacheMapper
-import com.codingwithmitch.cleannotes.framework.datasource.network.database.FirebaseFirestoreConfig
-import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteNetworkDataSourceImpl
+import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteFirestoreServiceImpl
+import com.codingwithmitch.cleannotes.business.data.implementation.NoteNetworkDataSourceImpl
 import com.codingwithmitch.cleannotes.framework.datasource.network.mappers.NetworkMapper
 import com.codingwithmitch.cleannotes.framework.datasource.preferences.PreferenceKeys
 import com.codingwithmitch.cleannotes.framework.presentation.BaseApplication
@@ -135,28 +135,39 @@ object AppModule {
         noteEntityMapper: CacheMapper,
         dateUtil: DateUtil
     ): NoteCacheDataSource {
-        return NoteCacheDataSourceImpl(noteDao, noteEntityMapper, dateUtil)
+        return NoteCacheDataSourceImpl(
+            noteDao,
+            noteEntityMapper,
+            dateUtil
+        )
     }
 
     @JvmStatic
     @Singleton
     @Provides
-    fun provideFirebaseFirestoreConfig(
+    fun provideFirestoreService(
         firebaseAuth: FirebaseAuth,
-        firebaseFirestore: FirebaseFirestore
-    ): FirebaseFirestoreConfig{
-        return FirebaseFirestoreConfig(firebaseAuth, firebaseFirestore)
+        firebaseFirestore: FirebaseFirestore,
+        networkMapper: NetworkMapper,
+        dateUtil: DateUtil
+    ): NoteFirestoreServiceImpl {
+        return NoteFirestoreServiceImpl(
+            firebaseAuth,
+            firebaseFirestore,
+            networkMapper,
+            dateUtil
+        )
     }
 
     @JvmStatic
     @Singleton
     @Provides
     fun provideNoteNetworkDataSource(
-        firebaseFirestoreConfig: FirebaseFirestoreConfig,
-        networkMapper: NetworkMapper,
-        dateUtil: DateUtil
+        firestoreService: NoteFirestoreServiceImpl
     ): NoteNetworkDataSource {
-        return NoteNetworkDataSourceImpl(firebaseFirestoreConfig, networkMapper, dateUtil)
+        return NoteNetworkDataSourceImpl(
+            firestoreService
+        )
     }
 
     @JvmStatic
@@ -187,10 +198,12 @@ object AppModule {
     @Provides
     fun provideNoteListInteractors(
         noteRepository: NoteRepository,
+        noteCacheDataSource: NoteCacheDataSource,
+        noteNetworkDataSource: NoteNetworkDataSource,
         noteFactory: NoteFactory
     ): NoteListInteractors {
         return NoteListInteractors(
-            InsertNewNote(noteRepository, noteFactory),
+            InsertNewNote(noteCacheDataSource, noteNetworkDataSource, noteFactory),
             DeleteNote(noteRepository),
             SearchNotes(noteRepository),
             GetNumNotes(noteRepository),
@@ -199,4 +212,22 @@ object AppModule {
             InsertMultipleNotes(noteRepository)
         )
     }
+
+//    @JvmStatic
+//    @Singleton
+//    @Provides
+//    fun provideNoteListInteractors(
+//        noteRepository: NoteRepository,
+//        noteFactory: NoteFactory
+//    ): NoteListInteractors {
+//        return NoteListInteractors(
+//            InsertNewNote(noteRepository, noteFactory),
+//            DeleteNote(noteRepository),
+//            SearchNotes(noteRepository),
+//            GetNumNotes(noteRepository),
+//            RestoreDeletedNote(noteRepository),
+//            DeleteMultipleNotes(noteRepository),
+//            InsertMultipleNotes(noteRepository)
+//        )
+//    }
 }

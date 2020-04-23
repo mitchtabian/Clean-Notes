@@ -6,11 +6,11 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
 import com.codingwithmitch.cleannotes.business.util.DateUtil
-import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NoteCacheDataSource
+import com.codingwithmitch.cleannotes.business.data.abstraction.NoteCacheDataSource
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NOTE_FILTER_DATE_CREATED
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NoteDao
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NoteDatabase
-import com.codingwithmitch.cleannotes.framework.datasource.cache.implementation.NoteCacheDataSourceImpl
+import com.codingwithmitch.cleannotes.business.data.implementation.NoteCacheDataSourceImpl
 import com.codingwithmitch.cleannotes.framework.datasource.cache.mappers.CacheMapper
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -31,7 +31,6 @@ import kotlin.test.assertEquals
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class NoteCacheDataSourceTests {
 
-
     // system in test
     private lateinit var dataSource: NoteCacheDataSource
 
@@ -50,11 +49,12 @@ class NoteCacheDataSourceTests {
             NoteDatabase::class.java
         ).build()
         dao = db.noteDao()
-        dataSource = NoteCacheDataSourceImpl(
-            noteDao = dao,
-            noteMapper = mapper,
-            dateUtil = dateUtil
-        )
+        dataSource =
+            NoteCacheDataSourceImpl(
+                noteDao = dao,
+                noteMapper = mapper,
+                dateUtil = dateUtil
+            )
     }
 
     @After

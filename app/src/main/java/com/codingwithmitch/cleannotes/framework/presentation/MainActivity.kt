@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
 import android.view.inputmethod.InputMethodManager
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -15,12 +14,16 @@ import com.afollestad.materialdialogs.input.input
 import com.codingwithmitch.cleannotes.R
 import com.codingwithmitch.cleannotes.business.state.*
 import com.codingwithmitch.cleannotes.business.state.UIComponentType.*
+import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteFirestoreServiceImpl.Companion.EMAIL
+import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteFirestoreServiceImpl.Companion.PASSWORD
 import com.codingwithmitch.cleannotes.framework.presentation.common.displayToast
 import com.codingwithmitch.cleannotes.framework.presentation.common.gone
 import com.codingwithmitch.cleannotes.framework.presentation.common.visible
 import com.codingwithmitch.cleannotes.util.TodoCallback
+import com.codingwithmitch.cleannotes.util.printLogD
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -38,6 +41,16 @@ class MainActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        loginToFirebase()
+    }
+
+    private fun loginToFirebase(){
+        FirebaseAuth.getInstance()
+            .signInWithEmailAndPassword(EMAIL, PASSWORD)
+            .addOnCompleteListener {
+                printLogD("MainActivity",
+                    "Signing in to Firebase: ${it.result}")
+            }
     }
 
     override fun displayProgressBar(isDisplayed: Boolean) {

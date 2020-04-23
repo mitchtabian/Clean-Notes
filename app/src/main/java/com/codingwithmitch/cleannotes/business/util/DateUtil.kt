@@ -36,12 +36,12 @@ constructor(
     }
 
     fun convertLongDateToFirebaseTimestamp(date: Long): Timestamp{
-        return Timestamp(date, 0)
+        return Timestamp(date/1000, 0)
     }
 
     fun convertStringDateToFirebaseTimestamp(date: String): Timestamp{
         return Timestamp(
-            convertServerStringDateToLong(date),
+            convertServerStringDateToLong(date) / 1000, // convert to seconds from ms
             0
         )
     }
