@@ -1,18 +1,21 @@
 package com.codingwithmitch.cleannotes.business.util
 
+import com.google.firebase.Timestamp
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Singleton
 
 @Singleton
 class DateUtil
+constructor(
+    private val dateFormat: SimpleDateFormat
+)
 {
 
-    // dates from server look like this: "2019-07-23T03:28:01.406944Z"
+    // dates from server look like this: "2019-07-23"
     fun convertServerStringDateToLong(sd: String): Long{
-        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
         try {
-            val time = sdf.parse(sd).time
+            val time = dateFormat.parse(sd).time
             return time
         } catch (e: Exception) {
             throw Exception(e)
@@ -20,18 +23,31 @@ class DateUtil
     }
 
     fun convertLongToStringDate(longDate: Long): String{
-        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
         try {
-            val date = sdf.format(Date(longDate))
+            val date = dateFormat.format(Date(longDate))
             return date
         } catch (e: Exception) {
             throw Exception(e)
         }
     }
 
+    fun convertFirebaseTimestampToStringData(timestamp: Timestamp): String{
+        return dateFormat.format(timestamp.toDate())
+    }
+
+    fun convertLongDateToFirebaseTimestamp(date: Long): Timestamp{
+        return Timestamp(date, 0)
+    }
+
+    fun convertStringDateToFirebaseTimestamp(date: String): Timestamp{
+        return Timestamp(
+            convertServerStringDateToLong(date),
+            0
+        )
+    }
+
     // dates format looks like this: "2019-07-23"
     fun getCurrentTimestamp(): String {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
         return dateFormat.format(Date())
     }
 

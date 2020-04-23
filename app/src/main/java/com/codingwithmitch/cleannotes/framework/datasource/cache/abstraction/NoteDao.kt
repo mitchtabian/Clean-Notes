@@ -1,7 +1,7 @@
 package com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction
 
 import androidx.room.*
-import com.codingwithmitch.cleannotes.framework.datasource.model.NoteEntity
+import com.codingwithmitch.cleannotes.framework.datasource.cache.model.NoteCacheEntity
 
 const val NOTE_ORDER_ASC: String = ""
 const val NOTE_ORDER_DESC: String = "-"
@@ -19,10 +19,10 @@ const val NOTE_PAGINATION_PAGE_SIZE = 30
 interface NoteDao {
 
     @Insert
-    suspend fun insertNote(note: NoteEntity): Long
+    suspend fun insertNote(note: NoteCacheEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertNotes(notes: List<NoteEntity>): LongArray
+    suspend fun insertNotes(notes: List<NoteCacheEntity>): LongArray
 
     @Query("""
         UPDATE notes 
@@ -43,7 +43,7 @@ interface NoteDao {
     suspend fun deleteNote(primaryKey: String): Int
 
     @Query("SELECT * FROM notes")
-    suspend fun searchNotes(): List<NoteEntity>
+    suspend fun searchNotes(): List<NoteCacheEntity>
 
     @Query("""
         SELECT * FROM notes 
@@ -55,7 +55,7 @@ interface NoteDao {
         query: String,
         page: Int,
         pageSize: Int = NOTE_PAGINATION_PAGE_SIZE
-    ): List<NoteEntity>
+    ): List<NoteCacheEntity>
 
     @Query("""
         SELECT * FROM notes 
@@ -67,7 +67,7 @@ interface NoteDao {
         query: String,
         page: Int,
         pageSize: Int = NOTE_PAGINATION_PAGE_SIZE
-    ): List<NoteEntity>
+    ): List<NoteCacheEntity>
 
     @Query("""
         SELECT * FROM notes 
@@ -79,7 +79,7 @@ interface NoteDao {
         query: String,
         page: Int,
         pageSize: Int = NOTE_PAGINATION_PAGE_SIZE
-    ): List<NoteEntity>
+    ): List<NoteCacheEntity>
 
     @Query("""
         SELECT * FROM notes 
@@ -91,7 +91,7 @@ interface NoteDao {
         query: String,
         page: Int,
         pageSize: Int = NOTE_PAGINATION_PAGE_SIZE
-    ): List<NoteEntity>
+    ): List<NoteCacheEntity>
 
 
     @Query("SELECT COUNT(*) FROM notes")
@@ -103,7 +103,7 @@ suspend fun NoteDao.returnOrderedQuery(
     query: String,
     filterAndOrder: String,
     page: Int
-): List<NoteEntity> {
+): List<NoteCacheEntity> {
 
     when{
 

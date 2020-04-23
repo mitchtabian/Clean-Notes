@@ -8,7 +8,7 @@ import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
 import com.codingwithmitch.cleannotes.business.util.DateUtil
 import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NoteDao
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NoteDatabase
-import com.codingwithmitch.cleannotes.framework.datasource.mappers.NoteMapper
+import com.codingwithmitch.cleannotes.framework.datasource.cache.mappers.CacheMapper
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -34,7 +34,7 @@ class NoteDaoTests {
     private lateinit var db: NoteDatabase
     private val dateUtil: DateUtil = DateUtil()
     private val noteFactory = NoteFactory(dateUtil)
-    private val mapper = NoteMapper(dateUtil)
+    private val mapper = CacheMapper(dateUtil)
 
     @Before
     fun before() {

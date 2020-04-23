@@ -5,14 +5,16 @@ import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.util.DateUtil
 import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NoteDao
 import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.returnOrderedQuery
-import com.codingwithmitch.cleannotes.framework.datasource.mappers.NoteMapper
+import com.codingwithmitch.cleannotes.framework.datasource.cache.mappers.CacheMapper
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class NoteCacheDataSourceImpl
 @Inject
 constructor(
     private val noteDao: NoteDao,
-    private val noteMapper: NoteMapper,
+    private val noteMapper: CacheMapper,
     private val dateUtil: DateUtil
 ): NoteCacheDataSource {
 

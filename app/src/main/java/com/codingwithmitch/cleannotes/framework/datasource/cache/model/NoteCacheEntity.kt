@@ -1,11 +1,11 @@
-package com.codingwithmitch.cleannotes.framework.datasource.model
+package com.codingwithmitch.cleannotes.framework.datasource.cache.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "notes")
-data class NoteEntity(
+data class NoteCacheEntity(
 
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "id")

@@ -1,23 +1,22 @@
-package com.codingwithmitch.cleannotes.framework.datasource.mappers
+package com.codingwithmitch.cleannotes.framework.datasource.cache.mappers
 
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.util.DateUtil
 import com.codingwithmitch.cleannotes.business.util.EntityMapper
-import com.codingwithmitch.cleannotes.framework.datasource.model.NoteEntity
-import java.lang.Exception
+import com.codingwithmitch.cleannotes.framework.datasource.cache.model.NoteCacheEntity
 import javax.inject.Inject
 
 /**
- * Maps Note to NoteEntity or NoteEntity to Note.
+ * Maps Note to NoteCacheEntity or NoteCacheEntity to Note.
  */
-class NoteMapper
+class CacheMapper
 @Inject
 constructor(
     private val dateUtil: DateUtil
-): EntityMapper<NoteEntity, Note>
+): EntityMapper<NoteCacheEntity, Note>
 {
 
-    fun entityListToNoteList(entities: List<NoteEntity>): List<Note>{
+    fun entityListToNoteList(entities: List<NoteCacheEntity>): List<Note>{
         val list: ArrayList<Note> = ArrayList()
         for(entity in entities){
             list.add(mapFromEntity(entity))
@@ -25,15 +24,15 @@ constructor(
         return list
     }
 
-    fun noteListToEntityList(notes: List<Note>): List<NoteEntity>{
-        val entities: ArrayList<NoteEntity> = ArrayList()
+    fun noteListToEntityList(notes: List<Note>): List<NoteCacheEntity>{
+        val entities: ArrayList<NoteCacheEntity> = ArrayList()
         for(note in notes){
             entities.add(mapToEntity(note))
         }
         return entities
     }
 
-    override fun mapFromEntity(entity: NoteEntity): Note {
+    override fun mapFromEntity(entity: NoteCacheEntity): Note {
         return Note(
             id = entity.id,
             title = entity.title,
@@ -43,8 +42,8 @@ constructor(
         )
     }
 
-    override fun mapToEntity(domainModel: Note): NoteEntity {
-        return NoteEntity(
+    override fun mapToEntity(domainModel: Note): NoteCacheEntity {
+        return NoteCacheEntity(
             id = domainModel.id,
             title = domainModel.title,
             body = domainModel.body,

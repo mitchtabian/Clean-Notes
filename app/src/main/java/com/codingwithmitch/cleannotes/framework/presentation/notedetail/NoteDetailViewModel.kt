@@ -5,7 +5,7 @@ import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.interactors.notedetail.NoteDetailInteractors
 import com.codingwithmitch.cleannotes.business.interactors.notedetail.UpdateNote.Companion.UPDATE_NOTE_FAILED
 import com.codingwithmitch.cleannotes.business.state.*
-import com.codingwithmitch.cleannotes.framework.datasource.model.NoteEntity
+import com.codingwithmitch.cleannotes.framework.datasource.cache.model.NoteCacheEntity
 import com.codingwithmitch.cleannotes.framework.presentation.common.BaseViewModel
 import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.*
 import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.CollapsingToolbarState.*
@@ -150,7 +150,7 @@ constructor(
                 CreateStateMessageEvent(
                     stateMessage = StateMessage(
                         response = Response(
-                            message = NoteEntity.nullTitleError(),
+                            message = NoteCacheEntity.nullTitleError(),
                             uiComponentType = UIComponentType.Dialog(),
                             messageType = MessageType.Error()
                         )

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
 import com.codingwithmitch.cleannotes.business.data.abstraction.NoteCacheDataSource
+import com.codingwithmitch.cleannotes.business.data.abstraction.NoteNetworkDataSource
 import com.codingwithmitch.cleannotes.business.data.implementation.NoteRepositoryImpl
 import com.codingwithmitch.cleannotes.business.data.abstraction.NoteRepository
 import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
@@ -16,22 +17,37 @@ import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.Not
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NoteDatabase
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NoteDatabase.Companion.DATABASE_NAME
 import com.codingwithmitch.cleannotes.framework.datasource.cache.implementation.NoteCacheDataSourceImpl
-import com.codingwithmitch.cleannotes.framework.datasource.mappers.NoteMapper
+import com.codingwithmitch.cleannotes.framework.datasource.cache.mappers.CacheMapper
+import com.codingwithmitch.cleannotes.framework.datasource.network.database.FirebaseFirestoreConfig
+import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteNetworkDataSourceImpl
+import com.codingwithmitch.cleannotes.framework.datasource.network.mappers.NetworkMapper
 import com.codingwithmitch.cleannotes.framework.datasource.preferences.PreferenceKeys
 import com.codingwithmitch.cleannotes.framework.presentation.BaseApplication
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Singleton
 
 @Module
 object AppModule {
 
 
+
     @JvmStatic
     @Singleton
     @Provides
-    fun provideDateUtil(): DateUtil {
-        return DateUtil()
+    fun provideDateFormat(): SimpleDateFormat {
+        return SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+    }
+
+    @JvmStatic
+    @Singleton
+    @Provides
+    fun provideDateUtil(dateFormat: SimpleDateFormat): DateUtil {
+        return DateUtil(dateFormat)
     }
 
     @JvmStatic
@@ -86,8 +102,29 @@ object AppModule {
     @JvmStatic
     @Singleton
     @Provides
-    fun provideNoteEntityMapper(dateUtil: DateUtil): NoteMapper {
-        return NoteMapper(dateUtil)
+    fun provideNoteCacheMapper(dateUtil: DateUtil): CacheMapper {
+        return CacheMapper(dateUtil)
+    }
+
+    @JvmStatic
+    @Singleton
+    @Provides
+    fun provideNoteNetworkMapper(dateUtil: DateUtil): NetworkMapper {
+        return NetworkMapper(dateUtil)
+    }
+
+    @JvmStatic
+    @Singleton
+    @Provides
+    fun provideFirebaseAuth(): FirebaseAuth {
+        return FirebaseAuth.getInstance()
+    }
+
+    @JvmStatic
+    @Singleton
+    @Provides
+    fun provideFirebaseFirestore(): FirebaseFirestore {
+        return FirebaseFirestore.getInstance()
     }
 
     @JvmStatic
@@ -95,7 +132,7 @@ object AppModule {
     @Provides
     fun provideNoteCacheDataSource(
         noteDao: NoteDao,
-        noteEntityMapper: NoteMapper,
+        noteEntityMapper: CacheMapper,
         dateUtil: DateUtil
     ): NoteCacheDataSource {
         return NoteCacheDataSourceImpl(noteDao, noteEntityMapper, dateUtil)
@@ -104,10 +141,32 @@ object AppModule {
     @JvmStatic
     @Singleton
     @Provides
+    fun provideFirebaseFirestoreConfig(
+        firebaseAuth: FirebaseAuth,
+        firebaseFirestore: FirebaseFirestore
+    ): FirebaseFirestoreConfig{
+        return FirebaseFirestoreConfig(firebaseAuth, firebaseFirestore)
+    }
+
+    @JvmStatic
+    @Singleton
+    @Provides
+    fun provideNoteNetworkDataSource(
+        firebaseFirestoreConfig: FirebaseFirestoreConfig,
+        networkMapper: NetworkMapper,
+        dateUtil: DateUtil
+    ): NoteNetworkDataSource {
+        return NoteNetworkDataSourceImpl(firebaseFirestoreConfig, networkMapper, dateUtil)
+    }
+
+    @JvmStatic
+    @Singleton
+    @Provides
     fun provideNoteRepository(
-        noteCacheDataSource: NoteCacheDataSource
+        noteCacheDataSource: NoteCacheDataSource,
+        noteNetworkDataSource: NoteNetworkDataSource
     ): NoteRepository {
-        return NoteRepositoryImpl(noteCacheDataSource)
+        return NoteRepositoryImpl(noteCacheDataSource, noteNetworkDataSource)
     }
 
 

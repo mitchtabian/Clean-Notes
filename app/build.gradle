@@ -75,12 +75,13 @@ dependencies {
     implementation Dependencies.play_core
     implementation Dependencies.leak_canary
     implementation Dependencies.dagger
-    implementation Dependencies.firestore
     implementation Dependencies.room_runtime
     implementation Dependencies.room_ktx
     implementation Dependencies.markdown_processor
     implementation Dependencies.retrofit
     implementation Dependencies.retrofit_gson
+    implementation Dependencies.firebase_firestore
+    implementation Dependencies.firebase_auth
 
 
     implementation SupportDependencies.swipe_refresh_layout

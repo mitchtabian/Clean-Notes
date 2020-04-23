@@ -1,33 +1,10 @@
 package com.codingwithmitch.cleannotes.framework.datasource.cache
 
-import android.content.Context
-import androidx.room.Room
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
-import com.codingwithmitch.cleannotes.business.data.implementation.NoteRepositoryImpl
-import com.codingwithmitch.cleannotes.business.data.abstraction.NoteRepository
-import com.codingwithmitch.cleannotes.business.domain.model.Note
-import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
-import com.codingwithmitch.cleannotes.business.interactors.common.DeleteNote
-import com.codingwithmitch.cleannotes.business.interactors.notelist.*
-import com.codingwithmitch.cleannotes.business.state.DataState
-import com.codingwithmitch.cleannotes.business.util.DateUtil
-import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.ORDER_BY_ASC_DATE_UPDATED
-import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NoteDatabase
-import com.codingwithmitch.cleannotes.framework.datasource.cache.implementation.NoteCacheDataSourceImpl
-import com.codingwithmitch.cleannotes.framework.datasource.mappers.NoteMapper
-import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListStateEvent.*
-import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListViewState
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.FlowCollector
-import org.junit.After
-import org.junit.Before
 import org.junit.FixMethodOrder
-import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
-import java.io.IOException
-import kotlin.test.assertEquals
 
 
 // These tests are trash. Do not use.
