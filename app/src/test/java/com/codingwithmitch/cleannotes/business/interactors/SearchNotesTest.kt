@@ -54,15 +54,15 @@ class SearchNotesTest {
 
         searchNotes = SearchNotes(noteCacheDataSource)
         (searchNotes as SearchNotes).searchNotes("", "", 0, SearchNotesEvent())
-            .collect(object: FlowCollector<DataState<NoteListViewState>>{
-                override suspend fun emit(value: DataState<NoteListViewState>) {
+            .collect(object: FlowCollector<DataState<NoteListViewState>?>{
+                override suspend fun emit(value: DataState<NoteListViewState>?) {
 
                     assertEquals(
-                        value.data?.noteList,
+                        value?.data?.noteList,
                         dummyListOfNotes
                     )
                     assertEquals(
-                        value.stateMessage?.response?.message,
+                        value?.stateMessage?.response?.message,
                         SearchNotes.SEARCH_NOTES_SUCCESS
                     )
                 }
@@ -83,15 +83,15 @@ class SearchNotesTest {
 
         searchNotes = SearchNotes(noteCacheDataSource)
         (searchNotes as SearchNotes).searchNotes("", "", 0, SearchNotesEvent())
-            .collect(object: FlowCollector<DataState<NoteListViewState>>{
-                override suspend fun emit(value: DataState<NoteListViewState>) {
+            .collect(object: FlowCollector<DataState<NoteListViewState>?>{
+                override suspend fun emit(value: DataState<NoteListViewState>?) {
 
                     assertEquals(
-                        value.data?.noteList,
+                        value?.data?.noteList,
                         dummyListOfNotes
                     )
                     assertEquals(
-                        value.stateMessage?.response?.message,
+                        value?.stateMessage?.response?.message,
                         SearchNotes.SEARCH_NOTES_NO_MATCHING_RESULTS
                     )
                 }
@@ -113,11 +113,11 @@ class SearchNotesTest {
 
         searchNotes = SearchNotes(noteCacheDataSource)
         (searchNotes as SearchNotes).searchNotes("", "", 0, SearchNotesEvent())
-            .collect(object: FlowCollector<DataState<NoteListViewState>>{
-                override suspend fun emit(value: DataState<NoteListViewState>) {
+            .collect(object: FlowCollector<DataState<NoteListViewState>?>{
+                override suspend fun emit(value: DataState<NoteListViewState>?) {
 
                     assertThat(
-                        value.stateMessage?.response?.message,
+                        value?.stateMessage?.response?.message,
                         containsString(SearchNotesEvent().errorInfo())
                     )
                 }

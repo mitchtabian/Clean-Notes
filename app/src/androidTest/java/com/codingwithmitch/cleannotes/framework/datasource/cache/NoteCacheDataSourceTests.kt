@@ -39,7 +39,7 @@ class NoteCacheDataSourceTests {
     private lateinit var noteDaoService: NoteDaoService
     private lateinit var dao: NoteDao
     private lateinit var db: NoteDatabase
-    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
     private val dateUtil: DateUtil = DateUtil(dateFormat)
     private val noteFactory = NoteFactory(dateUtil)
     private val mapper = CacheMapper(dateUtil)

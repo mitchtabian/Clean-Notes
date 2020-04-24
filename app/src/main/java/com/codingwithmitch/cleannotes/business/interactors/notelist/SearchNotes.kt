@@ -47,8 +47,6 @@ class SearchNotes(
                         SEARCH_NOTES_NO_MATCHING_RESULTS
                     uiComponentType = UIComponentType.Toast()
                 }
-                printLogD("SearchNotes",
-                    "message: ${message}\ndata:${resultObj}")
                 return DataState.data(
                     response = Response(
                         message = message,
