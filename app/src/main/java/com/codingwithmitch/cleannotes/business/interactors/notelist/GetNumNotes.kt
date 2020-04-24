@@ -15,7 +15,7 @@ class GetNumNotes(
 
     fun getNumNotes(
         stateEvent: StateEvent
-    ): Flow<DataState<NoteListViewState>> = flow {
+    ): Flow<DataState<NoteListViewState>?> = flow {
 
         val cacheResult = safeCacheCall(IO){
             noteCacheDataSource.getNumNotes()
@@ -25,7 +25,7 @@ class GetNumNotes(
                 response = cacheResult,
                 stateEvent = stateEvent
             ){
-                override suspend fun handleSuccess(resultObj: Int): DataState<NoteListViewState> {
+                override suspend fun handleSuccess(resultObj: Int): DataState<NoteListViewState>? {
                     val viewState = NoteListViewState(
                         numNotesInCache = resultObj
                     )

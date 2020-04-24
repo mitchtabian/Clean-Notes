@@ -12,7 +12,7 @@ constructor(
 )
 {
 
-    // dates from server look like this: "2019-07-23"
+    // dates from server look like this: "2019-07-23 HH:mm:ss"
     fun convertServerStringDateToLong(sd: String): Long{
         try {
             val time = dateFormat.parse(sd).time
@@ -31,6 +31,10 @@ constructor(
         }
     }
 
+    fun removeTimeFromDateString(sd: String): String{
+        return sd.substring(0, sd.indexOf(" "))
+    }
+
     fun convertFirebaseTimestampToStringData(timestamp: Timestamp): String{
         return dateFormat.format(timestamp.toDate())
     }
@@ -46,7 +50,7 @@ constructor(
         )
     }
 
-    // dates format looks like this: "2019-07-23"
+    // dates format looks like this: "2019-07-23 HH:mm:ss"
     fun getCurrentTimestamp(): String {
         return dateFormat.format(Date())
     }

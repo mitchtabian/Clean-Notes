@@ -40,7 +40,7 @@ object AppModule {
     @Singleton
     @Provides
     fun provideDateFormat(): SimpleDateFormat {
-        return SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+        return SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
     }
 
     @JvmStatic
@@ -180,12 +180,11 @@ object AppModule {
     @Provides
     fun provideNoteDetailInteractors(
         noteCacheDataSource: NoteCacheDataSource,
-        noteNetworkDataSource: NoteNetworkDataSource,
-        noteFactory: NoteFactory
+        noteNetworkDataSource: NoteNetworkDataSource
     ): NoteDetailInteractors{
         return NoteDetailInteractors(
-            DeleteNote(noteCacheDataSource),
-            UpdateNote(noteCacheDataSource)
+            DeleteNote(noteCacheDataSource, noteNetworkDataSource),
+            UpdateNote(noteCacheDataSource, noteNetworkDataSource)
         )
     }
 
@@ -199,12 +198,12 @@ object AppModule {
     ): NoteListInteractors {
         return NoteListInteractors(
             InsertNewNote(noteCacheDataSource, noteNetworkDataSource, noteFactory),
-            DeleteNote(noteCacheDataSource),
+            DeleteNote(noteCacheDataSource, noteNetworkDataSource),
             SearchNotes(noteCacheDataSource),
             GetNumNotes(noteCacheDataSource),
-            RestoreDeletedNote(noteCacheDataSource),
-            DeleteMultipleNotes(noteCacheDataSource),
-            InsertMultipleNotes(noteCacheDataSource)
+            RestoreDeletedNote(noteCacheDataSource, noteNetworkDataSource),
+            DeleteMultipleNotes(noteCacheDataSource, noteNetworkDataSource),
+            InsertMultipleNotes(noteCacheDataSource, noteNetworkDataSource)
         )
     }
 

@@ -25,6 +25,7 @@ import com.codingwithmitch.cleannotes.business.interactors.common.DeleteNote.Com
 import com.codingwithmitch.cleannotes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_SUCCESS
 import com.codingwithmitch.cleannotes.business.interactors.notelist.DeleteMultipleNotes.Companion.DELETE_NOTES_ARE_YOU_SURE
 import com.codingwithmitch.cleannotes.business.state.*
+import com.codingwithmitch.cleannotes.business.util.DateUtil
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NOTE_FILTER_DATE_CREATED
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NOTE_FILTER_TITLE
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NOTE_ORDER_ASC
@@ -55,6 +56,9 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    @Inject
+    lateinit var dateUtil: DateUtil
 
     val viewModel: NoteListViewModel by viewModels {
         viewModelFactory
@@ -93,8 +97,9 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
 
     override fun onResume() {
         super.onResume()
-        viewModel.setStateEvent(GetNumNotesInCacheEvent())
-        viewModel.restoreFromCache()
+        viewModel.retrieveNumNotesInCache()
+        viewModel.clearList()
+        viewModel.refreshSearchQuery()
     }
 
     override fun onPause() {
@@ -152,7 +157,8 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
             listAdapter = NoteListAdapter(
                 this@NoteListFragment,
                 viewLifecycleOwner,
-                viewModel.noteListInteractionManager.selectedNotes
+                viewModel.noteListInteractionManager.selectedNotes,
+                dateUtil
             )
             itemTouchHelper?.attachToRecyclerView(this)
             addOnScrollListener(object: RecyclerView.OnScrollListener(){
@@ -330,6 +336,7 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
 
     // for debugging
     private fun printActiveJobs(){
+
         for((index, job) in viewModel.getActiveJobs().withIndex()){
             printLogD("NoteList",
                 "${index}: ${job}")

@@ -26,7 +26,6 @@ constructor(
         return noteDao.insertNotes(
             noteMapper.noteListToEntityList(notes)
         )
-
     }
 
     override suspend fun updateNote(

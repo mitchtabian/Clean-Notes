@@ -7,12 +7,15 @@ import com.codingwithmitch.cleannotes.framework.datasource.network.mappers.Netwo
 import com.codingwithmitch.cleannotes.framework.datasource.network.model.NoteNetworkEntity
 import com.codingwithmitch.cleannotes.util.printLogD
 import com.google.android.gms.tasks.Task
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.Exception
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -28,14 +31,15 @@ import javax.inject.Singleton
 class NoteFirestoreServiceImpl
 @Inject
 constructor(
-    private val firebaseAuth: FirebaseAuth,
+    private val firebaseAuth: FirebaseAuth, // might include auth in the future
     private val firestore: FirebaseFirestore,
     private val networkMapper: NetworkMapper,
     private val dateUtil: DateUtil
 ): NoteFirestoreService {
 
-    override suspend fun insertNote(note: Note): Task<Void> {
+    override suspend fun insertOrUpdateNote(note: Note): Task<Void> {
         val entity = networkMapper.mapToEntity(note)
+        entity.updated_at = Timestamp.now() // for updates
         return firestore
             .collection(NOTES_COLLECTION)
             .document(USER_ID)
@@ -53,23 +57,38 @@ constructor(
             .delete()
     }
 
-    override suspend fun updateNote(
-        primaryKey: String,
-        newTitle: String,
-        newBody: String?
-    ): Task<Void> {
-        val updates = hashMapOf<String, Any>(
-            NoteNetworkEntity.TITLE_FIELD to newTitle
-        )
-        newBody?.let { body ->
-            updates.put(NoteNetworkEntity.BODY_FIELD, body)
-        }
+    override suspend fun insertDeletedNote(note: Note): Task<Void> {
+        val entity = networkMapper.mapToEntity(note)
         return firestore
-            .collection(NOTES_COLLECTION)
+            .collection(DELETES_COLLECTION)
             .document(USER_ID)
             .collection(NOTES_COLLECTION)
-            .document(primaryKey)
-            .update(updates)
+            .document(entity.id)
+            .set(entity)
+    }
+
+    override suspend fun insertDeletedNotes(notes: List<Note>): List<Task<Void>> {
+        val startTime = System.currentTimeMillis()
+        return withContext(Dispatchers.IO){ // wait for all the tasks to complete
+            val results: ArrayList<Task<Void>> = ArrayList()
+            for(note in notes){
+                launch { // do all jobs in parallel
+                    printLogD("NoteFirestoreServiceImpl",
+                        "insertDeletedNotes: starting job for note: ${note.title}")
+                    val entity = networkMapper.mapToEntity(note)
+                    val result = firestore
+                        .collection(DELETES_COLLECTION)
+                        .document(USER_ID)
+                        .collection(NOTES_COLLECTION)
+                        .document(entity.id)
+                        .set(entity)
+                    results.add(result)
+                }
+            }
+            printLogD("NoteFirestoreServiceImpl",
+                "insertDeletedNotes: elapsed time: ${(System.currentTimeMillis() - startTime)} ms")
+            results
+        }
     }
 
     override suspend fun findUpdatedNotes(previousSyncTimestamp: Long): Task<QuerySnapshot> {
@@ -84,14 +103,16 @@ constructor(
             .get()
     }
 
-    override suspend fun insertNotes(notes: List<Note>): List<Task<Void>> {
+    override suspend fun insertOrUpdateNotes(notes: List<Note>): List<Task<Void>> {
         val startTime = System.currentTimeMillis()
         return withContext(Dispatchers.IO){ // wait for all the tasks to complete
             val results: ArrayList<Task<Void>> = ArrayList()
             for(note in notes){
                 launch { // do all jobs in parallel
-                    printLogD("NoteFirestoreServiceImpl", "starting job for note: ${note.title}")
+                    printLogD("NoteFirestoreServiceImpl",
+                        "insertNotes: starting job for note: ${note.title}")
                     val entity = networkMapper.mapToEntity(note)
+                    entity.updated_at = Timestamp.now() // for updates
                     val result = firestore
                         .collection(NOTES_COLLECTION)
                         .document(USER_ID)
@@ -110,6 +131,7 @@ constructor(
     companion object {
         const val NOTES_COLLECTION = "notes"
         const val USERS_COLLECTION = "users"
+        const val DELETES_COLLECTION = "deletes"
         const val USER_ID = "9E7fDYAUTNUPFirw4R28NhBZE1u1" // hardcoded for single user
         const val PASSWORD = "HR19jyR5r2h5k8lY"
         const val EMAIL = "mitch@tabian.ca"

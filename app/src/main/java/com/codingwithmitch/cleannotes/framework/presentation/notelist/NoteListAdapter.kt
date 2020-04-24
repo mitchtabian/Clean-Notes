@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import com.codingwithmitch.cleannotes.R
 import com.codingwithmitch.cleannotes.business.domain.model.Note
+import com.codingwithmitch.cleannotes.business.util.DateUtil
 import com.codingwithmitch.cleannotes.framework.presentation.common.changeColor
+import com.codingwithmitch.cleannotes.util.printLogD
 import kotlinx.android.synthetic.main.layout_note_list_item.view.*
 import java.lang.IndexOutOfBoundsException
 
@@ -17,7 +19,8 @@ import java.lang.IndexOutOfBoundsException
 class NoteListAdapter(
     private val interaction: Interaction? = null,
     private val lifecycleOwner: LifecycleOwner,
-    private val selectedNotes: LiveData<ArrayList<Note>>
+    private val selectedNotes: LiveData<ArrayList<Note>>,
+    private val dateUtil: DateUtil
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>()
 {
@@ -45,7 +48,8 @@ class NoteListAdapter(
             ),
             interaction,
             lifecycleOwner,
-            selectedNotes
+            selectedNotes,
+            dateUtil
         )
     }
 
@@ -84,13 +88,14 @@ class NoteListAdapter(
         itemView: View,
         private val interaction: Interaction?,
         private val lifecycleOwner: LifecycleOwner,
-        private val selectedNotes: LiveData<ArrayList<Note>>
+        private val selectedNotes: LiveData<ArrayList<Note>>,
+        private val dateUtil: DateUtil
     ) : RecyclerView.ViewHolder(itemView)
     {
 
 
-        private val COLOR_GREY = com.codingwithmitch.cleannotes.R.color.app_background_color
-        private val COLOR_PRIMARY = com.codingwithmitch.cleannotes.R.color.colorPrimary
+        private val COLOR_GREY = R.color.app_background_color
+        private val COLOR_PRIMARY = R.color.colorPrimary
         private lateinit var note: Note
 
         fun bind(item: Note) = with(itemView) {
@@ -104,7 +109,7 @@ class NoteListAdapter(
             }
             note = item
             note_title.text = item.title
-            note_timestamp.text = item.updated_at
+            note_timestamp.text = dateUtil.removeTimeFromDateString(item.updated_at)
 
             selectedNotes.observe(lifecycleOwner, Observer { notes ->
 

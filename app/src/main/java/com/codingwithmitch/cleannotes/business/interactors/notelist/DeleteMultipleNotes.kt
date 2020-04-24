@@ -2,9 +2,12 @@ package com.codingwithmitch.cleannotes.business.interactors.notelist
 
 import com.codingwithmitch.cleannotes.business.data.cache.CacheResponseHandler
 import com.codingwithmitch.cleannotes.business.data.cache.abstraction.NoteCacheDataSource
+import com.codingwithmitch.cleannotes.business.data.network.abstraction.NoteNetworkDataSource
+import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_FAILED
 import com.codingwithmitch.cleannotes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_SUCCESS
 import com.codingwithmitch.cleannotes.business.state.*
+import com.codingwithmitch.cleannotes.business.util.safeApiCall
 import com.codingwithmitch.cleannotes.business.util.safeCacheCall
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListViewState
 import com.google.protobuf.LazyStringArrayList
@@ -13,66 +16,61 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class DeleteMultipleNotes(
-    private val noteCacheDataSource: NoteCacheDataSource
+    private val noteCacheDataSource: NoteCacheDataSource,
+    private val noteNetworkDataSource: NoteNetworkDataSource
 ){
+
+    // set true if an error occurs when deleting any of the notes from cache
+    private var onDeleteError: Boolean = false
 
     /**
      * Logic:
      * 1. execute all the deletes and save result into an ArrayList<DataState<NoteListViewState>>
-     * 2a. If one of the results is a failure, emit a failure response
+     * 2a. If one of the results is a failure, emit an "error" response
      * 2b. If all success, emit success response
+     * 3. Update network with notes that were successfully deleted
      */
     fun deleteNotes(
-        primaryKeys: LazyStringArrayList,
+        notes: List<Note>,
         stateEvent: StateEvent
-    ): Flow<DataState<NoteListViewState>> = flow {
+    ): Flow<DataState<NoteListViewState>?> = flow {
 
-        val results: ArrayList<DataState<NoteListViewState>> = ArrayList()
-        for(pk in primaryKeys){
+        val successfulDeletes: ArrayList<Note> = ArrayList() // notes that were successfully deleted
+        for(note in notes){
             val cacheResult = safeCacheCall(IO){
-                noteCacheDataSource.deleteNote(pk)
+                noteCacheDataSource.deleteNote(note.id)
             }
-            results.add(
-                object: CacheResponseHandler<NoteListViewState, Int>(
-                    response = cacheResult,
-                    stateEvent = stateEvent
-                ){
-                    override suspend fun handleSuccess(resultObj: Int): DataState<NoteListViewState> {
-                        return if(resultObj > 0){
-                            DataState.data(
-                                response = Response(
-                                    message = DELETE_NOTE_SUCCESS,
-                                    uiComponentType = UIComponentType.None(),
-                                    messageType = MessageType.Success()
-                                ),
-                                data = null,
-                                stateEvent = stateEvent
-                            )
-                        }
-                        else{
-                            DataState.data(
-                                response = Response(
-                                    message = DELETE_NOTE_FAILED,
-                                    uiComponentType = UIComponentType.Toast(),
-                                    messageType = MessageType.Error()
-                                ),
-                                data = null,
-                                stateEvent = stateEvent
-                            )
-                        }
+
+            object: CacheResponseHandler<NoteListViewState, Int>(
+                response = cacheResult,
+                stateEvent = stateEvent
+            ){
+                override suspend fun handleSuccess(resultObj: Int): DataState<NoteListViewState>? {
+                    if(resultObj < 0){ // if error
+                        onDeleteError = true
                     }
-                }.getResult()
+                    else{
+                        successfulDeletes.add(note)
+                    }
+                    return null
+                }
+            }.getResult()
+        }
+
+        if(onDeleteError){
+            emit(
+                DataState.data<NoteListViewState>(
+                    response = Response(
+                        message = DELETE_NOTES_ERRORS,
+                        uiComponentType = UIComponentType.Dialog(),
+                        messageType = MessageType.Success()
+                    ),
+                    data = null,
+                    stateEvent = stateEvent
+                )
             )
         }
-
-        var deleteNotesSuccess = true
-        for (result in results){
-            if(result.stateMessage?.response?.message.equals(DELETE_NOTE_FAILED)){
-                deleteNotesSuccess = false
-                break
-            }
-        }
-        if(deleteNotesSuccess){
+        else{
             emit(
                 DataState.data<NoteListViewState>(
                     response = Response(
@@ -85,25 +83,25 @@ class DeleteMultipleNotes(
                 )
             )
         }
-        else{
-            emit(
-                DataState.data<NoteListViewState>(
-                    response = Response(
-                        message = DELETE_NOTES_FAILED,
-                        uiComponentType = UIComponentType.Dialog(),
-                        messageType = MessageType.Success()
-                    ),
-                    data = null,
-                    stateEvent = stateEvent
-                )
-            )
-        }
 
+        // update network
+        for (note in successfulDeletes){
+
+            // delete from "notes" node
+            safeApiCall(IO){
+                noteNetworkDataSource.deleteNote(note.id)
+            }
+
+            // insert into "deletes" node
+            safeApiCall(IO){
+                noteNetworkDataSource.insertDeletedNote(note)
+            }
+        }
     }
 
     companion object{
         val DELETE_NOTES_SUCCESS = "Successfully deleted notes."
-        val DELETE_NOTES_FAILED = "Not all the notes you selected were deleted. There was some errors."
+        val DELETE_NOTES_ERRORS = "Not all the notes you selected were deleted. There was some errors."
         val DELETE_NOTES_YOU_MUST_SELECT = "You haven't selected any notes to delete."
         val DELETE_NOTES_ARE_YOU_SURE = "Are you sure you want to delete these?"
     }

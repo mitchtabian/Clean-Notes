@@ -29,11 +29,12 @@ abstract class DataChannelManager<ViewState> {
             .onEach{ dataState ->
                 dataState.data?.let { data ->
                     handleNewData(data)
-                    removeStateEvent(dataState.stateEvent)
                 }
                 dataState.stateMessage?.let { stateMessage ->
                     handleNewStateMessage(stateMessage)
-                    removeStateEvent(dataState.stateEvent)
+                }
+                dataState.stateEvent?.let { stateEvent ->
+                    removeStateEvent(stateEvent)
                 }
             }
             .launchIn(CoroutineScope(Main))
@@ -56,13 +57,15 @@ abstract class DataChannelManager<ViewState> {
 
     fun launchJob(
         stateEvent: StateEvent,
-        jobFunction: Flow<DataState<ViewState>>
+        jobFunction: Flow<DataState<ViewState>?>
     ){
         if(!isStateEventActive(stateEvent)){
             addStateEvent(stateEvent)
             jobFunction
                 .onEach { dataState ->
-                    offerToDataChannel(dataState)
+                    dataState?.let { dState ->
+                        offerToDataChannel(dataState)
+                    }
                 }
                 .launchIn(getChannelScope())
         }
@@ -93,13 +96,13 @@ abstract class DataChannelManager<ViewState> {
     // for debugging
     fun getActiveJobs() = stateEventManager.getActiveJobNames()
 
-    private fun clearActiveStateEventCounter()
+    fun clearActiveStateEventCounter()
             = stateEventManager.clearActiveStateEventCounter()
 
     private fun addStateEvent(stateEvent: StateEvent)
             = stateEventManager.addStateEvent(stateEvent)
 
-    private fun removeStateEvent(stateEvent: StateEvent?)
+    fun removeStateEvent(stateEvent: StateEvent?)
             = stateEventManager.removeStateEvent(stateEvent)
 
     private fun isStateEventActive(stateEvent: StateEvent)

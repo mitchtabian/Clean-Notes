@@ -46,15 +46,13 @@ constructor(
     override fun setStateEvent(stateEvent: StateEvent) {
 
         if(!isJobAlreadyActive(stateEvent)){
-            val job: Flow<DataState<NoteDetailViewState>> = when(stateEvent){
+            val job: Flow<DataState<NoteDetailViewState>?> = when(stateEvent){
 
                 is UpdateNoteEvent -> {
                     val pk = getNote()?.id
                     if(!isNoteTitleNull() && pk != null){
                         noteInteractors.updateNote.updateNote(
-                            primaryKey = pk,
-                            newTitle = getNote()!!.title,
-                            newBody = getNote()!!.body,
+                            note = getNote()!!,
                             stateEvent = stateEvent
                         )
                     }else{
@@ -73,7 +71,7 @@ constructor(
 
                 is DeleteNoteEvent -> {
                     noteInteractors.deleteNote.deleteNote(
-                        primaryKey = stateEvent.primaryKey,
+                        note = stateEvent.note,
                         stateEvent = stateEvent
                     )
                 }
@@ -96,7 +94,7 @@ constructor(
     fun beginPendingDelete(note: Note){
         setStateEvent(
             DeleteNoteEvent(
-                primaryKey = note.id
+                note = note
             )
         )
     }

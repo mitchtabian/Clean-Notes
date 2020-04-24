@@ -2,63 +2,98 @@ package com.codingwithmitch.cleannotes.business.interactors.notedetail
 
 import com.codingwithmitch.cleannotes.business.data.cache.CacheResponseHandler
 import com.codingwithmitch.cleannotes.business.data.cache.abstraction.NoteCacheDataSource
+import com.codingwithmitch.cleannotes.business.data.network.ApiResponseHandler
+import com.codingwithmitch.cleannotes.business.data.network.abstraction.NoteNetworkDataSource
+import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.state.*
+import com.codingwithmitch.cleannotes.business.util.safeApiCall
 import com.codingwithmitch.cleannotes.business.util.safeCacheCall
 import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.NoteDetailViewState
+import com.codingwithmitch.cleannotes.util.printLogD
+import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class UpdateNote(
-    private val noteCacheDataSource: NoteCacheDataSource
+    private val noteCacheDataSource: NoteCacheDataSource,
+    private val noteNetworkDataSource: NoteNetworkDataSource
 ){
 
     fun updateNote(
-        primaryKey: String,
-        newTitle: String,
-        newBody: String?,
+        note: Note,
         stateEvent: StateEvent
-    ): Flow<DataState<NoteDetailViewState>> = flow {
+    ): Flow<DataState<NoteDetailViewState>?> = flow {
 
         val cacheResult = safeCacheCall(Dispatchers.IO){
             noteCacheDataSource.updateNote(
-                primaryKey = primaryKey,
-                newTitle = newTitle,
-                newBody = newBody
+                primaryKey = note.id,
+                newTitle = note.title,
+                newBody = note.body
             )
         }
 
-        emit(
-            object: CacheResponseHandler<NoteDetailViewState, Int>(
-                response = cacheResult,
+        val response = object: CacheResponseHandler<NoteDetailViewState, Int>(
+            response = cacheResult,
+            stateEvent = stateEvent
+        ){
+            override suspend fun handleSuccess(resultObj: Int): DataState<NoteDetailViewState>? {
+                return if(resultObj > 0){
+                    DataState.data(
+                        response = Response(
+                            message = UPDATE_NOTE_SUCCESS,
+                            uiComponentType = UIComponentType.Toast(),
+                            messageType = MessageType.Success()
+                        ),
+                        data = null,
+                        stateEvent = stateEvent
+                    )
+                }
+                else{
+                    DataState.data(
+                        response = Response(
+                            message = UPDATE_NOTE_FAILED,
+                            uiComponentType = UIComponentType.Toast(),
+                            messageType = MessageType.Error()
+                        ),
+                        data = null,
+                        stateEvent = stateEvent
+                    )
+                }
+            }
+        }.getResult()
+
+        emit(response)
+
+        // update network
+        if(response?.stateMessage?.response?.message.equals(UPDATE_NOTE_SUCCESS)){
+
+            val apiResult = safeApiCall(Dispatchers.IO){
+                noteNetworkDataSource.insertOrUpdateNote(note)
+            }
+
+            object: ApiResponseHandler<NoteDetailViewState, Task<Void>>(
+                response = apiResult,
                 stateEvent = stateEvent
             ){
-                override suspend fun handleSuccess(resultObj: Int): DataState<NoteDetailViewState> {
-                    return if(resultObj > 0){
-                        DataState.data(
-                            response = Response(
-                                message = UPDATE_NOTE_SUCCESS,
-                                uiComponentType = UIComponentType.Toast(),
-                                messageType = MessageType.Success()
-                            ),
-                            data = null,
-                            stateEvent = stateEvent
-                        )
+                override suspend fun handleSuccess(resultObj: Task<Void>): DataState<NoteDetailViewState>? {
+                    resultObj.addOnFailureListener {
+
+                        // Good place to send error report
+                        printLogD("UpdateNote",
+                            "Network: onFailure: ${it.message}")
+
+                        printLogD("UpdateNote",
+                            "Network: onFailure: ${it.cause}")
+
+                        printLogD("UpdateNote",
+                            "Network: onFailure: ${it}")
                     }
-                    else{
-                        DataState.data(
-                            response = Response(
-                                message = UPDATE_NOTE_FAILED,
-                                uiComponentType = UIComponentType.Toast(),
-                                messageType = MessageType.Error()
-                            ),
-                            data = null,
-                            stateEvent = stateEvent
-                        )
-                    }
+                   return null
                 }
+
             }.getResult()
-        )
+        }
     }
 
     companion object{

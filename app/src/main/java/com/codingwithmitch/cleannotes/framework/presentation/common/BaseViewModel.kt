@@ -70,7 +70,7 @@ abstract class BaseViewModel<ViewState> : ViewModel()
 
     fun launchJob(
         stateEvent: StateEvent,
-        jobFunction: Flow<DataState<ViewState>>
+        jobFunction: Flow<DataState<ViewState>?>
     ) = dataChannelManager.launchJob(stateEvent, jobFunction)
 
     fun isJobAlreadyActive(stateEvent: StateEvent): Boolean {
@@ -92,6 +92,8 @@ abstract class BaseViewModel<ViewState> : ViewModel()
     fun clearStateMessage(index: Int = 0){
         dataChannelManager.clearStateMessage(index)
     }
+
+    fun clearActiveStateEvents() = dataChannelManager.clearActiveStateEventCounter()
 
     fun clearAllStateMessages() = dataChannelManager.clearAllStateMessages()
 

@@ -41,7 +41,7 @@ sealed class NoteListStateEvent: StateEvent {
     }
 
     class DeleteNoteEvent(
-        val primaryKey: String
+        val note: Note
     ): NoteListStateEvent(){
 
         override fun errorInfo(): String {
@@ -56,7 +56,7 @@ sealed class NoteListStateEvent: StateEvent {
     }
 
     class DeleteMultipleNotesEvent(
-        val primaryKeys: LazyStringArrayList
+        val notes: List<Note>
     ): NoteListStateEvent(){
 
         override fun errorInfo(): String {

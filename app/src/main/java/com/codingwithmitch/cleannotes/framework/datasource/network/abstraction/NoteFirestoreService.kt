@@ -6,19 +6,17 @@ import com.google.firebase.firestore.QuerySnapshot
 
 interface NoteFirestoreService {
 
-    suspend fun insertNote(note: Note): Task<Void>
+    suspend fun insertOrUpdateNote(note: Note): Task<Void>
 
     suspend fun deleteNote(primaryKey: String): Task<Void>
 
-    suspend fun updateNote(
-        primaryKey: String,
-        newTitle: String,
-        newBody: String?
-    ): Task<Void>
+    suspend fun insertDeletedNote(note: Note): Task<Void>
+
+    suspend fun insertDeletedNotes(notes: List<Note>): List<Task<Void>>
 
     suspend fun findUpdatedNotes(previousSyncTimestamp: Long): Task<QuerySnapshot>
 
-    suspend fun insertNotes(notes: List<Note>): List<Task<Void>>
+    suspend fun insertOrUpdateNotes(notes: List<Note>): List<Task<Void>>
 
 
 }

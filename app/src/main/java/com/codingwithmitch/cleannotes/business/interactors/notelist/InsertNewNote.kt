@@ -6,8 +6,12 @@ import com.codingwithmitch.cleannotes.business.state.*
 import com.codingwithmitch.cleannotes.business.util.safeApiCall
 import com.codingwithmitch.cleannotes.business.util.safeCacheCall
 import com.codingwithmitch.cleannotes.business.data.cache.abstraction.NoteCacheDataSource
+import com.codingwithmitch.cleannotes.business.data.network.ApiResponseHandler
 import com.codingwithmitch.cleannotes.business.data.network.abstraction.NoteNetworkDataSource
+import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.NoteDetailViewState
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListViewState
+import com.codingwithmitch.cleannotes.util.printLogD
+import com.google.android.gms.tasks.Task
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -24,7 +28,7 @@ class InsertNewNote(
         title: String,
         body: String,
         stateEvent: StateEvent
-    ): Flow<DataState<NoteListViewState>> = flow {
+    ): Flow<DataState<NoteListViewState>?> = flow {
 
         val newNote = noteFactory.createSingleNote(
             id = id ?: UUID.randomUUID().toString(),
@@ -39,7 +43,7 @@ class InsertNewNote(
             response = cacheResult,
             stateEvent = stateEvent
         ){
-            override suspend fun handleSuccess(resultObj: Long): DataState<NoteListViewState> {
+            override suspend fun handleSuccess(resultObj: Long): DataState<NoteListViewState>? {
                 return if(resultObj > 0){
                     val viewState =
                         NoteListViewState(
@@ -71,14 +75,36 @@ class InsertNewNote(
 
         emit(cacheResponse)
 
-        // update the note in network
+        // update network
         // TODO("WorkManager???")
-        if(cacheResponse.stateMessage?.response?.message.equals(INSERT_NOTE_SUCCESS)){
+        if(cacheResponse?.stateMessage?.response?.message.equals(INSERT_NOTE_SUCCESS)){
 
             // not listening for success/failure here b/c we don't take any action either way
-            safeApiCall(IO){
-                noteNetworkDataSource.insertNote(newNote)
+            val apiResult = safeApiCall(IO){
+                noteNetworkDataSource.insertOrUpdateNote(newNote)
             }
+
+            object: ApiResponseHandler<NoteDetailViewState, Task<Void>>(
+                response = apiResult,
+                stateEvent = stateEvent
+            ){
+                override suspend fun handleSuccess(resultObj: Task<Void>): DataState<NoteDetailViewState>? {
+                    resultObj.addOnFailureListener {
+
+                        // Good place to send error report
+                        printLogD("InsertNote",
+                            "Network: onFailure: ${it.message}")
+
+                        printLogD("InsertNote",
+                            "Network: onFailure: ${it.cause}")
+
+                        printLogD("InsertNote",
+                            "Network: onFailure: ${it}")
+                    }
+                    return null
+                }
+
+            }.getResult()
 
         }
     }

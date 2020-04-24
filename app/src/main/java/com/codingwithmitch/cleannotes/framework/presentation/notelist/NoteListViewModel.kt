@@ -91,7 +91,7 @@ constructor(
     override fun setStateEvent(stateEvent: StateEvent) {
 
         if(!isJobAlreadyActive(stateEvent)){
-            val job: Flow<DataState<NoteListViewState>> = when(stateEvent){
+            val job: Flow<DataState<NoteListViewState>?> = when(stateEvent){
 
                 is InsertNewNoteEvent -> {
                     noteInteractors.insertNewNote.insertNewNote(
@@ -110,14 +110,14 @@ constructor(
 
                 is DeleteNoteEvent -> {
                     noteInteractors.deleteNote.deleteNote(
-                        primaryKey = stateEvent.primaryKey,
+                        note = stateEvent.note,
                         stateEvent = stateEvent
                     )
                 }
 
                 is DeleteMultipleNotesEvent -> {
                     noteInteractors.deleteMultipleNotes.deleteNotes(
-                        primaryKeys = stateEvent.primaryKeys,
+                        notes = stateEvent.notes,
                         stateEvent = stateEvent
                     )
                 }
@@ -171,11 +171,7 @@ constructor(
 
     fun deleteNotes(){
         if(getSelectedNotes().size > 0){
-            val pks = LazyStringArrayList(getSelectedNotes().size)
-            for((index,note) in getSelectedNotes().withIndex()){
-                pks[index] = note.id
-            }
-            setStateEvent(DeleteMultipleNotesEvent(pks))
+            setStateEvent(DeleteMultipleNotesEvent(getSelectedNotes()))
             removeSelectedNotesFromList()
         }
         else{
@@ -293,7 +289,7 @@ constructor(
         removePendingNoteFromList(note)
         setStateEvent(
             DeleteNoteEvent(
-                primaryKey = note.id
+                note = note
             )
         )
     }
@@ -384,6 +380,7 @@ constructor(
     }
 
     fun clearList(){
+        printLogD("ListViewModel", "clearList")
         val update = getCurrentViewStateOrNew()
         update.noteList = ArrayList()
         setViewState(update)
@@ -417,7 +414,13 @@ constructor(
         setViewState(update)
     }
 
-    fun restoreFromCache(){
+    fun retrieveNumNotesInCache(){
+        if(!isJobAlreadyActive(GetNumNotesInCacheEvent())){
+            setStateEvent(GetNumNotesInCacheEvent())
+        }
+    }
+
+    fun refreshSearchQuery(){
         if(!isJobAlreadyActive(SearchNotesEvent())){
             setQueryExhausted(false)
             setStateEvent(SearchNotesEvent(false))

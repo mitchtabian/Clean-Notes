@@ -45,6 +45,7 @@
             android:id="@+id/recycler_view"
             />
 
+
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
