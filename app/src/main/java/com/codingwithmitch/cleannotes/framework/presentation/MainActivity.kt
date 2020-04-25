@@ -12,6 +12,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.afollestad.materialdialogs.input.input
 import com.codingwithmitch.cleannotes.R
+import com.codingwithmitch.cleannotes.business.interactors.network_sync.SyncNotes
 import com.codingwithmitch.cleannotes.business.state.*
 import com.codingwithmitch.cleannotes.business.state.UIComponentType.*
 import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteFirestoreServiceImpl.Companion.EMAIL
@@ -25,6 +26,10 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 class MainActivity : AppCompatActivity(),
@@ -42,6 +47,20 @@ class MainActivity : AppCompatActivity(),
         setContentView(R.layout.activity_main)
 
         loginToFirebase()
+
+        test()
+    }
+
+
+    @Inject
+    lateinit var syncNotes: SyncNotes
+
+    private fun test(){
+        (application as BaseApplication).appComponent.inject(this)
+        CoroutineScope(Dispatchers.Default).launch {
+            syncNotes.syncNotes()
+        }
+
     }
 
     private fun loginToFirebase(){

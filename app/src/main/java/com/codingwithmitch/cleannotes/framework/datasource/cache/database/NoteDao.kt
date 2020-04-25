@@ -24,6 +24,9 @@ interface NoteDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertNotes(notes: List<NoteCacheEntity>): LongArray
 
+    @Query("SELECT * FROM notes WHERE id = :id")
+    suspend fun searchNoteById(id: String): NoteCacheEntity?
+
     @Query("""
         UPDATE notes 
         SET 

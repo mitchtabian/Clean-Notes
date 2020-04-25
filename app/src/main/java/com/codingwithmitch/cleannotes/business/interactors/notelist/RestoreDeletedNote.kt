@@ -67,8 +67,15 @@ class RestoreDeletedNote(
 
         // update network
         if(response?.stateMessage?.response?.message.equals(RESTORE_NOTE_SUCCESS)){
+
+            // insert into "notes" node
             safeApiCall(IO){
                 noteNetworkDataSource.insertOrUpdateNote(note)
+            }
+
+            // remove from "deleted" node
+            safeApiCall(IO){
+                noteNetworkDataSource.deleteDeletedNote(note)
             }
         }
 

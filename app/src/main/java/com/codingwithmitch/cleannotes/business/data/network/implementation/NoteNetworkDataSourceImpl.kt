@@ -4,6 +4,7 @@ import com.codingwithmitch.cleannotes.business.data.network.abstraction.NoteNetw
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.framework.datasource.network.abstraction.NoteFirestoreService
 import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.QuerySnapshot
 import javax.inject.Singleton
 
@@ -30,8 +31,16 @@ constructor(
         return firestoreService.insertDeletedNotes(notes)
     }
 
-    override suspend fun findUpdatedNotes(previousSyncTimestamp: Long): Task<QuerySnapshot> {
-        return firestoreService.findUpdatedNotes(previousSyncTimestamp)
+    override suspend fun deleteDeletedNote(note: Note): Task<Void> {
+        return firestoreService.deleteDeletedNote(note)
+    }
+
+    override suspend fun searchNote(note: Note): Task<DocumentSnapshot> {
+        return firestoreService.searchNote(note)
+    }
+
+    override suspend fun getAllNotes(): Task<QuerySnapshot> {
+        return firestoreService.getAllNotes()
     }
 
     override suspend fun insertOrUpdateNotes(notes: List<Note>): List<Task<Void>> {

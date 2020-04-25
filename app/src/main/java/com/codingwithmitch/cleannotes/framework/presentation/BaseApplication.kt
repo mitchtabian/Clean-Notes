@@ -1,9 +1,14 @@
 package com.codingwithmitch.cleannotes.framework.presentation
 
 import android.app.Application
+import com.codingwithmitch.cleannotes.business.interactors.network_sync.SyncNotes
 import com.codingwithmitch.cleannotes.di.AppComponent
 import com.codingwithmitch.cleannotes.di.DaggerAppComponent
+import kotlinx.coroutines.*
+import javax.inject.Inject
 
+@FlowPreview
+@ExperimentalCoroutinesApi
 class BaseApplication : Application(){
 
     lateinit var appComponent: AppComponent
@@ -19,4 +24,6 @@ class BaseApplication : Application(){
             .factory()
             .create(this)
     }
+
+
 }

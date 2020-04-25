@@ -82,6 +82,7 @@ dependencies {
     implementation Dependencies.retrofit_gson
     implementation Dependencies.firebase_firestore
     implementation Dependencies.firebase_auth
+    implementation Dependencies.kotlin_coroutines_play_services
 
 
     implementation SupportDependencies.swipe_refresh_layout

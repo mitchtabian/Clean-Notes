@@ -67,6 +67,10 @@ constructor(
         }
     }
 
+    override suspend fun searchNoteById(id: String): Note? {
+        return noteDaoService.searchNoteById(id)
+    }
+
     override suspend fun getNumNotes(): Int {
         return noteDaoService.getNumNotes()
     }

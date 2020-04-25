@@ -9,6 +9,8 @@ interface NoteDaoService {
 
     suspend fun insertNotes(notes: List<Note>): LongArray
 
+    suspend fun searchNoteById(id: String): Note?
+
     suspend fun updateNote(
         primaryKey: String,
         title: String,

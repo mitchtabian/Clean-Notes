@@ -9,6 +9,7 @@ import com.codingwithmitch.cleannotes.util.printLogD
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
@@ -91,15 +92,30 @@ constructor(
         }
     }
 
-    override suspend fun findUpdatedNotes(previousSyncTimestamp: Long): Task<QuerySnapshot> {
+    override suspend fun deleteDeletedNote(note: Note): Task<Void> {
+        val entity = networkMapper.mapToEntity(note)
+        return firestore
+            .collection(DELETES_COLLECTION)
+            .document(USER_ID)
+            .collection(NOTES_COLLECTION)
+            .document(entity.id)
+            .delete()
+    }
+
+    override suspend fun searchNote(note: Note): Task<DocumentSnapshot> {
         return firestore
             .collection(NOTES_COLLECTION)
             .document(USER_ID)
             .collection(NOTES_COLLECTION)
-            .whereGreaterThan(
-                NoteNetworkEntity.UPDATED_AT_FIELD,
-                dateUtil.convertLongDateToFirebaseTimestamp(previousSyncTimestamp)
-            )
+            .document(note.id)
+            .get()
+    }
+
+    override suspend fun getAllNotes(): Task<QuerySnapshot> {
+        return firestore
+            .collection(NOTES_COLLECTION)
+            .document(USER_ID)
+            .collection(NOTES_COLLECTION)
             .get()
     }
 

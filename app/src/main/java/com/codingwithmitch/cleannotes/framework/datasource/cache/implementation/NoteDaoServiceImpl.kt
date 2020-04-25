@@ -28,6 +28,12 @@ constructor(
         )
     }
 
+    override suspend fun searchNoteById(id: String): Note? {
+        return noteDao.searchNoteById(id)?.let { note ->
+            noteMapper.mapFromEntity(note)
+        }
+    }
+
     override suspend fun updateNote(
         primaryKey: String,
         title: String,

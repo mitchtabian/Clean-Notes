@@ -16,6 +16,7 @@ import com.codingwithmitch.cleannotes.business.data.cache.implementation.NoteCac
 import com.codingwithmitch.cleannotes.framework.datasource.cache.mappers.CacheMapper
 import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteFirestoreServiceImpl
 import com.codingwithmitch.cleannotes.business.data.network.implementation.NoteNetworkDataSourceImpl
+import com.codingwithmitch.cleannotes.business.interactors.network_sync.SyncNotes
 import com.codingwithmitch.cleannotes.business.interactors.notedetail.NoteDetailInteractors
 import com.codingwithmitch.cleannotes.business.interactors.notedetail.UpdateNote
 import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NoteDaoService
@@ -36,11 +37,14 @@ object AppModule {
 
 
 
+    // https://developer.android.com/reference/java/text/SimpleDateFormat.html?hl=pt-br
     @JvmStatic
     @Singleton
     @Provides
     fun provideDateFormat(): SimpleDateFormat {
-        return SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
+        val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss a", Locale.ENGLISH)
+        sdf.timeZone = TimeZone.getTimeZone("UTC-7") // match firestore
+        return sdf
     }
 
     @JvmStatic
@@ -204,6 +208,23 @@ object AppModule {
             RestoreDeletedNote(noteCacheDataSource, noteNetworkDataSource),
             DeleteMultipleNotes(noteCacheDataSource, noteNetworkDataSource),
             InsertMultipleNotes(noteCacheDataSource, noteNetworkDataSource)
+        )
+    }
+
+    @JvmStatic
+    @Singleton
+    @Provides
+    fun provideSyncNotes(
+        noteCacheDataSource: NoteCacheDataSource,
+        noteNetworkDataSource: NoteNetworkDataSource,
+        dateUtil: DateUtil,
+        networkMapper: NetworkMapper
+    ): SyncNotes{
+        return SyncNotes(
+            noteCacheDataSource,
+            noteNetworkDataSource,
+            dateUtil,
+            networkMapper
         )
     }
 

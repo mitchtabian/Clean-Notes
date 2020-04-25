@@ -40,8 +40,7 @@ import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.Note
 import com.codingwithmitch.cleannotes.util.TodoCallback
 import com.codingwithmitch.cleannotes.util.printLogD
 import kotlinx.android.synthetic.main.fragment_note_list.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 
@@ -100,6 +99,7 @@ class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
         viewModel.retrieveNumNotesInCache()
         viewModel.clearList()
         viewModel.refreshSearchQuery()
+
     }
 
     override fun onPause() {

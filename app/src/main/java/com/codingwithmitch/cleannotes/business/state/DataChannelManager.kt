@@ -1,21 +1,18 @@
 package com.codingwithmitch.cleannotes.business.state
 
-
 import com.codingwithmitch.cleannotes.util.printLogD
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.channels.ConflatedBroadcastChannel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.*
 
 @FlowPreview
 @ExperimentalCoroutinesApi
 abstract class DataChannelManager<ViewState> {
 
-    private val dataChannel: ConflatedBroadcastChannel<DataState<ViewState>> =  ConflatedBroadcastChannel()
+    private val dataChannel = BroadcastChannel<DataState<ViewState>>(Channel.BUFFERED)
     private var channelScope: CoroutineScope? = null
     private val stateEventManager: StateEventManager = StateEventManager()
 
@@ -23,26 +20,28 @@ abstract class DataChannelManager<ViewState> {
 
     val shouldDisplayProgressBar = stateEventManager.shouldDisplayProgressBar
 
-    init {
+    fun setupChannel(){
+        cancelJobs()
+        initChannel()
+    }
+
+    private fun initChannel(){
         dataChannel
             .asFlow()
             .onEach{ dataState ->
-                dataState.data?.let { data ->
-                    handleNewData(data)
-                }
-                dataState.stateMessage?.let { stateMessage ->
-                    handleNewStateMessage(stateMessage)
-                }
-                dataState.stateEvent?.let { stateEvent ->
-                    removeStateEvent(stateEvent)
+                withContext(Main){
+                    dataState.data?.let { data ->
+                        handleNewData(data)
+                    }
+                    dataState.stateMessage?.let { stateMessage ->
+                        handleNewStateMessage(stateMessage)
+                    }
+                    dataState.stateEvent?.let { stateEvent ->
+                        removeStateEvent(stateEvent)
+                    }
                 }
             }
-            .launchIn(CoroutineScope(Main))
-    }
-
-    fun setupChannel(){
-        cancelJobs()
-        setupNewChannelScope(CoroutineScope(IO))
+            .launchIn(getChannelScope())
     }
 
     abstract fun handleNewData(data: ViewState)
@@ -60,6 +59,7 @@ abstract class DataChannelManager<ViewState> {
         jobFunction: Flow<DataState<ViewState>?>
     ){
         if(!isStateEventActive(stateEvent)){
+            printLogD("DCM", "launching job: ${stateEvent.eventName()}")
             addStateEvent(stateEvent)
             jobFunction
                 .onEach { dataState ->

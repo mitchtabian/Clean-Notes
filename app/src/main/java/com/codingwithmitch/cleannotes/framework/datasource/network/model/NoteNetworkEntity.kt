@@ -17,6 +17,15 @@ data class NoteNetworkEntity(
 
 ){
 
+    // no arg constructor for firestore
+    constructor(): this(
+        "",
+        "",
+        "",
+        Timestamp.now(),
+        Timestamp.now()
+    )
+
     companion object{
 
         const val UPDATED_AT_FIELD = "updated_at"
