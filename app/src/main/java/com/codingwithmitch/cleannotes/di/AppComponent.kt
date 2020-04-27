@@ -1,8 +1,7 @@
 package com.codingwithmitch.cleannotes.di
 
 import com.codingwithmitch.cleannotes.framework.presentation.BaseApplication
-import com.codingwithmitch.cleannotes.framework.presentation.MainActivity
-import com.codingwithmitch.cleannotes.framework.presentation.common.NoteNetworkSyncManager
+import com.codingwithmitch.cleannotes.framework.presentation.splash.NoteNetworkSyncManager
 import com.codingwithmitch.cleannotes.framework.presentation.notedetail.NoteDetailFragment
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.NoteListFragment
 import com.codingwithmitch.cleannotes.framework.presentation.splash.SplashFragment
@@ -11,7 +10,6 @@ import dagger.BindsInstance
 import dagger.Component
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import java.util.*
 import javax.inject.Singleton
 
 @ExperimentalCoroutinesApi

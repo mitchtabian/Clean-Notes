@@ -25,7 +25,7 @@ import com.codingwithmitch.cleannotes.framework.datasource.cache.implementation.
 import com.codingwithmitch.cleannotes.framework.datasource.network.mappers.NetworkMapper
 import com.codingwithmitch.cleannotes.framework.datasource.preferences.PreferenceKeys
 import com.codingwithmitch.cleannotes.framework.presentation.BaseApplication
-import com.codingwithmitch.cleannotes.framework.presentation.common.NoteNetworkSyncManager
+import com.codingwithmitch.cleannotes.framework.presentation.splash.NoteNetworkSyncManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
@@ -249,8 +249,11 @@ object AppModule {
     fun provideNoteNetworkSyncManager(
         syncNotes: SyncNotes,
         deletedNotes: SyncDeletedNotes
-    ): NoteNetworkSyncManager{
-        return NoteNetworkSyncManager(syncNotes, deletedNotes)
+    ): NoteNetworkSyncManager {
+        return NoteNetworkSyncManager(
+            syncNotes,
+            deletedNotes
+        )
     }
 
 }

@@ -1,4 +1,4 @@
-package com.codingwithmitch.cleannotes.framework.presentation.common
+package com.codingwithmitch.cleannotes.framework.presentation.splash
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

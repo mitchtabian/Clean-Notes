@@ -8,8 +8,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.codingwithmitch.cleannotes.R
 import com.codingwithmitch.cleannotes.framework.presentation.common.BaseNoteFragment
-import com.codingwithmitch.cleannotes.framework.presentation.common.NoteNetworkSyncManager
-import com.codingwithmitch.cleannotes.framework.presentation.notelist.NoteListViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import javax.inject.Inject
