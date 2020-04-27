@@ -35,6 +35,10 @@ constructor(
         return firestoreService.deleteDeletedNote(note)
     }
 
+    override suspend fun getDeletedNotes(): Task<QuerySnapshot> {
+        return firestoreService.getDeletedNotes()
+    }
+
     override suspend fun searchNote(note: Note): Task<DocumentSnapshot> {
         return firestoreService.searchNote(note)
     }

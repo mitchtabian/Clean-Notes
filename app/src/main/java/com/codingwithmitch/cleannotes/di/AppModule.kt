@@ -16,6 +16,7 @@ import com.codingwithmitch.cleannotes.business.data.cache.implementation.NoteCac
 import com.codingwithmitch.cleannotes.framework.datasource.cache.mappers.CacheMapper
 import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteFirestoreServiceImpl
 import com.codingwithmitch.cleannotes.business.data.network.implementation.NoteNetworkDataSourceImpl
+import com.codingwithmitch.cleannotes.business.interactors.network_sync.SyncDeletedNotes
 import com.codingwithmitch.cleannotes.business.interactors.network_sync.SyncNotes
 import com.codingwithmitch.cleannotes.business.interactors.notedetail.NoteDetailInteractors
 import com.codingwithmitch.cleannotes.business.interactors.notedetail.UpdateNote
@@ -24,6 +25,7 @@ import com.codingwithmitch.cleannotes.framework.datasource.cache.implementation.
 import com.codingwithmitch.cleannotes.framework.datasource.network.mappers.NetworkMapper
 import com.codingwithmitch.cleannotes.framework.datasource.preferences.PreferenceKeys
 import com.codingwithmitch.cleannotes.framework.presentation.BaseApplication
+import com.codingwithmitch.cleannotes.framework.presentation.common.NoteNetworkSyncManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
@@ -226,6 +228,29 @@ object AppModule {
             dateUtil,
             networkMapper
         )
+    }
+
+    @JvmStatic
+    @Singleton
+    @Provides
+    fun provideSyncDeletedNotes(
+        noteCacheDataSource: NoteCacheDataSource,
+        noteNetworkDataSource: NoteNetworkDataSource
+    ): SyncDeletedNotes{
+        return SyncDeletedNotes(
+            noteCacheDataSource,
+            noteNetworkDataSource
+        )
+    }
+
+    @JvmStatic
+    @Singleton
+    @Provides
+    fun provideNoteNetworkSyncManager(
+        syncNotes: SyncNotes,
+        deletedNotes: SyncDeletedNotes
+    ): NoteNetworkSyncManager{
+        return NoteNetworkSyncManager(syncNotes, deletedNotes)
     }
 
 }

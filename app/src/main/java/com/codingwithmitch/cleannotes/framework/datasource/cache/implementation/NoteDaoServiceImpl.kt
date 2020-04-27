@@ -51,6 +51,10 @@ constructor(
         return noteDao.deleteNote(primaryKey)
     }
 
+    override suspend fun deleteNotes(ids: List<String>): Int {
+        return noteDao.deleteNotes(ids)
+    }
+
     override suspend fun searchNotes(): List<Note> {
         return noteMapper.entityListToNoteList(
             noteDao.searchNotes()

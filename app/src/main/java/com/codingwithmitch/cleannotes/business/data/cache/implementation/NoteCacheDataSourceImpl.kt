@@ -25,6 +25,10 @@ constructor(
         return noteDaoService.deleteNote(primaryKey)
     }
 
+    override suspend fun deleteNotes(ids: List<String>): Int {
+        return noteDaoService.deleteNotes(ids)
+    }
+
     override suspend fun updateNote(primaryKey: String, newTitle: String, newBody: String?): Int {
         return noteDaoService.updateNote(primaryKey, newTitle, newBody)
     }

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.codingwithmitch.cleannotes.framework.presentation.common.NoteViewModelFactory
 import com.codingwithmitch.cleannotes.framework.presentation.notedetail.NoteDetailViewModel
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.NoteListViewModel
+import com.codingwithmitch.cleannotes.framework.presentation.splash.SplashViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -20,6 +21,13 @@ abstract class NoteViewModelModule{
     @Singleton
     @Binds
     abstract fun bindViewModelFactory(factory: NoteViewModelFactory): ViewModelProvider.Factory
+
+    @Singleton
+    @Binds
+    @IntoMap
+    @NoteViewModelKey(SplashViewModel::class)
+    abstract fun bindSplashViewModel(viewModel: SplashViewModel): ViewModel
+
 
     @Singleton
     @Binds

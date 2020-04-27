@@ -16,6 +16,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.http.DELETE
 import java.lang.Exception
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -100,6 +101,14 @@ constructor(
             .collection(NOTES_COLLECTION)
             .document(entity.id)
             .delete()
+    }
+
+    override suspend fun getDeletedNotes(): Task<QuerySnapshot> {
+        return firestore
+            .collection(DELETES_COLLECTION)
+            .document(USER_ID)
+            .collection(NOTES_COLLECTION)
+            .get()
     }
 
     override suspend fun searchNote(note: Note): Task<DocumentSnapshot> {

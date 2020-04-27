@@ -18,6 +18,8 @@ interface NoteNetworkDataSource{
 
     suspend fun deleteDeletedNote(note: Note): Task<Void>
 
+    suspend fun getDeletedNotes(): Task<QuerySnapshot>
+
     suspend fun searchNote(note: Note): Task<DocumentSnapshot>
 
     suspend fun getAllNotes(): Task<QuerySnapshot>

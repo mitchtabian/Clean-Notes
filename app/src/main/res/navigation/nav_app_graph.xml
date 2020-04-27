@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:startDestination="@id/noteListFragment"
+    app:startDestination="@id/splashFragment"
     >
 
     <fragment
-        app:moduleName="@string/module_notes_name"
+        android:id="@+id/splashFragment"
+        android:name="com.codingwithmitch.cleannotes.framework.presentation.splash.SplashFragment">
+
+        <action
+            android:id="@+id/action_splashFragment_to_noteListFragment"
+            app:destination="@id/noteListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
+
+    <fragment
         android:id="@+id/noteListFragment"
         android:name="com.codingwithmitch.cleannotes.framework.presentation.notelist.NoteListFragment"
         >
@@ -34,5 +49,6 @@
             app:popUpToInclusive="true"
             />
     </fragment>
+
 
 </navigation>

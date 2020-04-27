@@ -32,6 +32,13 @@ class SyncNotes(
 
     suspend fun syncNotes() {
 
+        val cachedNotesList = getCachedNotes()
+
+        printLogD("SyncNotes", "notelist: ${cachedNotesList.size}")
+        syncNetworkNotesWithCachedNotes(ArrayList(cachedNotesList))
+    }
+
+    private suspend fun getCachedNotes(): List<Note> {
         val cacheResult = safeCacheCall(IO){
             noteCacheDataSource.searchNotes("", "", 1)
         }
@@ -50,10 +57,7 @@ class SyncNotes(
 
         }.getResult()
 
-        response?.data.let { noteList ->
-            printLogD("SyncNotes", "notelist: ${noteList?.size}")
-            syncNetworkNotesWithCachedNotes(ArrayList(noteList.orEmpty()))
-        }
+        return response?.data ?: ArrayList()
     }
 
     // get all notes from network
@@ -72,7 +76,7 @@ class SyncNotes(
             for(note in noteList){
                 noteCacheDataSource.searchNoteById(note.id)?.let { cachedNote ->
                     cachedNotes.remove(cachedNote)
-                    checkIfCachedNoteNeedsUpdate(cachedNote, note)
+                    checkIfCachedNoteRequiresUpdate(cachedNote, note)
                 }?: noteCacheDataSource.insertNote(networkMapper.mapFromEntity(note))
             }
         }
@@ -84,7 +88,7 @@ class SyncNotes(
         }
     }
 
-    private suspend fun checkIfCachedNoteNeedsUpdate(
+    private suspend fun checkIfCachedNoteRequiresUpdate(
         cachedNote: Note,
         networkNote: NoteNetworkEntity
     ){
