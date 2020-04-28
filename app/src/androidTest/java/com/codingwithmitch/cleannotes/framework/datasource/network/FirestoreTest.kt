@@ -1,6 +1,8 @@
 package com.codingwithmitch.cleannotes.framework.datasource.network
 
+import android.app.Application
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import androidx.test.platform.app.InstrumentationRegistry
 import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
 import com.codingwithmitch.cleannotes.business.util.DateUtil
 import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteFirestoreServiceImpl.Companion.NOTES_COLLECTION
@@ -11,11 +13,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4ClassRunner::class)
 class FirestoreTest {
@@ -24,6 +26,10 @@ class FirestoreTest {
     private val dateUtil: DateUtil = DateUtil(dateFormat)
     private val noteFactory = NoteFactory(dateUtil)
     private val networkMapper = NetworkMapper(dateUtil)
+    private val application = InstrumentationRegistry.getInstrumentation()
+        .targetContext
+        .applicationContext
+    private val noteDataFactory: NoteDataFactory = NoteDataFactory(application as Application)
 
     val firestoreSettings = FirebaseFirestoreSettings.Builder()
         .setHost("10.0.2.2:8080")
@@ -37,8 +43,23 @@ class FirestoreTest {
         FirebaseFirestore.getInstance().firestoreSettings = firestoreSettings
     }
 
-    private fun insertTestDataSet() = runBlocking {
+    @Before
+    fun before(){
+        insertFakeData()
+    }
 
+    private fun insertFakeData() {
+        val entityList = networkMapper.noteListToEntityList(
+            noteDataFactory.produceListOfNotes()
+        )
+        for(entity in entityList){
+            firestore
+                .collection(NOTES_COLLECTION)
+                .document(USER_ID)
+                .collection(NOTES_COLLECTION)
+                .document(entity.id)
+                .set(entity)
+        }
     }
 
     @Test
@@ -57,15 +78,7 @@ class FirestoreTest {
             .collection(NOTES_COLLECTION)
             .document(entity.id)
             .set(entity)
-            .addOnCompleteListener {
-                println("test: inserted new note: ${entity.title}")
-            }
-            .addOnFailureListener {
-                println("test: failure: ${it}")
-                assertEquals(0, 1)
-            }
             .await()
-
 
         val noteList = firestore
             .collection(NOTES_COLLECTION)

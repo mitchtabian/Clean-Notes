@@ -3,7 +3,7 @@ package com.codingwithmitch.cleannotes.business.interactors
 import com.codingwithmitch.cleannotes.business.data.cache.abstraction.NoteCacheDataSource
 import com.codingwithmitch.cleannotes.business.interactors.notelist.SearchNotes
 import com.codingwithmitch.cleannotes.business.state.DataState
-import com.codingwithmitch.cleannotes.data.NoteDataFactory
+import com.codingwithmitch.cleannotes.business.data.NoteDataFactory
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListStateEvent.*
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListViewState
 import io.mockk.every
@@ -32,7 +32,10 @@ class SearchNotesTest {
 
     init {
         this.javaClass.classLoader?.let { classLoader ->
-            noteFactory = NoteDataFactory(classLoader)
+            noteFactory =
+                NoteDataFactory(
+                    classLoader
+                )
         }
     }
 

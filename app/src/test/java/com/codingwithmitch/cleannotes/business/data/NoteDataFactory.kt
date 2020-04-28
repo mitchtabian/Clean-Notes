@@ -1,4 +1,4 @@
-package com.codingwithmitch.cleannotes.data
+package com.codingwithmitch.cleannotes.business.data
 
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.google.common.reflect.TypeToken
