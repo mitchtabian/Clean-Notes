@@ -77,7 +77,7 @@ class NoteFirestoreServiceTests: FirestoreTest() {
 
         // choose a random note from list to update
         val random = Random()
-        val note = searchResults.get(random.nextInt(searchResults.size-1))
+        val note = searchResults.get(random.nextInt(searchResults.size-1) + 1)
         val UPDATED_TITLE = UUID.randomUUID().toString()
         val UPDATED_BODY = UUID.randomUUID().toString()
         note.title = UPDATED_TITLE
@@ -119,7 +119,7 @@ class NoteFirestoreServiceTests: FirestoreTest() {
             .toObjects(NoteNetworkEntity::class.java)
 
         // choose one at random to delete
-        val noteToDelete = noteList.get(Random().nextInt(noteList.size - 1))
+        val noteToDelete = noteList.get(Random().nextInt(noteList.size - 1) + 1)
 
         noteFirestoreService.deleteNote(noteToDelete.id)
             .await()
@@ -139,7 +139,7 @@ class NoteFirestoreServiceTests: FirestoreTest() {
             .toObjects(NoteNetworkEntity::class.java)
 
         // choose one at random to insert into "deletes" node
-        val noteToDelete = noteList.get(Random().nextInt(noteList.size - 1))
+        val noteToDelete = noteList.get(Random().nextInt(noteList.size - 1) + 1)
 
         noteFirestoreService.insertDeletedNote(networkMapper.mapFromEntity(noteToDelete))
             .await()
@@ -162,22 +162,22 @@ class NoteFirestoreServiceTests: FirestoreTest() {
         val notesToDelete: ArrayList<NoteNetworkEntity> = ArrayList()
 
         // 1st
-        var noteToDelete = noteList.get(Random().nextInt(noteList.size - 1))
+        var noteToDelete = noteList.get(Random().nextInt(noteList.size - 1) + 1)
         noteList.remove(noteToDelete)
         notesToDelete.add(noteToDelete)
 
         // 2nd
-        noteToDelete = noteList.get(Random().nextInt(noteList.size - 1))
+        noteToDelete = noteList.get(Random().nextInt(noteList.size - 1) + 1)
         noteList.remove(noteToDelete)
         notesToDelete.add(noteToDelete)
 
         // 3rd
-        noteToDelete = noteList.get(Random().nextInt(noteList.size - 1))
+        noteToDelete = noteList.get(Random().nextInt(noteList.size - 1) + 1)
         noteList.remove(noteToDelete)
         notesToDelete.add(noteToDelete)
 
         // 4th
-        noteToDelete = noteList.get(Random().nextInt(noteList.size - 1))
+        noteToDelete = noteList.get(Random().nextInt(noteList.size - 1) + 1)
         noteList.remove(noteToDelete)
         notesToDelete.add(noteToDelete)
 

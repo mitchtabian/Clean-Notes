@@ -247,3 +247,5 @@ Apr 28, 2020 3:24:55 PM com.google.cloud.datastore.emulator.impl.context.Emulato
 WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
 Apr 28, 2020 3:24:55 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
 WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+*** shutting down gRPC server since JVM is shutting down
+*** server shut down
