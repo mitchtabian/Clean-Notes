@@ -27,7 +27,7 @@ class InsertMultipleNotes(
     ): Flow<DataState<NoteListViewState>?> = flow {
 
         val noteList = NoteListTester.generateNoteList(numNotes)
-        val cacheResult = safeCacheCall(IO){
+        safeCacheCall(IO){
             noteCacheDataSource.insertNotes(noteList)
         }
 
@@ -43,7 +43,10 @@ class InsertMultipleNotes(
             )
         )
 
-        // update network
+        updateNetwork(noteList)
+    }
+
+    private suspend fun updateNetwork(noteList: List<Note>){
         safeApiCall(IO){
             noteNetworkDataSource.insertOrUpdateNotes(noteList)
         }

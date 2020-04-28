@@ -84,7 +84,10 @@ class DeleteMultipleNotes(
             )
         }
 
-        // update network
+        updateNetwork(successfulDeletes)
+    }
+
+    private suspend fun updateNetwork(successfulDeletes: ArrayList<Note>){
         for (note in successfulDeletes){
 
             // delete from "notes" node

@@ -6,6 +6,7 @@ import com.codingwithmitch.cleannotes.business.data.network.abstraction.NoteNetw
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.state.DataState
 import com.codingwithmitch.cleannotes.business.util.DateUtil
+import com.codingwithmitch.cleannotes.business.util.safeApiCall
 import com.codingwithmitch.cleannotes.business.util.safeCacheCall
 import com.codingwithmitch.cleannotes.framework.datasource.network.mappers.NetworkMapper
 import com.codingwithmitch.cleannotes.framework.datasource.network.model.NoteNetworkEntity
@@ -94,6 +95,8 @@ class SyncNotes(
     ){
         val cacheUpdatedAt = dateUtil.convertServerStringDateToLong(cachedNote.updated_at) / 1000
         val networkUpdatedAt = networkNote.updated_at.toDate().time / 1000
+
+        // update cache (network has newest data)
         if(networkUpdatedAt > cacheUpdatedAt){
             printLogD("SyncNotes",
                 "cacheUpdatedAt: ${cacheUpdatedAt}, " +
@@ -105,6 +108,12 @@ class SyncNotes(
                     networkNote.title,
                     networkNote.body
                 )
+            }
+        }
+        // update network (cache has newest data)
+        else{
+            safeApiCall(IO){
+                noteNetworkDataSource.insertOrUpdateNote(cachedNote)
             }
         }
     }

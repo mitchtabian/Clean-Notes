@@ -35,8 +35,7 @@ class NoteFirestoreServiceImpl
 constructor(
     private val firebaseAuth: FirebaseAuth, // might include auth in the future
     private val firestore: FirebaseFirestore,
-    private val networkMapper: NetworkMapper,
-    private val dateUtil: DateUtil
+    private val networkMapper: NetworkMapper
 ): NoteFirestoreService {
 
     override suspend fun insertOrUpdateNote(note: Note): Task<Void> {

@@ -65,8 +65,11 @@ class UpdateNote(
 
         emit(response)
 
-        // update network
-        if(response?.stateMessage?.response?.message.equals(UPDATE_NOTE_SUCCESS)){
+        updateNetwork(response?.stateMessage?.response?.message, note)
+    }
+
+    private suspend fun updateNetwork(response: String?, note: Note) {
+        if(response.equals(UPDATE_NOTE_SUCCESS)){
 
             val apiResult = safeApiCall(Dispatchers.IO){
                 noteNetworkDataSource.insertOrUpdateNote(note)
@@ -74,7 +77,7 @@ class UpdateNote(
 
             object: ApiResponseHandler<NoteDetailViewState, Task<Void>>(
                 response = apiResult,
-                stateEvent = stateEvent
+                stateEvent = null
             ){
                 override suspend fun handleSuccess(resultObj: Task<Void>): DataState<NoteDetailViewState>? {
                     resultObj.addOnFailureListener {
@@ -89,7 +92,7 @@ class UpdateNote(
                         printLogD("UpdateNote",
                             "Network: onFailure: ${it}")
                     }
-                   return null
+                    return null
                 }
 
             }.getResult()

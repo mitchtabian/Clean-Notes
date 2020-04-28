@@ -65,8 +65,11 @@ class RestoreDeletedNote(
 
         emit(response)
 
-        // update network
-        if(response?.stateMessage?.response?.message.equals(RESTORE_NOTE_SUCCESS)){
+        updateNetwork(response?.stateMessage?.response?.message, note)
+    }
+
+    private suspend fun updateNetwork(response: String?, note: Note) {
+        if(response.equals(RESTORE_NOTE_SUCCESS)){
 
             // insert into "notes" node
             safeApiCall(IO){
@@ -78,7 +81,6 @@ class RestoreDeletedNote(
                 noteNetworkDataSource.deleteDeletedNote(note)
             }
         }
-
     }
 
     companion object{

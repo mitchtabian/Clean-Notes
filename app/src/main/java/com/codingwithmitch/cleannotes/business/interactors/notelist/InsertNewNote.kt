@@ -8,6 +8,7 @@ import com.codingwithmitch.cleannotes.business.util.safeCacheCall
 import com.codingwithmitch.cleannotes.business.data.cache.abstraction.NoteCacheDataSource
 import com.codingwithmitch.cleannotes.business.data.network.ApiResponseHandler
 import com.codingwithmitch.cleannotes.business.data.network.abstraction.NoteNetworkDataSource
+import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.NoteDetailViewState
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListViewState
 import com.codingwithmitch.cleannotes.util.printLogD
@@ -75,9 +76,11 @@ class InsertNewNote(
 
         emit(cacheResponse)
 
-        // update network
-        // TODO("WorkManager???")
-        if(cacheResponse?.stateMessage?.response?.message.equals(INSERT_NOTE_SUCCESS)){
+        updateNetwork(cacheResponse?.stateMessage?.response?.message, newNote)
+    }
+
+    private suspend fun updateNetwork(cacheResponse: String?, newNote: Note ){
+        if(cacheResponse.equals(INSERT_NOTE_SUCCESS)){
 
             // not listening for success/failure here b/c we don't take any action either way
             val apiResult = safeApiCall(IO){
@@ -86,7 +89,7 @@ class InsertNewNote(
 
             object: ApiResponseHandler<NoteDetailViewState, Task<Void>>(
                 response = apiResult,
-                stateEvent = stateEvent
+                stateEvent = null
             ){
                 override suspend fun handleSuccess(resultObj: Task<Void>): DataState<NoteDetailViewState>? {
                     resultObj.addOnFailureListener {
@@ -105,7 +108,6 @@ class InsertNewNote(
                 }
 
             }.getResult()
-
         }
     }
 

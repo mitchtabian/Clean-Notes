@@ -159,14 +159,12 @@ object AppModule {
     fun provideFirestoreService(
         firebaseAuth: FirebaseAuth,
         firebaseFirestore: FirebaseFirestore,
-        networkMapper: NetworkMapper,
-        dateUtil: DateUtil
+        networkMapper: NetworkMapper
     ): NoteFirestoreServiceImpl {
         return NoteFirestoreServiceImpl(
             firebaseAuth,
             firebaseFirestore,
-            networkMapper,
-            dateUtil
+            networkMapper
         )
     }
 
