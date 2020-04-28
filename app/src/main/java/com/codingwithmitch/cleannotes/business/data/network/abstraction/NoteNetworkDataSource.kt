@@ -14,7 +14,7 @@ interface NoteNetworkDataSource{
 
     suspend fun insertDeletedNote(note: Note): Task<Void>
 
-    suspend fun insertDeletedNotes(notes: List<Note>): List<Task<Void>>
+    suspend fun insertDeletedNotes(notes: List<Note>): Task<Void>
 
     suspend fun deleteDeletedNote(note: Note): Task<Void>
 
@@ -24,6 +24,6 @@ interface NoteNetworkDataSource{
 
     suspend fun getAllNotes(): Task<QuerySnapshot>
 
-    suspend fun insertOrUpdateNotes(notes: List<Note>): List<Task<Void>>
+    suspend fun insertOrUpdateNotes(notes: List<Note>): Task<Void>
 
 }

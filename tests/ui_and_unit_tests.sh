@@ -15,14 +15,6 @@ print_blue(){
 
 #Start
 print_blue "\n\n\nStarting"
-#print_blue "\n\n\nCleaning...\n"
-#./gradlew clean
-
-#print_blue "\n\n\ncleanBuildCache...\n"
-#./gradlew cleanBuildCache
-
-#print_blue "\n\n\n build...\n"
-#./gradlew build
 
 print_blue "\n\n\ncd into working directory...\n"
 cd "/d/Android Studio Projects/CleanNotes/"

@@ -9,11 +9,13 @@ interface NoteFirestoreService {
 
     suspend fun insertOrUpdateNote(note: Note): Task<Void>
 
+    suspend fun insertOrUpdateNotes(notes: List<Note>): Task<Void>
+
     suspend fun deleteNote(primaryKey: String): Task<Void>
 
     suspend fun insertDeletedNote(note: Note): Task<Void>
 
-    suspend fun insertDeletedNotes(notes: List<Note>): List<Task<Void>>
+    suspend fun insertDeletedNotes(notes: List<Note>): Task<Void>
 
     suspend fun deleteDeletedNote(note: Note): Task<Void>
 
@@ -22,8 +24,6 @@ interface NoteFirestoreService {
     suspend fun searchNote(note: Note): Task<DocumentSnapshot>
 
     suspend fun getAllNotes(): Task<QuerySnapshot>
-
-    suspend fun insertOrUpdateNotes(notes: List<Note>): List<Task<Void>>
 
 
 }

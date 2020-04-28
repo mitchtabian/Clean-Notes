@@ -1,0 +1,393 @@
+[debug] [2020-04-28T21:04:46.009Z] ----------------------------------------------------------------------
+[debug] [2020-04-28T21:04:46.010Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\mitch\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start --only firestore,functions
+[debug] [2020-04-28T21:04:46.011Z] CLI Version:   8.2.0
+[debug] [2020-04-28T21:04:46.011Z] Platform:      win32
+[debug] [2020-04-28T21:04:46.011Z] Node Version:  v12.16.2
+[debug] [2020-04-28T21:04:46.012Z] Time:          Tue Apr 28 2020 14:04:46 GMT-0700 (Pacific Daylight Time)
+[debug] [2020-04-28T21:04:46.012Z] ----------------------------------------------------------------------
+[debug] [2020-04-28T21:04:46.012Z] 
+[debug] [2020-04-28T21:04:46.017Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-04-28T21:04:46.018Z] > authorizing via signed-in user
+[info] i  emulators: Starting emulators: firestore
+[warn] !  functions: Not starting the functions emulator, make sure you have run firebase init.
+[debug] [2020-04-28T21:04:48.059Z] [hub] writing locator at C:\Users\mitch\AppData\Local\Temp\hub-clean-notes-11971.json
+[info] +  hub: emulator hub started at http://localhost:4400
+[debug] [2020-04-28T21:04:50.071Z] Ignoring unsupported arg: projectId
+[debug] [2020-04-28T21:04:50.071Z] Ignoring unsupported arg: auto_download
+[debug] [2020-04-28T21:04:50.071Z] Starting firestore emulator with command {"binary":"java","args":["-Duser.language=en","-jar","C:\\Users\\mitch\\.cache\\firebase\\emulators\\cloud-firestore-emulator-v1.11.3.jar","--host","localhost","--port",8080,"--rules","D:\\Android Studio Projects\\CleanNotes\\firestore.rules"],"optionalArgs":["port","webchannel_port","host","rules","functions_emulator","seed_from_export"],"joinArgs":false}
+[info] i  firestore: firestore emulator logging to firestore-debug.log
+[debug] [2020-04-28T21:04:51.210Z] API endpoint: http://localhost:8080
+
+[debug] [2020-04-28T21:04:51.210Z] If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:
+
+   export FIRESTORE_EMULATOR_HOST=localhost:8080
+
+Dev App Server is now running.
+
+
+[info] +  firestore: firestore emulator started at http://localhost:8080
+[info] i  firestore: For testing set FIRESTORE_EMULATOR_HOST=localhost:8080
+[info] +  emulators: All emulators started, it is now safe to connect.
+[debug] [2020-04-28T21:05:03.463Z] Apr 28, 2020 2:05:03 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T21:05:03.913Z] Apr 28, 2020 2:05:03 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:05:04.136Z] Apr 28, 2020 2:05:04 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:05:10.561Z] Apr 28, 2020 2:05:10 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T21:05:10.586Z] Apr 28, 2020 2:05:10 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:05:10.964Z] Apr 28, 2020 2:05:10 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:05:10.990Z] Apr 28, 2020 2:05:10 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:05:33.669Z] Apr 28, 2020 2:05:33 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T21:05:33.695Z] Apr 28, 2020 2:05:33 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:05:34.007Z] Apr 28, 2020 2:05:34 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:05:34.033Z] Apr 28, 2020 2:05:34 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:13:09.642Z] Apr 28, 2020 2:13:09 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T21:13:09.666Z] Apr 28, 2020 2:13:09 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:13:10.176Z] Apr 28, 2020 2:13:10 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:13:10.202Z] Apr 28, 2020 2:13:10 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:13:10.785Z] Apr 28, 2020 2:13:10 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:13:10.879Z] Apr 28, 2020 2:13:10 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:13:27.571Z] Apr 28, 2020 2:13:27 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T21:13:27.597Z] Apr 28, 2020 2:13:27 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:13:27.937Z] Apr 28, 2020 2:13:27 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:13:27.962Z] Apr 28, 2020 2:13:27 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:13:28.417Z] Apr 28, 2020 2:13:28 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:13:28.470Z] Apr 28, 2020 2:13:28 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:22:38.872Z] Apr 28, 2020 2:22:38 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T21:22:38.897Z] Apr 28, 2020 2:22:38 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:22:39.416Z] Apr 28, 2020 2:22:39 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:22:39.442Z] Apr 28, 2020 2:22:39 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:22:39.951Z] Apr 28, 2020 2:22:39 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:22:40.008Z] Apr 28, 2020 2:22:40 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:41:23.282Z] Apr 28, 2020 2:41:23 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T21:41:23.305Z] Apr 28, 2020 2:41:23 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:41:23.849Z] Apr 28, 2020 2:41:23 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:41:23.904Z] Apr 28, 2020 2:41:23 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:41:48.385Z] Apr 28, 2020 2:41:48 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T21:41:48.406Z] Apr 28, 2020 2:41:48 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:41:48.783Z] Apr 28, 2020 2:41:48 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:41:48.827Z] Apr 28, 2020 2:41:48 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:45:46.184Z] Apr 28, 2020 2:45:46 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T21:45:46.209Z] Apr 28, 2020 2:45:46 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:45:46.677Z] Apr 28, 2020 2:45:46 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:45:46.724Z] Apr 28, 2020 2:45:46 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:46:09.682Z] Apr 28, 2020 2:46:09 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T21:46:09.705Z] Apr 28, 2020 2:46:09 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:46:10.087Z] Apr 28, 2020 2:46:10 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:46:10.131Z] Apr 28, 2020 2:46:10 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:46:21.067Z] Apr 28, 2020 2:46:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T21:46:21.088Z] Apr 28, 2020 2:46:21 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:46:21.374Z] Apr 28, 2020 2:46:21 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:46:21.451Z] Apr 28, 2020 2:46:21 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:47:28.238Z] Apr 28, 2020 2:47:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T21:47:28.261Z] Apr 28, 2020 2:47:28 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:47:29.131Z] Apr 28, 2020 2:47:29 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:47:29.173Z] Apr 28, 2020 2:47:29 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:47:43.116Z] Apr 28, 2020 2:47:43 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T21:47:43.138Z] Apr 28, 2020 2:47:43 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:47:43.442Z] Apr 28, 2020 2:47:43 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:47:43.485Z] Apr 28, 2020 2:47:43 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:49:02.838Z] Apr 28, 2020 2:49:02 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T21:49:02.861Z] Apr 28, 2020 2:49:02 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:49:03.305Z] Apr 28, 2020 2:49:03 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:49:03.347Z] Apr 28, 2020 2:49:03 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:50:32.004Z] Apr 28, 2020 2:50:32 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T21:50:32.027Z] Apr 28, 2020 2:50:32 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:50:32.466Z] Apr 28, 2020 2:50:32 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:50:32.513Z] Apr 28, 2020 2:50:32 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:50:43.124Z] Apr 28, 2020 2:50:43 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T21:50:43.148Z] Apr 28, 2020 2:50:43 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:50:43.450Z] Apr 28, 2020 2:50:43 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:50:43.494Z] Apr 28, 2020 2:50:43 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:52:00.646Z] Apr 28, 2020 2:52:00 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T21:52:00.667Z] Apr 28, 2020 2:52:00 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:52:01.138Z] Apr 28, 2020 2:52:01 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:52:01.181Z] Apr 28, 2020 2:52:01 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:52:13.624Z] Apr 28, 2020 2:52:13 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T21:52:13.645Z] Apr 28, 2020 2:52:13 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:52:13.991Z] Apr 28, 2020 2:52:13 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:52:14.032Z] Apr 28, 2020 2:52:14 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:52:24.738Z] Apr 28, 2020 2:52:24 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T21:52:24.759Z] Apr 28, 2020 2:52:24 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:52:25.006Z] Apr 28, 2020 2:52:25 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:52:25.049Z] Apr 28, 2020 2:52:25 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:57:21.535Z] Apr 28, 2020 2:57:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T21:57:21.562Z] Apr 28, 2020 2:57:21 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:57:22.138Z] Apr 28, 2020 2:57:22 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:57:22.207Z] Apr 28, 2020 2:57:22 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:58:10.364Z] Apr 28, 2020 2:58:10 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T21:58:10.385Z] Apr 28, 2020 2:58:10 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:58:10.696Z] Apr 28, 2020 2:58:10 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:58:10.751Z] Apr 28, 2020 2:58:10 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:58:38.756Z] Apr 28, 2020 2:58:38 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T21:58:38.782Z] Apr 28, 2020 2:58:38 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:58:39.318Z] Apr 28, 2020 2:58:39 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T21:58:39.376Z] Apr 28, 2020 2:58:39 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T22:01:56.945Z] Apr 28, 2020 3:01:56 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T22:01:56.972Z] Apr 28, 2020 3:01:56 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T22:01:57.455Z] Apr 28, 2020 3:01:57 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T22:01:57.505Z] Apr 28, 2020 3:01:57 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T22:02:31.477Z] Apr 28, 2020 3:02:31 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T22:02:31.498Z] Apr 28, 2020 3:02:31 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T22:02:31.880Z] Apr 28, 2020 3:02:31 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T22:02:31.930Z] Apr 28, 2020 3:02:31 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T22:02:51.912Z] Apr 28, 2020 3:02:51 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T22:02:51.933Z] Apr 28, 2020 3:02:51 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T22:02:52.324Z] Apr 28, 2020 3:02:52 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T22:02:52.374Z] Apr 28, 2020 3:02:52 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T22:20:09.551Z] Apr 28, 2020 3:20:09 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T22:20:09.573Z] Apr 28, 2020 3:20:09 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T22:20:10.204Z] Apr 28, 2020 3:20:10 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T22:20:10.258Z] Apr 28, 2020 3:20:10 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T22:20:21.630Z] Apr 28, 2020 3:20:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T22:20:21.652Z] Apr 28, 2020 3:20:21 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T22:20:22.092Z] Apr 28, 2020 3:20:22 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T22:20:22.145Z] Apr 28, 2020 3:20:22 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T22:24:31.276Z] Apr 28, 2020 3:24:31 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T22:24:31.299Z] Apr 28, 2020 3:24:31 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T22:24:31.789Z] Apr 28, 2020 3:24:31 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T22:24:31.821Z] Apr 28, 2020 3:24:31 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T22:24:55.217Z] Apr 28, 2020 3:24:55 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+
+[debug] [2020-04-28T22:24:55.244Z] Apr 28, 2020 3:24:55 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T22:24:55.468Z] Apr 28, 2020 3:24:55 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+
+[debug] [2020-04-28T22:24:55.500Z] Apr 28, 2020 3:24:55 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
+

@@ -66,7 +66,7 @@ class NoteCacheDataSourceTests {
     }
 
     @Test
-    fun insertNote_savesData()= runBlocking {
+    fun insertNote_savesData() = runBlocking {
 
         val newNote = noteFactory.createSingleNote(
             null,

@@ -4,6 +4,7 @@ import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.util.DateUtil
 import com.codingwithmitch.cleannotes.business.util.EntityMapper
 import com.codingwithmitch.cleannotes.framework.datasource.cache.model.NoteCacheEntity
+import java.lang.Exception
 import javax.inject.Inject
 
 /**
@@ -32,7 +33,10 @@ constructor(
         return entities
     }
 
-    override fun mapFromEntity(entity: NoteCacheEntity): Note {
+    override fun mapFromEntity(entity: NoteCacheEntity?): Note {
+        if(entity == null){
+            throw Exception("Cannot convert a null NoteCacheEntity to a Note.")
+        }
         return Note(
             id = entity.id,
             title = entity.title,
@@ -42,7 +46,10 @@ constructor(
         )
     }
 
-    override fun mapToEntity(domainModel: Note): NoteCacheEntity {
+    override fun mapToEntity(domainModel: Note?): NoteCacheEntity {
+        if(domainModel == null){
+            throw Exception("Cannot convert a null Note to a NoteCacheEntity.")
+        }
         return NoteCacheEntity(
             id = domainModel.id,
             title = domainModel.title,

@@ -1,22 +1,12 @@
 package com.codingwithmitch.cleannotes.framework.datasource.network.implementation
 
 import com.codingwithmitch.cleannotes.business.domain.model.Note
-import com.codingwithmitch.cleannotes.business.util.DateUtil
 import com.codingwithmitch.cleannotes.framework.datasource.network.abstraction.NoteFirestoreService
 import com.codingwithmitch.cleannotes.framework.datasource.network.mappers.NetworkMapper
-import com.codingwithmitch.cleannotes.framework.datasource.network.model.NoteNetworkEntity
-import com.codingwithmitch.cleannotes.util.printLogD
 import com.google.android.gms.tasks.Task
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import retrofit2.http.DELETE
+import com.google.firebase.firestore.*
 import java.lang.Exception
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -68,27 +58,21 @@ constructor(
             .set(entity)
     }
 
-    override suspend fun insertDeletedNotes(notes: List<Note>): List<Task<Void>> {
-        val startTime = System.currentTimeMillis()
-        return withContext(Dispatchers.IO){ // wait for all the tasks to complete
-            val results: ArrayList<Task<Void>> = ArrayList()
+    override suspend fun insertDeletedNotes(notes: List<Note>): Task<Void> {
+        if(notes.size > 500){
+            throw Exception("Cannot delete more than 500 notes at a time in firestore.")
+        }
+
+        val collectionRef = firestore
+            .collection(DELETES_COLLECTION)
+            .document(USER_ID)
+            .collection(NOTES_COLLECTION)
+
+        return firestore.runBatch { batch ->
             for(note in notes){
-                launch { // do all jobs in parallel
-                    printLogD("NoteFirestoreServiceImpl",
-                        "insertDeletedNotes: starting job for note: ${note.title}")
-                    val entity = networkMapper.mapToEntity(note)
-                    val result = firestore
-                        .collection(DELETES_COLLECTION)
-                        .document(USER_ID)
-                        .collection(NOTES_COLLECTION)
-                        .document(entity.id)
-                        .set(entity)
-                    results.add(result)
-                }
+                val documentRef = collectionRef.document(note.id)
+                batch.set(documentRef, networkMapper.mapToEntity(note))
             }
-            printLogD("NoteFirestoreServiceImpl",
-                "insertDeletedNotes: elapsed time: ${(System.currentTimeMillis() - startTime)} ms")
-            results
         }
     }
 
@@ -127,28 +111,22 @@ constructor(
             .get()
     }
 
-    override suspend fun insertOrUpdateNotes(notes: List<Note>): List<Task<Void>> {
-        val startTime = System.currentTimeMillis()
-        return withContext(Dispatchers.IO){ // wait for all the tasks to complete
-            val results: ArrayList<Task<Void>> = ArrayList()
+    override suspend fun insertOrUpdateNotes(notes: List<Note>): Task<Void> {
+
+        if(notes.size > 500){
+            throw Exception("Cannot insert more than 500 notes at a time into firestore.")
+        }
+
+        val collectionRef = firestore
+            .collection(NOTES_COLLECTION)
+            .document(USER_ID)
+            .collection(NOTES_COLLECTION)
+
+        return firestore.runBatch { batch ->
             for(note in notes){
-                launch { // do all jobs in parallel
-                    printLogD("NoteFirestoreServiceImpl",
-                        "insertNotes: starting job for note: ${note.title}")
-                    val entity = networkMapper.mapToEntity(note)
-                    entity.updated_at = Timestamp.now() // for updates
-                    val result = firestore
-                        .collection(NOTES_COLLECTION)
-                        .document(USER_ID)
-                        .collection(NOTES_COLLECTION)
-                        .document(entity.id)
-                        .set(entity)
-                    results.add(result)
-                }
+                val documentRef = collectionRef.document(note.id)
+                batch.set(documentRef, networkMapper.mapToEntity(note))
             }
-            printLogD("NoteFirestoreServiceImpl",
-                "insertNotes: elapsed time: ${(System.currentTimeMillis() - startTime)} ms")
-            results
         }
     }
 

@@ -27,7 +27,7 @@ constructor(
         return firestoreService.insertDeletedNote(note)
     }
 
-    override suspend fun insertDeletedNotes(notes: List<Note>): List<Task<Void>> {
+    override suspend fun insertDeletedNotes(notes: List<Note>): Task<Void> {
         return firestoreService.insertDeletedNotes(notes)
     }
 
@@ -47,7 +47,7 @@ constructor(
         return firestoreService.getAllNotes()
     }
 
-    override suspend fun insertOrUpdateNotes(notes: List<Note>): List<Task<Void>> {
+    override suspend fun insertOrUpdateNotes(notes: List<Note>): Task<Void> {
         return firestoreService.insertOrUpdateNotes(notes)
     }
 
