@@ -1,4 +1,4 @@
-package com.codingwithmitch.cleannotes.framework.datasource.network
+package com.codingwithmitch.cleannotes.framework.datasource.data
 
 import android.app.Application
 import android.content.res.AssetManager

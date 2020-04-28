@@ -5,10 +5,13 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.platform.app.InstrumentationRegistry
 import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
 import com.codingwithmitch.cleannotes.business.util.DateUtil
+import com.codingwithmitch.cleannotes.framework.datasource.data.NoteDataFactory
+import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteFirestoreServiceImpl
 import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteFirestoreServiceImpl.Companion.NOTES_COLLECTION
 import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteFirestoreServiceImpl.Companion.USER_ID
 import com.codingwithmitch.cleannotes.framework.datasource.network.mappers.NetworkMapper
 import com.codingwithmitch.cleannotes.framework.datasource.network.model.NoteNetworkEntity
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import kotlinx.coroutines.runBlocking
@@ -22,29 +25,28 @@ import java.util.*
 @RunWith(AndroidJUnit4ClassRunner::class)
 class FirestoreTest {
 
+    private lateinit var application: Application
+    private lateinit var noteDataFactory: NoteDataFactory
+    private lateinit var firestoreSettings: FirebaseFirestoreSettings
+    private lateinit var firestore: FirebaseFirestore
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
     private val dateUtil: DateUtil = DateUtil(dateFormat)
     private val noteFactory = NoteFactory(dateUtil)
     private val networkMapper = NetworkMapper(dateUtil)
-    private val application = InstrumentationRegistry.getInstrumentation()
-        .targetContext
-        .applicationContext
-    private val noteDataFactory: NoteDataFactory = NoteDataFactory(application as Application)
-
-    val firestoreSettings = FirebaseFirestoreSettings.Builder()
-        .setHost("10.0.2.2:8080")
-        .setSslEnabled(false)
-        .setPersistenceEnabled(false)
-        .build()
-
-    val firestore = FirebaseFirestore.getInstance()
-
-    init {
-        FirebaseFirestore.getInstance().firestoreSettings = firestoreSettings
-    }
 
     @Before
     fun before(){
+        firestore = FirebaseFirestore.getInstance()
+        firestoreSettings = FirebaseFirestoreSettings.Builder()
+            .setHost("10.0.2.2:8080")
+            .setSslEnabled(false)
+            .setPersistenceEnabled(false)
+            .build()
+        firestore.firestoreSettings = firestoreSettings
+        application = InstrumentationRegistry.getInstrumentation()
+            .targetContext
+            .applicationContext as Application
+        noteDataFactory = NoteDataFactory(application)
         insertFakeData()
     }
 
@@ -62,8 +64,16 @@ class FirestoreTest {
         }
     }
 
+    private suspend fun signIn(){
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(
+            NoteFirestoreServiceImpl.EMAIL,
+            NoteFirestoreServiceImpl.PASSWORD
+        ).await()
+    }
+
     @Test
     fun firstTest() = runBlocking{
+        signIn()
 
         val note = noteFactory.createSingleNote(
             UUID.randomUUID().toString(),
@@ -91,7 +101,9 @@ class FirestoreTest {
         println("test: size: ${noteList.size}")
         for(noteEntity in noteList){
             println("test: ${noteEntity.title}")
+            assert(noteEntity.title != null)
         }
+
     }
 
 }
