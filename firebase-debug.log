@@ -1,24 +1,24 @@
-[debug] [2020-04-28T00:43:22.285Z] ----------------------------------------------------------------------
-[debug] [2020-04-28T00:43:22.287Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\mitch\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start --only firestore,functions
-[debug] [2020-04-28T00:43:22.287Z] CLI Version:   8.2.0
-[debug] [2020-04-28T00:43:22.288Z] Platform:      win32
-[debug] [2020-04-28T00:43:22.288Z] Node Version:  v12.16.2
-[debug] [2020-04-28T00:43:22.288Z] Time:          Mon Apr 27 2020 17:43:22 GMT-0700 (Pacific Daylight Time)
-[debug] [2020-04-28T00:43:22.288Z] ----------------------------------------------------------------------
-[debug] [2020-04-28T00:43:22.289Z] 
-[debug] [2020-04-28T00:43:22.294Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2020-04-28T00:43:22.295Z] > authorizing via signed-in user
+[debug] [2020-04-28T01:19:37.008Z] ----------------------------------------------------------------------
+[debug] [2020-04-28T01:19:37.010Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\mitch\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start --only firestore,functions
+[debug] [2020-04-28T01:19:37.010Z] CLI Version:   8.2.0
+[debug] [2020-04-28T01:19:37.010Z] Platform:      win32
+[debug] [2020-04-28T01:19:37.010Z] Node Version:  v12.16.2
+[debug] [2020-04-28T01:19:37.011Z] Time:          Mon Apr 27 2020 18:19:37 GMT-0700 (Pacific Daylight Time)
+[debug] [2020-04-28T01:19:37.011Z] ----------------------------------------------------------------------
+[debug] [2020-04-28T01:19:37.011Z] 
+[debug] [2020-04-28T01:19:37.017Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-04-28T01:19:37.018Z] > authorizing via signed-in user
 [info] i  emulators: Starting emulators: firestore
 [warn] !  functions: Not starting the functions emulator, make sure you have run firebase init.
-[debug] [2020-04-28T00:43:24.338Z] [hub] writing locator at C:\Users\mitch\AppData\Local\Temp\hub-clean-notes-11971.json
+[debug] [2020-04-28T01:19:39.063Z] [hub] writing locator at C:\Users\mitch\AppData\Local\Temp\hub-clean-notes-11971.json
 [info] +  hub: emulator hub started at http://localhost:4400
-[debug] [2020-04-28T00:43:26.348Z] Ignoring unsupported arg: projectId
-[debug] [2020-04-28T00:43:26.348Z] Ignoring unsupported arg: auto_download
-[debug] [2020-04-28T00:43:26.348Z] Starting firestore emulator with command {"binary":"java","args":["-Duser.language=en","-jar","C:\\Users\\mitch\\.cache\\firebase\\emulators\\cloud-firestore-emulator-v1.11.3.jar","--host","localhost","--port",8080,"--rules","D:\\Android Studio Projects\\CleanNotes\\firestore.rules"],"optionalArgs":["port","webchannel_port","host","rules","functions_emulator","seed_from_export"],"joinArgs":false}
+[debug] [2020-04-28T01:19:41.073Z] Ignoring unsupported arg: projectId
+[debug] [2020-04-28T01:19:41.073Z] Ignoring unsupported arg: auto_download
+[debug] [2020-04-28T01:19:41.073Z] Starting firestore emulator with command {"binary":"java","args":["-Duser.language=en","-jar","C:\\Users\\mitch\\.cache\\firebase\\emulators\\cloud-firestore-emulator-v1.11.3.jar","--host","localhost","--port",8080,"--rules","D:\\Android Studio Projects\\CleanNotes\\firestore.rules"],"optionalArgs":["port","webchannel_port","host","rules","functions_emulator","seed_from_export"],"joinArgs":false}
 [info] i  firestore: firestore emulator logging to firestore-debug.log
-[debug] [2020-04-28T00:43:27.647Z] API endpoint: http://localhost:8080
+[debug] [2020-04-28T01:19:42.275Z] API endpoint: http://localhost
+[debug] [2020-04-28T01:19:42.276Z] :8080
 If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:
-[debug] [2020-04-28T00:43:27.648Z] 
 
    export FIRESTORE_EMULATOR_HOST=localhost:8080
 
@@ -28,57 +28,12 @@ Dev App Server is now running.
 [info] +  firestore: firestore emulator started at http://localhost:8080
 [info] i  firestore: For testing set FIRESTORE_EMULATOR_HOST=localhost:8080
 [info] +  emulators: All emulators started, it is now safe to connect.
-[debug] [2020-04-28T00:43:35.087Z] Apr 27, 2020 5:43:35 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+[debug] [2020-04-28T01:21:39.707Z] Apr 27, 2020 6:21:39 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected HTTP/2 connection.
 
-[debug] [2020-04-28T00:43:35.528Z] Apr 27, 2020 5:43:35 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+[debug] [2020-04-28T01:21:40.287Z] Apr 27, 2020 6:21:40 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
 WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
 
-[debug] [2020-04-28T00:43:35.756Z] Apr 27, 2020 5:43:35 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
-WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
-
-[debug] [2020-04-28T00:43:50.099Z] Apr 27, 2020 5:43:50 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-
-[debug] [2020-04-28T00:43:50.121Z] Apr 27, 2020 5:43:50 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
-WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
-
-[debug] [2020-04-28T00:43:50.179Z] Apr 27, 2020 5:43:50 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
-WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
-
-[debug] [2020-04-28T00:44:09.418Z] Apr 27, 2020 5:44:09 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-
-[debug] [2020-04-28T00:44:09.442Z] Apr 27, 2020 5:44:09 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
-WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
-
-[debug] [2020-04-28T00:44:09.501Z] Apr 27, 2020 5:44:09 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
-WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
-
-[debug] [2020-04-28T00:45:08.187Z] Apr 27, 2020 5:45:08 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-
-[debug] [2020-04-28T00:45:08.210Z] Apr 27, 2020 5:45:08 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
-WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
-
-[debug] [2020-04-28T00:45:08.273Z] Apr 27, 2020 5:45:08 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
-WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
-
-[debug] [2020-04-28T00:45:48.166Z] Apr 27, 2020 5:45:48 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-
-[debug] [2020-04-28T00:45:48.190Z] Apr 27, 2020 5:45:48 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
-WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
-
-[debug] [2020-04-28T00:45:48.249Z] Apr 27, 2020 5:45:48 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
-WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
-
-[debug] [2020-04-28T00:47:20.711Z] Apr 27, 2020 5:47:20 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
-INFO: Detected HTTP/2 connection.
-
-[debug] [2020-04-28T00:47:20.733Z] Apr 27, 2020 5:47:20 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
-WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
-
-[debug] [2020-04-28T00:47:20.791Z] Apr 27, 2020 5:47:20 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
+[debug] [2020-04-28T01:21:40.547Z] Apr 27, 2020 6:21:40 PM com.google.cloud.datastore.emulator.impl.context.EmulatorAuthorization warnAboutSecuredJwt
 WARNING: expected an unsecured JWT, the emulator does not validate JWTs and IS NOT SECURE
 

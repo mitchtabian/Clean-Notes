@@ -1,6 +1,0 @@
-<network-security-config>
-    <domain-config cleartextTrafficPermitted="true">
-        <!-- cloud functions emulator -->
-        <domain includeSubdomains="true">http://10.0.2.2:5001</domain>
-    </domain-config>
-</network-security-config>

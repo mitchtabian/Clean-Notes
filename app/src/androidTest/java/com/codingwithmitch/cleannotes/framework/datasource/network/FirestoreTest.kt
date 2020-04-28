@@ -7,11 +7,8 @@ import com.codingwithmitch.cleannotes.framework.datasource.network.implementatio
 import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteFirestoreServiceImpl.Companion.USER_ID
 import com.codingwithmitch.cleannotes.framework.datasource.network.mappers.NetworkMapper
 import com.codingwithmitch.cleannotes.framework.datasource.network.model.NoteNetworkEntity
-import com.google.android.gms.tasks.Task
-import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
-import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import org.junit.Test
@@ -38,6 +35,10 @@ class FirestoreTest {
 
     init {
         FirebaseFirestore.getInstance().firestoreSettings = firestoreSettings
+    }
+
+    private fun insertTestDataSet() = runBlocking {
+
     }
 
     @Test
