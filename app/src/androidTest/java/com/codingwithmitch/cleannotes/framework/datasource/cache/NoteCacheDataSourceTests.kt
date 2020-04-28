@@ -124,10 +124,10 @@ class NoteCacheDataSourceTests {
                 page = 1,
                 pageSize = 1
             )
-            println("result: size: ${result.size}")
-            println("result: ${randomIndex}: " +
-                    "expected: ${noteList.get(randomIndex).title}, " +
-                    "actual: ${result.get(0).title}")
+//            println("result: size: ${result.size}")
+//            println("result: ${randomIndex}: " +
+//                    "expected: ${noteList.get(randomIndex).title}, " +
+//                    "actual: ${result.get(0).title}")
             assertEquals(noteList.get(randomIndex).title, result.get(0).title)
         }
     }

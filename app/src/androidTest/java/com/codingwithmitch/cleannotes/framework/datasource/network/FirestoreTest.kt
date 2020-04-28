@@ -25,29 +25,32 @@ import java.util.*
 @RunWith(AndroidJUnit4ClassRunner::class)
 class FirestoreTest {
 
-    private lateinit var application: Application
-    private lateinit var noteDataFactory: NoteDataFactory
-    private lateinit var firestoreSettings: FirebaseFirestoreSettings
-    private lateinit var firestore: FirebaseFirestore
+    private val application: Application
+    private val noteDataFactory: NoteDataFactory
+    private val firestoreSettings: FirebaseFirestoreSettings = FirebaseFirestoreSettings.Builder()
+        .setHost("10.0.2.2:8080")
+        .setSslEnabled(false)
+        .setPersistenceEnabled(false)
+        .build()
+    private val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
     private val dateUtil: DateUtil = DateUtil(dateFormat)
     private val noteFactory = NoteFactory(dateUtil)
     private val networkMapper = NetworkMapper(dateUtil)
 
-    @Before
-    fun before(){
-        firestore = FirebaseFirestore.getInstance()
-        firestoreSettings = FirebaseFirestoreSettings.Builder()
-            .setHost("10.0.2.2:8080")
-            .setSslEnabled(false)
-            .setPersistenceEnabled(false)
-            .build()
+
+    init {
         firestore.firestoreSettings = firestoreSettings
         application = InstrumentationRegistry.getInstrumentation()
             .targetContext
             .applicationContext as Application
         noteDataFactory = NoteDataFactory(application)
         insertFakeData()
+    }
+
+    @Before
+    fun before(){
+
     }
 
     private fun insertFakeData() {
@@ -105,6 +108,8 @@ class FirestoreTest {
         }
 
     }
+
+
 
 }
 
