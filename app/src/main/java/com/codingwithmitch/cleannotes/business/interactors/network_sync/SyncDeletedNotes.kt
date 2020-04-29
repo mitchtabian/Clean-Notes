@@ -8,6 +8,8 @@ import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.state.DataState
 import com.codingwithmitch.cleannotes.business.util.safeApiCall
 import com.codingwithmitch.cleannotes.business.util.safeCacheCall
+import com.codingwithmitch.cleannotes.framework.datasource.cache.mappers.CacheMapper
+import com.codingwithmitch.cleannotes.framework.datasource.network.mappers.NetworkMapper
 import com.codingwithmitch.cleannotes.framework.datasource.network.model.NoteNetworkEntity
 import com.codingwithmitch.cleannotes.util.printLogD
 import kotlinx.coroutines.Dispatchers.IO
@@ -20,7 +22,8 @@ import kotlinx.coroutines.tasks.await
  */
 class SyncDeletedNotes(
     private val noteCacheDataSource: NoteCacheDataSource,
-    private val noteNetworkDataSource: NoteNetworkDataSource
+    private val noteNetworkDataSource: NoteNetworkDataSource,
+    private val networkMapper: NetworkMapper
 ){
 
     suspend fun syncDeletedNotes(){
@@ -42,11 +45,10 @@ class SyncDeletedNotes(
             }
         }
 
-        // map List<Note> to List<String>
-        val ids = response.getResult()?.data?.mapIndexed {index, value -> value.id}?: ArrayList()
+        val notes = networkMapper.entityListToNoteList(response.getResult()?.data?: ArrayList())
 
         val cacheResult = safeCacheCall(IO){
-            noteCacheDataSource.deleteNotes(ids)
+            noteCacheDataSource.deleteNotes(notes)
         }
 
         val result = object: CacheResponseHandler<Int, Int>(

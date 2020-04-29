@@ -51,7 +51,8 @@ constructor(
         return noteDao.deleteNote(primaryKey)
     }
 
-    override suspend fun deleteNotes(ids: List<String>): Int {
+    override suspend fun deleteNotes(notes: List<Note>): Int {
+        val ids = notes.mapIndexed {index, value -> value.id}
         return noteDao.deleteNotes(ids)
     }
 

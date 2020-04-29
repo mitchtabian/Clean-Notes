@@ -233,11 +233,13 @@ object AppModule {
     @Provides
     fun provideSyncDeletedNotes(
         noteCacheDataSource: NoteCacheDataSource,
-        noteNetworkDataSource: NoteNetworkDataSource
+        noteNetworkDataSource: NoteNetworkDataSource,
+        networkMapper: NetworkMapper
     ): SyncDeletedNotes{
         return SyncDeletedNotes(
             noteCacheDataSource,
-            noteNetworkDataSource
+            noteNetworkDataSource,
+            networkMapper
         )
     }
 

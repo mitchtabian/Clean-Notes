@@ -19,7 +19,7 @@ interface NoteDaoService {
 
     suspend fun deleteNote(primaryKey: String): Int
 
-    suspend fun deleteNotes(ids: List<String>): Int
+    suspend fun deleteNotes(notes: List<Note>): Int
 
     suspend fun searchNotes(): List<Note>
 
