@@ -42,22 +42,23 @@ import com.codingwithmitch.cleannotes.util.printLogD
 import kotlinx.android.synthetic.main.fragment_note_list.*
 import kotlinx.coroutines.*
 import javax.inject.Inject
+import javax.inject.Singleton
 
 
 const val NOTE_LIST_STATE_BUNDLE_KEY = "com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state"
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class NoteListFragment : BaseNoteFragment(R.layout.fragment_note_list),
+@Singleton
+class NoteListFragment
+@Inject
+constructor(
+    private val viewModelFactory: ViewModelProvider.Factory,
+    private val dateUtil: DateUtil
+): BaseNoteFragment(R.layout.fragment_note_list),
     NoteListAdapter.Interaction,
     ItemTouchHelperAdapter
 {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    @Inject
-    lateinit var dateUtil: DateUtil
 
     val viewModel: NoteListViewModel by viewModels {
         viewModelFactory

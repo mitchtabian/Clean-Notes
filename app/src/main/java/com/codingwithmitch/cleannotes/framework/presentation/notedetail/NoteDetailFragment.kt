@@ -30,16 +30,19 @@ import kotlinx.android.synthetic.main.layout_note_detail_toolbar.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import javax.inject.Inject
+import javax.inject.Singleton
 
 const val NOTE_DETAIL_STATE_BUNDLE_KEY = "com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state"
 
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class NoteDetailFragment : BaseNoteFragment(R.layout.fragment_note_detail) {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+@Singleton
+class NoteDetailFragment
+@Inject
+constructor(
+    private val viewModelFactory: ViewModelProvider.Factory
+): BaseNoteFragment(R.layout.fragment_note_detail) {
 
     val viewModel: NoteDetailViewModel by viewModels {
         viewModelFactory

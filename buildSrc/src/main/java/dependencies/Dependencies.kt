@@ -32,6 +32,7 @@ object Versions {
     val markdown_processor = "0.1.3"
     val junit_jupiter_version = "5.6.0"
     val junit_4_version = "4.12"
+    val fragment_version = "1.2.0"
 }
 
 object Dependencies {
@@ -71,6 +72,7 @@ object AndroidTestDependencies{
     val test_rules = "androidx.test:rules:${Versions.test_runner}"
     val text_core_ktx = "androidx.test:core-ktx:${Versions.test_core}"
     val mockk_android = "io.mockk:mockk-android:${Versions.mockk_version}"
+    val fragment_testing = "androidx.fragment:fragment-testing:${Versions.fragment_version}"
 }
 
 object TestDependencies {

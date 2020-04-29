@@ -11,21 +11,19 @@ import com.codingwithmitch.cleannotes.framework.presentation.common.BaseNoteFrag
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import javax.inject.Inject
+import javax.inject.Singleton
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class SplashFragment: BaseNoteFragment(R.layout.fragment_splash) {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+@Singleton
+class SplashFragment
+@Inject
+constructor(
+    private val viewModelFactory: ViewModelProvider.Factory
+): BaseNoteFragment(R.layout.fragment_splash) {
 
     val viewModel: SplashViewModel by viewModels {
         viewModelFactory
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        uiController.displayProgressBar(true)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
