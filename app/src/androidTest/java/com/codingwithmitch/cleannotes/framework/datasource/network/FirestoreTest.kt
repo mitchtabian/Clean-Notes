@@ -5,42 +5,75 @@ import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
 import com.codingwithmitch.cleannotes.business.util.DateUtil
+import com.codingwithmitch.cleannotes.di.TestAppComponent
 import com.codingwithmitch.cleannotes.framework.datasource.data.NoteDataFactory
 import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteFirestoreServiceImpl
 import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteFirestoreServiceImpl.Companion.NOTES_COLLECTION
 import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteFirestoreServiceImpl.Companion.USER_ID
 import com.codingwithmitch.cleannotes.framework.datasource.network.mappers.NetworkMapper
+import com.codingwithmitch.cleannotes.framework.presentation.TestBaseApplication
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
+@FlowPreview
 open class FirestoreTest {
 
-    private val firestoreSettings: FirebaseFirestoreSettings = FirebaseFirestoreSettings.Builder()
-        .setHost("10.0.2.2:8080")
-        .setSslEnabled(false)
-        .setPersistenceEnabled(false)
-        .build()
-    private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
+//    private val firestoreSettings: FirebaseFirestoreSettings = FirebaseFirestoreSettings.Builder()
+//        .setHost("10.0.2.2:8080")
+//        .setSslEnabled(false)
+//        .setPersistenceEnabled(false)
+//        .build()
+//    private val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH)
+//
+//    val application: Application
+//    val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+//    val noteDataFactory: NoteDataFactory
+//    val dateUtil: DateUtil = DateUtil(dateFormat)
+//    val noteFactory = NoteFactory(dateUtil)
+//    val networkMapper = NetworkMapper(dateUtil)
 
-    val application: Application
-    val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
-    val noteDataFactory: NoteDataFactory
-    val dateUtil: DateUtil = DateUtil(dateFormat)
-    val noteFactory = NoteFactory(dateUtil)
-    val networkMapper = NetworkMapper(dateUtil)
+    @Inject
+    lateinit var firestoreSettings: FirebaseFirestoreSettings
 
+    @Inject
+    lateinit var firestore: FirebaseFirestore
+
+    @Inject
+    lateinit var noteDataFactory: NoteDataFactory
+
+    @Inject
+    lateinit var dateUtil: DateUtil
+
+    @Inject
+    lateinit var noteFactory: NoteFactory
+
+    @Inject
+    lateinit var networkMapper: NetworkMapper
+
+    private val application: TestBaseApplication
+            = ApplicationProvider.getApplicationContext<Context>() as TestBaseApplication
 
     init {
+        injectTest(application)
         firestore.firestoreSettings = firestoreSettings
-        application = ApplicationProvider.getApplicationContext<Context>() as Application
-        noteDataFactory = NoteDataFactory(application)
+        firestore.firestoreSettings = firestoreSettings
+//        noteDataFactory = NoteDataFactory(application)
         signIn()
         insertTestData()
+    }
+
+    private fun injectTest(application: TestBaseApplication) {
+        (application.appComponent as TestAppComponent)
+            .inject(this)
     }
 
     fun insertTestData() {

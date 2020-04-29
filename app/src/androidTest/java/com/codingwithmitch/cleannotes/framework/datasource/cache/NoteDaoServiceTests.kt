@@ -4,6 +4,8 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NoteDaoService
 import com.codingwithmitch.cleannotes.framework.datasource.cache.implementation.NoteDaoServiceImpl
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking
 import org.junit.FixMethodOrder
 import org.junit.Test
@@ -39,6 +41,8 @@ import kotlin.test.assertTrue
     12. search notes, order by title (DESC), confirm order
 
  */
+@FlowPreview
+@UseExperimental(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4ClassRunner::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class NoteDaoServiceTests: CacheTest() {
@@ -48,7 +52,7 @@ class NoteDaoServiceTests: CacheTest() {
 
     init {
         noteDaoService = NoteDaoServiceImpl(
-            noteDao = getDao(),
+            noteDao = dao,
             noteMapper = cacheMapper,
             dateUtil = dateUtil
         )
@@ -233,7 +237,7 @@ class NoteDaoServiceTests: CacheTest() {
             val currentNoteDate = dateUtil.convertServerStringDateToLong(
                 noteList.get(index).updated_at
             )
-            assertTrue { currentNoteDate > previousNoteDate }
+            assertTrue { currentNoteDate >= previousNoteDate }
             previousNoteDate = currentNoteDate
         }
     }
@@ -255,7 +259,7 @@ class NoteDaoServiceTests: CacheTest() {
             val current = dateUtil.convertServerStringDateToLong(
                 noteList.get(index).updated_at
             )
-            assertTrue { current < previous }
+            assertTrue { current <= previous }
             previous = current
         }
     }

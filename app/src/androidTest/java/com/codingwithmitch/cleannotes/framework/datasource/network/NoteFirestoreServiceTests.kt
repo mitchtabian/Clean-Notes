@@ -5,6 +5,8 @@ import com.codingwithmitch.cleannotes.framework.datasource.network.abstraction.N
 import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteFirestoreServiceImpl
 import com.codingwithmitch.cleannotes.framework.datasource.network.model.NoteNetworkEntity
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import org.junit.Before
@@ -31,6 +33,8 @@ import kotlin.test.assertTrue
     7. delete a 'deleted note' (note from "deletes" node). CBS
 
  */
+@FlowPreview
+@UseExperimental(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4ClassRunner::class)
 class NoteFirestoreServiceTests: FirestoreTest() {
 
@@ -154,26 +158,32 @@ class NoteFirestoreServiceTests: FirestoreTest() {
             .await()
             .toObjects(NoteNetworkEntity::class.java)
 
+        println("test: notelist: ${noteList.size}")
+
         // choose some random notes to add to "deletes" node
         val notesToDelete: ArrayList<NoteNetworkEntity> = ArrayList()
 
         // 1st
         var noteToDelete = noteList.get(Random.nextInt(0, noteList.size - 1) + 1)
+        println("test: removing note: ${noteToDelete.id}")
         noteList.remove(noteToDelete)
         notesToDelete.add(noteToDelete)
 
         // 2nd
         noteToDelete = noteList.get(Random.nextInt(0, noteList.size - 1) + 1)
+        println("test: removing note: ${noteToDelete.id}")
         noteList.remove(noteToDelete)
         notesToDelete.add(noteToDelete)
 
         // 3rd
         noteToDelete = noteList.get(Random.nextInt(0, noteList.size - 1) + 1)
+        println("test: removing note: ${noteToDelete.id}")
         noteList.remove(noteToDelete)
         notesToDelete.add(noteToDelete)
 
         // 4th
         noteToDelete = noteList.get(Random.nextInt(0, noteList.size - 1) + 1)
+        println("test: removing note: ${noteToDelete.id}")
         noteList.remove(noteToDelete)
         notesToDelete.add(noteToDelete)
 
@@ -187,9 +197,9 @@ class NoteFirestoreServiceTests: FirestoreTest() {
             .await()
             .toObjects(NoteNetworkEntity::class.java)
 
-        for(entity in notesToDelete){
-            assertTrue { searchResults.contains(entity) }
-        }
+        println("test: deleted noteList: ${searchResults.size}")
+
+        assertTrue { searchResults.containsAll(notesToDelete) }
     }
 
     @Test

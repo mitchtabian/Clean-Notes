@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-class BaseApplication : Application(){
+open class BaseApplication : Application(){
 
     lateinit var appComponent: AppComponent
 
@@ -19,7 +19,7 @@ class BaseApplication : Application(){
 
     }
 
-    fun initAppComponent(){
+    open fun initAppComponent(){
         appComponent = DaggerAppComponent
             .factory()
             .create(this)

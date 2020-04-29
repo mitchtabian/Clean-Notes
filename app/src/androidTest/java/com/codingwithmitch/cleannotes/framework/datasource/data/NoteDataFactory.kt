@@ -7,8 +7,12 @@ import com.google.common.reflect.TypeToken
 import com.google.gson.Gson
 import java.io.IOException
 import java.io.InputStream
+import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class NoteDataFactory
+@Inject
 constructor(
     private val application: Application
 ){

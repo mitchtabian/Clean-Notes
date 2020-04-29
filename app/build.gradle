@@ -28,7 +28,8 @@ android {
         versionCode Releases.version_code
         versionName Releases.version_name
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+//        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.codingwithmitch.cleannotes.framework.MockTestRunner"
     }
     buildTypes {
         debug {
@@ -107,5 +108,7 @@ dependencies {
     androidTestImplementation AndroidTestDependencies.test_runner
     androidTestImplementation AndroidTestDependencies.test_rules
     androidTestImplementation AndroidTestDependencies.text_core_ktx
+    kaptAndroidTest  AnnotationProcessorsDependencies.dagger_compiler
+
 }
 apply plugin: 'com.google.gms.google-services'
