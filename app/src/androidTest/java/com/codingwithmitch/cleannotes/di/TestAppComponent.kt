@@ -3,6 +3,7 @@ package com.codingwithmitch.cleannotes.di
 import com.codingwithmitch.cleannotes.framework.datasource.cache.CacheTest
 import com.codingwithmitch.cleannotes.framework.datasource.network.FirestoreTest
 import com.codingwithmitch.cleannotes.framework.presentation.TestBaseApplication
+import com.codingwithmitch.cleannotes.framework.presentation.notelist.NoteListFragmentTests
 import com.codingwithmitch.cleannotes.notes.di.NoteViewModelModule
 import dagger.BindsInstance
 import dagger.Component
@@ -17,7 +18,7 @@ import javax.inject.Singleton
     modules = [
         TestAppModule::class,
         TempModule::class,
-        NoteFragmentFactoryModule::class,
+        TestNoteFragmentFactoryModule::class,
         NoteViewModelModule::class
     ]
 )
@@ -32,6 +33,8 @@ interface TestAppComponent: AppComponent {
     fun inject(cacheTest: CacheTest)
 
     fun inject(firestoreTest: FirestoreTest)
+
+    fun inject(noteListFragmentTests: NoteListFragmentTests)
 
 }
 

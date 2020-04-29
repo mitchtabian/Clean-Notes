@@ -158,32 +158,26 @@ class NoteFirestoreServiceTests: FirestoreTest() {
             .await()
             .toObjects(NoteNetworkEntity::class.java)
 
-        println("test: notelist: ${noteList.size}")
-
         // choose some random notes to add to "deletes" node
         val notesToDelete: ArrayList<NoteNetworkEntity> = ArrayList()
 
         // 1st
         var noteToDelete = noteList.get(Random.nextInt(0, noteList.size - 1) + 1)
-        println("test: removing note: ${noteToDelete.id}")
         noteList.remove(noteToDelete)
         notesToDelete.add(noteToDelete)
 
         // 2nd
         noteToDelete = noteList.get(Random.nextInt(0, noteList.size - 1) + 1)
-        println("test: removing note: ${noteToDelete.id}")
         noteList.remove(noteToDelete)
         notesToDelete.add(noteToDelete)
 
         // 3rd
         noteToDelete = noteList.get(Random.nextInt(0, noteList.size - 1) + 1)
-        println("test: removing note: ${noteToDelete.id}")
         noteList.remove(noteToDelete)
         notesToDelete.add(noteToDelete)
 
         // 4th
         noteToDelete = noteList.get(Random.nextInt(0, noteList.size - 1) + 1)
-        println("test: removing note: ${noteToDelete.id}")
         noteList.remove(noteToDelete)
         notesToDelete.add(noteToDelete)
 
@@ -196,8 +190,6 @@ class NoteFirestoreServiceTests: FirestoreTest() {
         val searchResults = noteFirestoreService.getDeletedNotes()
             .await()
             .toObjects(NoteNetworkEntity::class.java)
-
-        println("test: deleted noteList: ${searchResults.size}")
 
         assertTrue { searchResults.containsAll(notesToDelete) }
     }

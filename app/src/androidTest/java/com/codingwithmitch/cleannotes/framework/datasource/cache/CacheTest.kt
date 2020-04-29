@@ -1,14 +1,12 @@
 package com.codingwithmitch.cleannotes.framework.datasource.cache
 
-import android.content.Context
-import androidx.test.core.app.ApplicationProvider
+import com.codingwithmitch.cleannotes.BaseTest
 import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
 import com.codingwithmitch.cleannotes.business.util.DateUtil
 import com.codingwithmitch.cleannotes.di.TestAppComponent
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NoteDao
 import com.codingwithmitch.cleannotes.framework.datasource.cache.mappers.CacheMapper
 import com.codingwithmitch.cleannotes.framework.datasource.data.NoteDataFactory
-import com.codingwithmitch.cleannotes.framework.presentation.TestBaseApplication
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking
@@ -16,7 +14,7 @@ import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @FlowPreview
-open class CacheTest {
+open class CacheTest: BaseTest() {
 
     @Inject
     lateinit var dao: NoteDao
@@ -33,15 +31,12 @@ open class CacheTest {
     @Inject
     lateinit var cacheMapper: CacheMapper
 
-    private val application: TestBaseApplication
-            = ApplicationProvider.getApplicationContext<Context>() as TestBaseApplication
-
     init {
-        injectTest(application)
+        injectTest()
         insertTestData()
     }
 
-    private fun injectTest(application: TestBaseApplication) {
+    override fun injectTest() {
         (application.appComponent as TestAppComponent)
             .inject(this)
     }

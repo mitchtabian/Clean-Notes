@@ -84,10 +84,21 @@ constructor(
     override fun onAttach(context: Context) {
         inject()
         super.onAttach(context)
-        try{
-            uiController = context as MainActivity
-        }catch (e: ClassCastException){
-            e.printStackTrace()
+        setUIController(null) // null in production
+    }
+
+    fun setUIController(mockController: UIController?){
+
+        // TEST: Set interface from mock
+        if(mockController != null){
+            this.uiController = mockController
+        }
+        else{ // PRODUCTION: if no mock, get from context
+            try{
+                uiController = context as MainActivity
+            }catch (e: ClassCastException){
+                e.printStackTrace()
+            }
         }
     }
 }

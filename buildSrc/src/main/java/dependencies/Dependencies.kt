@@ -13,7 +13,8 @@ object Versions {
     val room = "2.1.0"
     val appcompat = "1.1.0-rc01"
     val constraintlayout = "1.1.3"
-    val material_design = "1.2.0-alpha05"
+//    val material_design = "1.2.0-alpha05"
+    val material_design = "1.1.0"
     val play_core = "1.7.1"
     val play_services = "4.3.3"
     val leak_canary = "2.0-alpha-3"
@@ -33,6 +34,7 @@ object Versions {
     val junit_jupiter_version = "5.6.0"
     val junit_4_version = "4.12"
     val fragment_version = "1.2.0"
+    val androidx_test_ext = "1.1.1"
 }
 
 object Dependencies {
@@ -73,6 +75,7 @@ object AndroidTestDependencies{
     val text_core_ktx = "androidx.test:core-ktx:${Versions.test_core}"
     val mockk_android = "io.mockk:mockk-android:${Versions.mockk_version}"
     val fragment_testing = "androidx.fragment:fragment-testing:${Versions.fragment_version}"
+    val androidx_test_ext = "androidx.test.ext:junit-ktx:${Versions.androidx_test_ext}"
 }
 
 object TestDependencies {

@@ -14,6 +14,4 @@ class TestBaseApplication : BaseApplication(){
             .create(this)
     }
 
-
-
 }
