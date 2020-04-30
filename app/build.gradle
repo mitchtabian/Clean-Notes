@@ -1,6 +1,6 @@
+import dependencies.AndroidTestDependencies
 import dependencies.ApplicationId
 import dependencies.Dependencies
-import dependencies.Modules
 import dependencies.Releases
 import dependencies.SupportDependencies
 import dependencies.TestDependencies
@@ -28,7 +28,8 @@ android {
         versionCode Releases.version_code
         versionName Releases.version_name
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+//        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.codingwithmitch.cleannotes.framework.MockTestRunner"
     }
     buildTypes {
         debug {
@@ -48,15 +49,21 @@ android {
         jvmTarget = JavaVersion.version_1_8.toString()
     }
 
+    sourceSets {
+        test.resources.srcDirs += 'src/test/res'
+    }
 
-    dynamicFeatures = [Modules.notes, Modules.settings, Modules.reminders]
-
+    testOptions {
+        unitTests.all {
+            useJUnitPlatform()
+        }
+    }
 
 }
 
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(Modules.core)
     implementation Dependencies.kotlin_standard_library
     implementation Dependencies.kotlin_reflect
     implementation Dependencies.ktx
@@ -69,8 +76,17 @@ dependencies {
     implementation Dependencies.play_core
     implementation Dependencies.leak_canary
     implementation Dependencies.dagger
-    implementation Dependencies.firestore
+    implementation Dependencies.room_runtime
+    implementation Dependencies.room_ktx
+    implementation Dependencies.markdown_processor
+    implementation Dependencies.retrofit
+    implementation Dependencies.retrofit_gson
+    implementation Dependencies.firebase_firestore
+    implementation Dependencies.firebase_auth
+    implementation Dependencies.kotlin_coroutines_play_services
+    implementation AndroidTestDependencies.idling_resource
 
+    implementation SupportDependencies.swipe_refresh_layout
     implementation SupportDependencies.appcompat
     implementation SupportDependencies.constraintlayout
     implementation SupportDependencies.material_design
@@ -78,13 +94,24 @@ dependencies {
     kapt AnnotationProcessorsDependencies.room_compiler
     kapt AnnotationProcessorsDependencies.dagger_compiler
 
-    androidTestImplementation TestDependencies.kotlin_test
-    androidTestImplementation TestDependencies.espresso_core
-    androidTestImplementation TestDependencies.idling_resource
-    androidTestImplementation TestDependencies.mockk
-    androidTestImplementation TestDependencies.test_runner
-    androidTestImplementation TestDependencies.test_rules
-    androidTestImplementation TestDependencies.text_core_ktx
+    testImplementation TestDependencies.mockk
+    testImplementation TestDependencies.jupiter_api
+    testImplementation TestDependencies.jupiter_params
+    testImplementation TestDependencies.junit4
+    testRuntimeOnly TestDependencies.jupiter_engine
+
+    androidTestImplementation AndroidTestDependencies.kotlin_test
+    androidTestImplementation AndroidTestDependencies.coroutines_test
+    androidTestImplementation AndroidTestDependencies.espresso_core
+    androidTestImplementation AndroidTestDependencies.espresso_contrib
+    androidTestImplementation AndroidTestDependencies.idling_resource
+    androidTestImplementation AndroidTestDependencies.mockk_android
+    androidTestImplementation AndroidTestDependencies.test_runner
+    androidTestImplementation AndroidTestDependencies.test_rules
+    androidTestImplementation AndroidTestDependencies.text_core_ktx
+    androidTestImplementation AndroidTestDependencies.navigation_testing
+    debugImplementation AndroidTestDependencies.fragment_testing
+    kaptAndroidTest  AnnotationProcessorsDependencies.dagger_compiler
 
 }
 apply plugin: 'com.google.gms.google-services'

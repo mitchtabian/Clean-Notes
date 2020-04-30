@@ -8,29 +8,32 @@ object Versions {
     val kotlin = "1.3.61"
     val ktx = "1.2.0"
     val dagger = "2.25.4"
-    val nav_components = "2.3.0-alpha04"
-    val recyclerview = "1.2.0-alpha01"
-    val recyclerview_selection = "1.0.0"
+    val nav_components = "2.3.0-alpha06"
     val material_dialogs = "3.2.1"
     val room = "2.1.0"
     val appcompat = "1.1.0-rc01"
     val constraintlayout = "1.1.3"
-    val material_design = "1.2.0-alpha05"
+    val material_design = "1.1.0"
     val play_core = "1.7.1"
     val play_services = "4.3.3"
     val leak_canary = "2.0-alpha-3"
     val swipe_refresh_layout = "1.1.0-alpha03"
-    val firestore = "21.4.2"
+    val firebase_firestore = "21.4.2"
+    val firebase_auth = "19.3.0"
     val espresso_core = "3.1.1"
     val espresso_idling_resource = "3.2.0"
     val mockk_version = "1.9.2"
     val test_runner = "1.2.0"
     val test_core = "1.2.0"
     val coroutines_version = "1.3.0"
+    val coroutines_play_services = "1.3.2"
     val lifecycle_version = "2.2.0-alpha03"
     val retrofit2_version = "2.6.0"
     val markdown_processor = "0.1.3"
-
+    val junit_jupiter_version = "5.6.0"
+    val junit_4_version = "4.12"
+    val fragment_version = "1.2.0"
+    val androidx_test_ext = "1.1.1"
 }
 
 object Dependencies {
@@ -39,6 +42,7 @@ object Dependencies {
     val ktx = "androidx.core:core-ktx:${Versions.ktx}"
     val kotlin_coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines_version}"
     val kotlin_coroutines_android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines_version}"
+    val kotlin_coroutines_play_services = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:${Versions.coroutines_play_services}"
     val dagger = "com.google.dagger:dagger:${Versions.dagger}"
     val navigation_fragment = "androidx.navigation:navigation-fragment-ktx:${Versions.nav_components}"
     val navigation_runtime = "androidx.navigation:navigation-runtime:${Versions.nav_components}"
@@ -50,7 +54,8 @@ object Dependencies {
     val room_ktx = "androidx.room:room-ktx:${Versions.room}"
     val play_core = "com.google.android.play:core:${Versions.play_core}"
     val leak_canary = "com.squareup.leakcanary:leakcanary-android:${Versions.leak_canary}"
-    val firestore = "com.google.firebase:firebase-firestore-ktx:${Versions.firestore}"
+    val firebase_firestore = "com.google.firebase:firebase-firestore-ktx:${Versions.firebase_firestore}"
+    val firebase_auth = "com.google.firebase:firebase-auth:${Versions.firebase_auth}"
     val lifecycle_runtime = "androidx.lifecycle:lifecycle-runtime:${Versions.lifecycle_version}"
     val lifecycle_coroutines = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycle_version}"
     val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit2_version}"
@@ -58,37 +63,42 @@ object Dependencies {
     val markdown_processor = "com.yydcdut:markdown-processor:${Versions.markdown_processor}"
 }
 
-object TestDependencies{
+object AndroidTestDependencies{
 
     val kotlin_test = "org.jetbrains.kotlin:kotlin-test-junit:${Versions.kotlin}"
+    val coroutines_test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines_version}"
     val espresso_core = "androidx.test.espresso:espresso-core:${Versions.espresso_core}"
+    val espresso_contrib = "androidx.test.espresso:espresso-contrib:${Versions.espresso_core}"
     val idling_resource = "androidx.test.espresso:espresso-idling-resource:${Versions.espresso_idling_resource}"
-    val mockk = "io.mockk:mockk-android:${Versions.mockk_version}"
     val test_runner = "androidx.test:runner:${Versions.test_runner}"
     val test_rules = "androidx.test:rules:${Versions.test_runner}"
     val text_core_ktx = "androidx.test:core-ktx:${Versions.test_core}"
+    val mockk_android = "io.mockk:mockk-android:${Versions.mockk_version}"
+    val fragment_testing = "androidx.fragment:fragment-testing:${Versions.fragment_version}"
+    val androidx_test_ext = "androidx.test.ext:junit-ktx:${Versions.androidx_test_ext}"
+    val navigation_testing = "androidx.navigation:navigation-testing:${Versions.nav_components}"
+
+}
+
+object TestDependencies {
+
+    val jupiter_api = "org.junit.jupiter:junit-jupiter-api:${Versions.junit_jupiter_version}"
+    val jupiter_params = "org.junit.jupiter:junit-jupiter-params:${Versions.junit_jupiter_version}"
+    val jupiter_engine = "org.junit.jupiter:junit-jupiter-engine:${Versions.junit_jupiter_version}"
+    val mockk = "io.mockk:mockk:${Versions.mockk_version}"
+    val junit4 = "junit:junit:${Versions.junit_4_version}"
 }
 
 object ApplicationId {
     val id = "com.codingwithmitch.cleannotes"
 }
 
-object Modules {
-    val app = ":app"
-    val core = ":core"
-    val notes = ":notes"
-    val reminders = ":reminders"
-    val settings = ":settings"
-
-}
-
-
 
 object Build {
     val build_tools = "com.android.tools.build:gradle:${Versions.gradle}"
     val kotlin_gradle_plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     val google_services = "com.google.gms:google-services:${Versions.play_services}"
-
+    val junit5 = "de.mannodermaus.gradle.plugins:android-junit5:1.3.2.0"
 }
 
 object JavaVersion {
@@ -111,10 +121,11 @@ object SupportDependencies {
 
     val appcompat = "androidx.appcompat:appcompat:${Versions.appcompat}"
     val constraintlayout = "androidx.constraintlayout:constraintlayout:${Versions.constraintlayout}"
-    val recyclerview = "androidx.recyclerview:recyclerview:${Versions.recyclerview}"
-    val recyclerview_selection = "androidx.recyclerview:recyclerview-selection:${Versions.recyclerview_selection}"
     val material_design = "com.google.android.material:material:${Versions.material_design}"
     val swipe_refresh_layout = "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swipe_refresh_layout}"
+
 }
+
+
 
 

@@ -1,2 +1,2 @@
-include ':app', ':notes', ':settings', ':reminders', ':core'
+include ':app'
 rootProject.name='Clean Notes'

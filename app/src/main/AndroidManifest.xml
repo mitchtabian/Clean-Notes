@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:dist="http://schemas.android.com/apk/distribution"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.codingwithmitch.cleannotes">
 
-    <dist:module dist:instant="true" />
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:name=".presentation.BaseApplication"
+        android:name="com.codingwithmitch.cleannotes.framework.presentation.BaseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -18,7 +15,7 @@
         >
 
         <activity
-            android:name=".presentation.MainActivity"
+            android:name="com.codingwithmitch.cleannotes.framework.presentation.MainActivity"
             android:windowSoftInputMode="adjustPan"
             >
             <intent-filter>

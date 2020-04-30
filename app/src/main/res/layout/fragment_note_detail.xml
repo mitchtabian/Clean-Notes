@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_background_color"
+    style="@style/Theme.AppCompat.Light"
+    android:theme="@style/Theme.AppCompat.Light"
+    >
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:id="@+id/note_scroll_view"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/colorPrimary"
+            android:id="@+id/note_body_container"
+            >
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/view_between_spacing"
+                android:background="@color/app_background_color"
+                android:layout_gravity="bottom"
+                >
+
+            </View>
+
+            <com.yydcdut.markdown.MarkdownEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="300dp"
+                android:id="@+id/note_body"
+                android:textSize="18sp"
+                android:textColor="#000"
+                android:padding="5dp"
+                android:gravity="top"
+                android:imeOptions="flagNoExtractUi"
+                android:background="#fff"
+                android:paddingTop="@dimen/default_view_margin"
+                android:paddingStart="@dimen/default_view_margin"
+                android:paddingEnd="@dimen/default_view_margin"
+                android:hint="@string/text_notes_go_here"
+                android:layout_marginTop="@dimen/default_view_margin"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/view_between_spacing"
+                android:background="@color/app_background_color"
+                android:layout_gravity="bottom"
+                >
+
+            </View>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/default_view_margin"
+                android:gravity="center_vertical"
+                android:id="@+id/container_due_date"
+
+                >
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_date_range_black_24dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_due_date"
+                    android:textColor="#000"
+                    android:textSize="15sp"
+                    android:layout_marginStart="@dimen/default_view_margin"
+                    />
+
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/scrollview_bottom_margin"
+                android:background="@color/app_background_color"
+                >
+
+            </View>
+
+
+        </LinearLayout>
+
+
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/app_bar"
+        android:background="@color/colorPrimary"
+        >
+
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:expandedTitleGravity="top"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            >
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_collapseMode="parallax"
+                android:layout_marginTop="@dimen/toolbar_title_offset_height"
+                android:paddingStart="@dimen/default_view_margin"
+                android:paddingEnd="@dimen/default_view_margin"
+                android:clipToPadding="false"
+                android:orientation="vertical"
+                >
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/toolbar_height"
+                    android:id="@+id/note_title"
+                    android:textColor="#000"
+                    android:textSize="22sp"
+                    android:hint="@string/text_enter_a_title"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorAccent"
+                    android:layout_marginEnd="@dimen/default_view_margin_negative"
+                    android:layout_marginStart="@dimen/default_view_margin_negative"
+                    />
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/tool_bar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/toolbar_height"
+                app:layout_collapseMode="pin"
+                android:background="@color/colorPrimary">
+
+                <include layout="@layout/layout_note_detail_toolbar"/>
+
+            </androidx.appcompat.widget.Toolbar>
+
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

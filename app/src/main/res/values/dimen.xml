@@ -22,6 +22,6 @@
 
     <dimen name="scrollview_bottom_margin">80dp</dimen>
 
-
+    <dimen name="splash_logo_width">80dp</dimen>
 
 </resources>

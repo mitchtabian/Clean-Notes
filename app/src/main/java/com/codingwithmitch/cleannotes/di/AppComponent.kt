@@ -1,31 +1,32 @@
 package com.codingwithmitch.cleannotes.di
 
-import com.codingwithmitch.cleannotes.di.features.notes.NotesFeature
-import com.codingwithmitch.cleannotes.di.features.notes.NotesFeatureModule
-import com.codingwithmitch.cleannotes.di.features.reminders.RemindersFeature
-import com.codingwithmitch.cleannotes.di.features.reminders.RemindersFeatureModule
-import com.codingwithmitch.cleannotes.presentation.BaseApplication
-import com.codingwithmitch.cleannotes.presentation.MainActivity
+import com.codingwithmitch.cleannotes.framework.presentation.BaseApplication
+import com.codingwithmitch.cleannotes.framework.presentation.MainActivity
+import com.codingwithmitch.cleannotes.framework.presentation.splash.NoteNetworkSyncManager
+import com.codingwithmitch.cleannotes.framework.presentation.notedetail.NoteDetailFragment
+import com.codingwithmitch.cleannotes.framework.presentation.notelist.NoteListFragment
+import com.codingwithmitch.cleannotes.framework.presentation.splash.SplashFragment
+import com.codingwithmitch.cleannotes.notes.di.NoteViewModelModule
 import dagger.BindsInstance
 import dagger.Component
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import javax.inject.Singleton
 
+@ExperimentalCoroutinesApi
+@FlowPreview
 @Singleton
 @Component(
     modules = [
+        ProductionModule::class,
         AppModule::class,
-        NotesFeatureModule::class,
-        RemindersFeatureModule::class
+        NoteViewModelModule::class,
+        NoteFragmentFactoryModule::class
     ]
 )
-interface AppComponent :
-    NotesFeature.Dependencies,
-    RemindersFeature.Dependencies
-{
+interface AppComponent {
 
-    fun notesFeature(): NotesFeature?
-
-    fun remindersFeature(): RemindersFeature?
+    val noteNetworkSync: NoteNetworkSyncManager
 
     @Component.Factory
     interface Factory{
@@ -34,6 +35,12 @@ interface AppComponent :
     }
 
     fun inject(mainActivity: MainActivity)
+
+    fun inject(splashFragment: SplashFragment)
+
+    fun inject(noteListFragment: NoteListFragment)
+
+    fun inject(noteDetailFragment: NoteDetailFragment)
 }
 
 

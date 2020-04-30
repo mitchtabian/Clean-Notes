@@ -1,27 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_app_graph"
-    app:startDestination="@id/nav_notes_graph"
+    app:startDestination="@id/splashFragment"
     >
 
-    <include-dynamic
-        android:id="@+id/nav_notes_graph"
-        app:moduleName="@string/module_notes_name"
-        app:graphResName="nav_notes_graph"
-        app:graphPackage="com.codingwithmitch.cleannotes.notes" />
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.codingwithmitch.cleannotes.framework.presentation.splash.SplashFragment">
 
-    <include-dynamic
-        android:id="@+id/nav_reminders_graph"
-        app:moduleName="@string/module_reminders_name"
-        app:graphResName="nav_reminders_graph"
-        app:graphPackage="com.codingwithmitch.cleannotes.reminders" />
+        <action
+            android:id="@+id/action_splashFragment_to_noteListFragment"
+            app:destination="@id/noteListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
 
+    <fragment
+        android:id="@+id/noteListFragment"
+        android:name="com.codingwithmitch.cleannotes.framework.presentation.notelist.NoteListFragment"
+        >
+        <action
+            android:id="@+id/action_note_list_fragment_to_noteDetailFragment"
+            app:destination="@id/noteDetailFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+    </fragment>
 
-    <include-dynamic
-        android:id="@+id/nav_settings_graph"
-        app:moduleName="@string/module_settings_name"
-        app:graphResName="nav_settings_graph"
-        app:graphPackage="com.codingwithmitch.cleannotes.settings" />
+    <fragment
+        android:id="@+id/noteDetailFragment"
+        android:name="com.codingwithmitch.cleannotes.framework.presentation.notedetail.NoteDetailFragment"
+        >
+
+        <action
+            android:id="@+id/action_note_detail_fragment_to_noteListFragment"
+            app:destination="@id/noteListFragment"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/noteListFragment"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
+
 
 </navigation>
