@@ -1,7 +1,5 @@
 package com.codingwithmitch.cleannotes.framework.datasource.network
 
-import android.content.Context
-import androidx.test.core.app.ApplicationProvider
 import com.codingwithmitch.cleannotes.BaseTest
 import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
 import com.codingwithmitch.cleannotes.business.util.DateUtil
@@ -11,10 +9,8 @@ import com.codingwithmitch.cleannotes.framework.datasource.network.implementatio
 import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteFirestoreServiceImpl.Companion.NOTES_COLLECTION
 import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteFirestoreServiceImpl.Companion.USER_ID
 import com.codingwithmitch.cleannotes.framework.datasource.network.mappers.NetworkMapper
-import com.codingwithmitch.cleannotes.framework.presentation.TestBaseApplication
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreSettings
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking

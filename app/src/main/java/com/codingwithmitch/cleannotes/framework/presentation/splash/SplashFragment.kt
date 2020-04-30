@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.codingwithmitch.cleannotes.R
 import com.codingwithmitch.cleannotes.framework.presentation.common.BaseNoteFragment
+import com.codingwithmitch.cleannotes.util.EspressoIdlingResource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import javax.inject.Inject

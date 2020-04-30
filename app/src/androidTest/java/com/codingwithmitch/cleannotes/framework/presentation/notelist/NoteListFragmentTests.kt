@@ -3,46 +3,55 @@ package com.codingwithmitch.cleannotes.framework.presentation.notelist
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.testing.launchFragmentInContainer
-import androidx.lifecycle.ViewModelStore
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.testing.TestNavHostController
-import androidx.test.core.app.ApplicationProvider
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.NoMatchingViewException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
-import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.ViewAssertion
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
+import androidx.test.espresso.contrib.RecyclerViewActions.*
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.codingwithmitch.cleannotes.BaseTest
 import com.codingwithmitch.cleannotes.R
 import com.codingwithmitch.cleannotes.di.TestAppComponent
+import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NOTE_PAGINATION_PAGE_SIZE
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NoteDao
 import com.codingwithmitch.cleannotes.framework.datasource.cache.mappers.CacheMapper
 import com.codingwithmitch.cleannotes.framework.datasource.cache.model.NoteCacheEntity
 import com.codingwithmitch.cleannotes.framework.datasource.data.NoteDataFactory
 import com.codingwithmitch.cleannotes.framework.presentation.TestNoteFragmentFactory
 import com.codingwithmitch.cleannotes.framework.presentation.UIController
-import com.codingwithmitch.cleannotes.framework.presentation.notelist.NoteListAdapter.*
-import io.mockk.*
+import com.codingwithmitch.cleannotes.framework.presentation.notelist.NoteListAdapter.NoteViewHolder
+import com.codingwithmitch.cleannotes.util.EspressoIdlingResourceRule
+import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Matcher
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 import kotlin.random.Random
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 
 /*
+    **WARNING**
+    - This test will fail randomly. Seems to be bug because it doesn't make sense.
+
     --Test cases:
     1. is the test data being displayed in the RecyclerView?
     2. Make a search using the searchview
@@ -55,7 +64,10 @@ import kotlin.test.assertEquals
     orchestrator. And if you use test orchestrator you can't get reports. There's always a
     downside, whichever route you choose.
 
-    2. SearchViews should have an option to "submit an empty query". It's a pain to deal
+    2. Test fails when run via gradle (./gradlew connectedAndroidTest)
+     but passses if "right click > run"????? >_<
+
+    3. SearchViews should have an option to "submit an empty query". It's a pain to deal
     with and create work-arounds.
 
 
@@ -64,6 +76,9 @@ import kotlin.test.assertEquals
 @FlowPreview
 @RunWith(AndroidJUnit4ClassRunner::class)
 class NoteListFragmentTests: BaseTest() {
+
+    @get: Rule
+    val espressoIdlingResourceRule = EspressoIdlingResourceRule()
 
     @Inject
     lateinit var fragmentFactory: TestNoteFragmentFactory
@@ -77,7 +92,7 @@ class NoteListFragmentTests: BaseTest() {
     @Inject
     lateinit var dao: NoteDao
 
-    private val testEntityList: ArrayList<NoteCacheEntity> = ArrayList()
+    private val testEntityList: List<NoteCacheEntity>
 
     val uiController = mockk<UIController>(relaxed = true)
 
@@ -85,13 +100,9 @@ class NoteListFragmentTests: BaseTest() {
 
     init {
         injectTest()
-        val tempList = cacheMapper.noteListToEntityList(
+        testEntityList = cacheMapper.noteListToEntityList(
             noteDataFactory.produceListOfNotes()
         )
-        // add only 5 notes to the db to prevent need for scrolling recyclerview
-        for(index in 0..5){
-            testEntityList.add(tempList.get(index))
-        }
         insertTestData(testEntityList)
     }
 
@@ -115,7 +126,7 @@ class NoteListFragmentTests: BaseTest() {
      * reports. And I want reports.
      */
     @Test
-    fun generalListFragmentTest(){
+    fun generalListFragmentTest() = runBlocking{
 
         // setup
         val scenario = launchFragmentInContainer<NoteListFragment>(
@@ -134,6 +145,9 @@ class NoteListFragmentTests: BaseTest() {
         recyclerView.check(matches(isDisplayed()))
 
         for(entity in testEntityList){
+            recyclerView.perform(
+                scrollTo<NoteViewHolder>(hasDescendant(withText(entity.title)))
+            )
             onView(withText(entity.title)).check(matches(isDisplayed()))
         }
 
@@ -142,11 +156,24 @@ class NoteListFragmentTests: BaseTest() {
         onView(withId(R.id.search_view))
             .perform(typeSearchViewTextAndSubmit(randomNote.title))
 
-        // make sure all views except the randomNote title are not visible
-        for(entity in testEntityList){
-            if(!entity.title.equals(randomNote.title)){
-                onView(withText(entity.title)).check(doesNotExist())
-            }
+        // clear text in searchview so it doesn't conflict the assertions
+        onView(withId(R.id.search_view))
+            .perform(typeSearchViewTextAndSubmit(""))
+
+        // make sure the query worked
+        val expectedSearchResults = dao.searchNotesOrderByDateASC(
+            randomNote.title,
+            1,
+            NOTE_PAGINATION_PAGE_SIZE
+        )
+
+        onView(withId(R.id.recycler_view))
+            .check(RecyclerViewItemCountAssertion(expectedSearchResults.size))
+        for(entity in expectedSearchResults){
+            recyclerView.perform(
+                scrollTo<NoteViewHolder>(hasDescendant(withText(entity.title)))
+            )
+            onView(withText(entity.title)).check(matches(isDisplayed()))
         }
 
         // clear search query to reset the list so all notes are visible
@@ -157,13 +184,15 @@ class NoteListFragmentTests: BaseTest() {
         }
 
         for(entity in testEntityList){
+            recyclerView.perform(
+                scrollTo<NoteViewHolder>(hasDescendant(withText(entity.title)))
+            )
             onView(withText(entity.title)).check(matches(isDisplayed()))
         }
 
         // engage 'MultiSelectionState'
         recyclerView.perform(
-            RecyclerViewActions
-                .actionOnItemAtPosition<NoteViewHolder>(
+            actionOnItemAtPosition<NoteViewHolder>(
                     0,
                     longClick()
                 )
@@ -179,11 +208,15 @@ class NoteListFragmentTests: BaseTest() {
         onView(withId(R.id.search_view)).check(matches(isDisplayed()))
 
         // select a note and confirm navigate function was called
+        val selectedPosition = 1
         recyclerView.perform(
-            RecyclerViewActions.actionOnItemAtPosition<NoteViewHolder>(1, click())
+            actionOnItemAtPosition<NoteViewHolder>(selectedPosition, click())
         )
         verify {
-            navController.navigate(R.id.action_note_list_fragment_to_noteDetailFragment)
+            navController.navigate(
+                R.id.action_note_list_fragment_to_noteDetailFragment,
+                any()
+            )
         }
     }
 
@@ -207,6 +240,25 @@ class typeSearchViewTextAndSubmit(private val text: String?): ViewAction{
     override fun perform(uiController: UiController?, view: View?) {
         val searchView = (view as SearchView)
         searchView.setQuery(text, true)
+    }
+
+}
+
+
+class RecyclerViewItemCountAssertion(
+    private val expectedCount: Int
+) : ViewAssertion {
+
+    override fun check(
+        view: View,
+        noViewFoundException: NoMatchingViewException?
+    ) {
+        if (noViewFoundException != null) {
+            throw noViewFoundException
+        }
+        val recyclerView = view as RecyclerView
+        val adapter = recyclerView.adapter
+        assertTrue { adapter!!.itemCount == expectedCount }
     }
 
 }

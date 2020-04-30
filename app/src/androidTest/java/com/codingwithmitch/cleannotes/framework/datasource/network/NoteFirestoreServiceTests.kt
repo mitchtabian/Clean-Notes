@@ -33,8 +33,8 @@ import kotlin.test.assertTrue
     7. delete a 'deleted note' (note from "deletes" node). CBS
 
  */
+@ExperimentalCoroutinesApi
 @FlowPreview
-@UseExperimental(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4ClassRunner::class)
 class NoteFirestoreServiceTests: FirestoreTest() {
 

@@ -3,6 +3,7 @@ package com.codingwithmitch.cleannotes.di
 import com.codingwithmitch.cleannotes.framework.datasource.cache.CacheTest
 import com.codingwithmitch.cleannotes.framework.datasource.network.FirestoreTest
 import com.codingwithmitch.cleannotes.framework.presentation.TestBaseApplication
+import com.codingwithmitch.cleannotes.framework.presentation.end_to_end.NotesFeatureTest
 import com.codingwithmitch.cleannotes.framework.presentation.notedetail.NoteDetailFragmentTests
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.NoteListFragmentTests
 import com.codingwithmitch.cleannotes.notes.di.NoteViewModelModule
@@ -12,13 +13,13 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import javax.inject.Singleton
 
+@ExperimentalCoroutinesApi
 @FlowPreview
-@UseExperimental(ExperimentalCoroutinesApi::class)
 @Singleton
 @Component(
     modules = [
-        TestAppModule::class,
-        TempModule::class,
+        TestModule::class,
+        AppModule::class,
         TestNoteFragmentFactoryModule::class,
         NoteViewModelModule::class
     ]
@@ -39,6 +40,7 @@ interface TestAppComponent: AppComponent {
 
     fun inject(noteDetailFragmentTests: NoteDetailFragmentTests)
 
+    fun inject(notesFeatureTest: NotesFeatureTest)
 }
 
 

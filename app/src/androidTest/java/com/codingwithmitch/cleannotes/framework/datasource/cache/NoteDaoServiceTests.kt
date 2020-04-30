@@ -41,8 +41,8 @@ import kotlin.test.assertTrue
     12. search notes, order by title (DESC), confirm order
 
  */
+@ExperimentalCoroutinesApi
 @FlowPreview
-@UseExperimental(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4ClassRunner::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class NoteDaoServiceTests: CacheTest() {

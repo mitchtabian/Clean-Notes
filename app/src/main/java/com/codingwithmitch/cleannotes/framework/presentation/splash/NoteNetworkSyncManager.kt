@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.codingwithmitch.cleannotes.business.interactors.network_sync.SyncDeletedNotes
 import com.codingwithmitch.cleannotes.business.interactors.network_sync.SyncNotes
+import com.codingwithmitch.cleannotes.util.EspressoIdlingResource
 import com.codingwithmitch.cleannotes.util.printLogD
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

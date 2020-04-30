@@ -1,8 +1,6 @@
 package com.codingwithmitch.cleannotes.di
 
-import android.content.Context
 import android.content.SharedPreferences
-import androidx.room.Room
 import com.codingwithmitch.cleannotes.business.data.cache.abstraction.NoteCacheDataSource
 import com.codingwithmitch.cleannotes.business.data.network.abstraction.NoteNetworkDataSource
 import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
@@ -11,7 +9,6 @@ import com.codingwithmitch.cleannotes.business.interactors.notelist.*
 import com.codingwithmitch.cleannotes.business.util.DateUtil
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NoteDao
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NoteDatabase
-import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NoteDatabase.Companion.DATABASE_NAME
 import com.codingwithmitch.cleannotes.business.data.cache.implementation.NoteCacheDataSourceImpl
 import com.codingwithmitch.cleannotes.framework.datasource.cache.mappers.CacheMapper
 import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteFirestoreServiceImpl
@@ -23,27 +20,21 @@ import com.codingwithmitch.cleannotes.business.interactors.notedetail.UpdateNote
 import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NoteDaoService
 import com.codingwithmitch.cleannotes.framework.datasource.cache.implementation.NoteDaoServiceImpl
 import com.codingwithmitch.cleannotes.framework.datasource.network.mappers.NetworkMapper
-import com.codingwithmitch.cleannotes.framework.datasource.preferences.PreferenceKeys
-import com.codingwithmitch.cleannotes.framework.presentation.BaseApplication
 import com.codingwithmitch.cleannotes.framework.presentation.splash.NoteNetworkSyncManager
-import com.codingwithmitch.cleannotes.util.AndroidTestUtils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Singleton
 
+@ExperimentalCoroutinesApi
+@FlowPreview
 @Module
 object AppModule {
-
-    @JvmStatic
-    @Singleton
-    @Provides
-    fun provideAndroidTestUtils(): AndroidTestUtils{
-        return AndroidTestUtils(false)
-    }
 
 
     // https://developer.android.com/reference/java/text/SimpleDateFormat.html?hl=pt-br
@@ -66,19 +57,6 @@ object AppModule {
     @JvmStatic
     @Singleton
     @Provides
-    fun provideSharedPreferences(
-        application: BaseApplication
-    ): SharedPreferences {
-        return application
-            .getSharedPreferences(
-                PreferenceKeys.NOTE_PREFERENCES,
-                Context.MODE_PRIVATE
-            )
-    }
-
-    @JvmStatic
-    @Singleton
-    @Provides
     fun provideSharedPrefsEditor(
         sharedPreferences: SharedPreferences
     ): SharedPreferences.Editor {
@@ -92,17 +70,6 @@ object AppModule {
         return NoteFactory(
             dateUtil
         )
-    }
-
-    @JvmStatic
-    @Singleton
-    @Provides
-    fun provideNoteDb(app: BaseApplication): NoteDatabase {
-        return Room
-//            .inMemoryDatabaseBuilder(app, NoteDatabase::class.java)
-            .databaseBuilder(app, NoteDatabase::class.java, DATABASE_NAME)
-            .fallbackToDestructiveMigration()
-            .build()
     }
 
     @JvmStatic
@@ -131,13 +98,6 @@ object AppModule {
     @Provides
     fun provideFirebaseAuth(): FirebaseAuth {
         return FirebaseAuth.getInstance()
-    }
-
-    @JvmStatic
-    @Singleton
-    @Provides
-    fun provideFirebaseFirestore(): FirebaseFirestore {
-        return FirebaseFirestore.getInstance()
     }
 
     @JvmStatic
