@@ -22,13 +22,14 @@ import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.No
 import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.NoteDetailViewState
 import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.NoteInteractionState.*
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.NOTE_PENDING_DELETE_BUNDLE_KEY
+import com.codingwithmitch.cleannotes.util.EspressoIdlingResource
 import com.google.android.material.appbar.AppBarLayout
 import com.yydcdut.markdown.MarkdownProcessor
 import com.yydcdut.markdown.syntax.edit.EditFactory
 import kotlinx.android.synthetic.main.fragment_note_detail.*
 import kotlinx.android.synthetic.main.layout_note_detail_toolbar.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Main
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -37,9 +38,7 @@ const val NOTE_DETAIL_STATE_BUNDLE_KEY = "com.codingwithmitch.cleannotes.notes.f
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-@Singleton
 class NoteDetailFragment
-@Inject
 constructor(
     private val viewModelFactory: ViewModelProvider.Factory
 ): BaseNoteFragment(R.layout.fragment_note_detail) {
@@ -56,7 +55,6 @@ constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        restoreInstanceState()
         setupUI()
         setupOnBackPressDispatcher()
         subscribeObservers()
@@ -75,25 +73,7 @@ constructor(
 
         setupMarkdown()
         getSelectedNoteFromPreviousFragment()
-    }
-
-    private fun getSelectedNoteFromPreviousFragment(){
-        findNavController()
-            .previousBackStackEntry
-            ?.savedStateHandle
-            ?.getLiveData<Note>(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY)
-            ?.observe(viewLifecycleOwner, Observer { selectedNote ->
-                if(selectedNote == null){
-                    onErrorRetrievingNoteFromPreviousFragment()
-                }
-                else{
-                    viewModel.setNote(selectedNote)
-                    findNavController()
-                        .previousBackStackEntry
-                        ?.savedStateHandle
-                        ?.remove<Note>(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY)
-                }
-            })
+        restoreInstanceState()
     }
 
     private fun onErrorRetrievingNoteFromPreviousFragment(){
@@ -316,13 +296,18 @@ constructor(
         note_body.setText(body)
     }
 
-    private fun restoreInstanceState(){
+    private fun getSelectedNoteFromPreviousFragment(){
+        arguments?.let { args ->
+            (args.getParcelable(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY) as Note?)?.let { selectedNote ->
+                viewModel.setNote(selectedNote)
+            }?: onErrorRetrievingNoteFromPreviousFragment()
+        }
 
-        findNavController()
-            .currentBackStackEntry
-            ?.savedStateHandle
-            ?.getLiveData<NoteDetailViewState>(NOTE_DETAIL_STATE_BUNDLE_KEY)
-            ?.observe(viewLifecycleOwner, Observer { viewState ->
+    }
+
+    private fun restoreInstanceState(){
+        arguments?.let { args ->
+            (args.getParcelable(NOTE_DETAIL_STATE_BUNDLE_KEY) as NoteDetailViewState?)?.let { viewState ->
                 viewModel.setViewState(viewState)
 
                 // One-time check after rotation
@@ -334,7 +319,8 @@ constructor(
                     app_bar.setExpanded(true)
                     transitionToExpandedMode()
                 }
-            })
+            }
+        }
     }
 
     private fun updateTitleInViewModel(){
@@ -472,12 +458,9 @@ constructor(
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
         val viewState = viewModel.getCurrentViewStateOrNew()
-        findNavController()
-            .currentBackStackEntry
-            ?.savedStateHandle
-            ?.set(NOTE_DETAIL_STATE_BUNDLE_KEY, viewState)
+        outState.putParcelable(NOTE_DETAIL_STATE_BUNDLE_KEY, viewState)
+        super.onSaveInstanceState(outState)
     }
 
 

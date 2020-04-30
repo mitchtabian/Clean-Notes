@@ -8,7 +8,7 @@ object Versions {
     val kotlin = "1.3.61"
     val ktx = "1.2.0"
     val dagger = "2.25.4"
-    val nav_components = "2.3.0-alpha04"
+    val nav_components = "2.3.0-alpha06"
     val material_dialogs = "3.2.1"
     val room = "2.1.0"
     val appcompat = "1.1.0-rc01"
@@ -76,6 +76,8 @@ object AndroidTestDependencies{
     val mockk_android = "io.mockk:mockk-android:${Versions.mockk_version}"
     val fragment_testing = "androidx.fragment:fragment-testing:${Versions.fragment_version}"
     val androidx_test_ext = "androidx.test.ext:junit-ktx:${Versions.androidx_test_ext}"
+    val navigation_testing = "androidx.navigation:navigation-testing:${Versions.nav_components}"
+
 }
 
 object TestDependencies {

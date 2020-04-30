@@ -87,8 +87,8 @@ object TestAppModule {
     @JvmStatic
     @Singleton
     @Provides
-    fun provideNoteDataFactory(application: TestBaseApplication): NoteDataFactory {
-        return NoteDataFactory(application)
+    fun provideNoteDataFactory(application: TestBaseApplication, noteFactory: NoteFactory): NoteDataFactory {
+        return NoteDataFactory(application, noteFactory)
     }
 
     @JvmStatic

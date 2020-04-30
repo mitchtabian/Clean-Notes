@@ -2,10 +2,11 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_background_color"
+    style="@style/Theme.AppCompat.Light"
+    android:theme="@style/Theme.AppCompat.Light"
     >
 
 
@@ -13,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:id="@+id/note_scroll_view"
         >
 
         <LinearLayout
@@ -20,7 +22,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:background="@color/colorPrimary"
-
+            android:id="@+id/note_body_container"
             >
             <View
                 android:layout_width="match_parent"
@@ -106,6 +108,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/app_bar"
+        android:background="@color/colorPrimary"
         >
 
 

@@ -9,6 +9,7 @@ import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -50,9 +51,7 @@ const val NOTE_LIST_STATE_BUNDLE_KEY = "com.codingwithmitch.cleannotes.notes.fra
 
 @FlowPreview
 @ExperimentalCoroutinesApi
-@Singleton
 class NoteListFragment
-@Inject
 constructor(
     private val viewModelFactory: ViewModelProvider.Factory,
     private val dateUtil: DateUtil
@@ -121,8 +120,7 @@ constructor(
     }
 
     // Why didn't I use the "SavedStateHandle" here?
-    // It doesn't seem to work in this fragment. I'm guessing because the backstack is empty
-    // at this point.
+    // It sucks and doesn't work for testing
     override fun onSaveInstanceState(outState: Bundle) {
         val viewState = viewModel.viewState.value
 
@@ -349,12 +347,10 @@ constructor(
     }
 
     private fun navigateToDetailFragment(selectedNote: Note){
-        findNavController()
-            .currentBackStackEntry
-            ?.savedStateHandle
-            ?.set(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY, selectedNote)
+        val bundle = bundleOf(NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY to selectedNote)
         findNavController().navigate(
-            R.id.action_note_list_fragment_to_noteDetailFragment
+            R.id.action_note_list_fragment_to_noteDetailFragment,
+            bundle
         )
         viewModel.setNote(null)
     }

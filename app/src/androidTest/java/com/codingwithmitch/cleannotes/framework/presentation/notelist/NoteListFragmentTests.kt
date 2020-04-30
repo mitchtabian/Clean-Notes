@@ -3,6 +3,11 @@ package com.codingwithmitch.cleannotes.framework.presentation.notelist
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.testing.launchFragmentInContainer
+import androidx.lifecycle.ViewModelStore
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.testing.TestNavHostController
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
@@ -22,10 +27,7 @@ import com.codingwithmitch.cleannotes.framework.datasource.data.NoteDataFactory
 import com.codingwithmitch.cleannotes.framework.presentation.TestNoteFragmentFactory
 import com.codingwithmitch.cleannotes.framework.presentation.UIController
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.NoteListAdapter.*
-import io.mockk.every
-import io.mockk.just
-import io.mockk.mockk
-import io.mockk.runs
+import io.mockk.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking
@@ -37,22 +39,26 @@ import org.junit.runner.RunWith
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 import kotlin.random.Random
+import kotlin.test.assertEquals
 
 
 /*
-    Test cases:
+    --Test cases:
     1. is the test data being displayed in the RecyclerView?
     2. Make a search using the searchview
     3. clear the search so all list items show again
     3. Toolbar states
 
-    I really dislike these FragmentScenario tests. It seems to randomly fail for no reason.
+    --Notes:
+    1. I really dislike these FragmentScenario tests. It seems to randomly fail for no reason.
     And you don't have the option to "clear state" because then you'd have to use test
-    orchestrator. And if you use test orchestrator you can't get reposts. There's always a
+    orchestrator. And if you use test orchestrator you can't get reports. There's always a
     downside, whichever route you choose.
 
-    Also, SearchViews should have an option to "submit an empty query". It's a pain to deal
+    2. SearchViews should have an option to "submit an empty query". It's a pain to deal
     with and create work-arounds.
+
+
  */
 @ExperimentalCoroutinesApi
 @FlowPreview
@@ -73,7 +79,9 @@ class NoteListFragmentTests: BaseTest() {
 
     private val testEntityList: ArrayList<NoteCacheEntity> = ArrayList()
 
-    val uiController = mockk<UIController>()
+    val uiController = mockk<UIController>(relaxed = true)
+
+    val navController = mockk<NavController>(relaxed = true)
 
     init {
         injectTest()
@@ -93,10 +101,6 @@ class NoteListFragmentTests: BaseTest() {
     }
 
     private fun setupUIController(){
-        every { uiController.displayProgressBar(any()) } just runs
-        every { uiController.hideSoftKeyboard() } just runs
-        every { uiController.displayInputCaptureDialog(any(), any()) } just runs
-        every { uiController.onResponseReceived(any(), any()) } just runs
         fragmentFactory.uiController = uiController
     }
 
@@ -113,10 +117,18 @@ class NoteListFragmentTests: BaseTest() {
     @Test
     fun generalListFragmentTest(){
 
+        // setup
         val scenario = launchFragmentInContainer<NoteListFragment>(
             factory = fragmentFactory
-        )
+        ).onFragment { fragment ->
+            fragment.viewLifecycleOwnerLiveData.observeForever { viewLifecycleOwner ->
+                if (viewLifecycleOwner != null) {
+                    Navigation.setViewNavController(fragment.requireView(), navController)
+                }
+            }
+        }
 
+        // test
         val recyclerView = onView(withId(R.id.recycler_view))
 
         recyclerView.check(matches(isDisplayed()))
@@ -165,6 +177,14 @@ class NoteListFragmentTests: BaseTest() {
 
         // confirm 'SearchViewState' is active
         onView(withId(R.id.search_view)).check(matches(isDisplayed()))
+
+        // select a note and confirm navigate function was called
+        recyclerView.perform(
+            RecyclerViewActions.actionOnItemAtPosition<NoteViewHolder>(1, click())
+        )
+        verify {
+            navController.navigate(R.id.action_note_list_fragment_to_noteDetailFragment)
+        }
     }
 
     override fun injectTest() {

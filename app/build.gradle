@@ -109,6 +109,7 @@ dependencies {
     androidTestImplementation AndroidTestDependencies.test_runner
     androidTestImplementation AndroidTestDependencies.test_rules
     androidTestImplementation AndroidTestDependencies.text_core_ktx
+    androidTestImplementation AndroidTestDependencies.navigation_testing
     debugImplementation AndroidTestDependencies.fragment_testing
     kaptAndroidTest  AnnotationProcessorsDependencies.dagger_compiler
 
