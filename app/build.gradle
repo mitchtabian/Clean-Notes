@@ -16,7 +16,7 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
-
+apply plugin: 'io.fabric'
 
 
 android {
@@ -84,6 +84,8 @@ dependencies {
     implementation Dependencies.firebase_firestore
     implementation Dependencies.firebase_auth
     implementation Dependencies.kotlin_coroutines_play_services
+    implementation Dependencies.firebase_analytics
+    implementation Dependencies.firebase_crashlytics
     implementation AndroidTestDependencies.idling_resource
 
     implementation SupportDependencies.swipe_refresh_layout

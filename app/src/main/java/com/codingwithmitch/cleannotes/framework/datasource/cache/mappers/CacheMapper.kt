@@ -33,10 +33,7 @@ constructor(
         return entities
     }
 
-    override fun mapFromEntity(entity: NoteCacheEntity?): Note {
-        if(entity == null){
-            throw Exception("Cannot convert a null NoteCacheEntity to a Note.")
-        }
+    override fun mapFromEntity(entity: NoteCacheEntity): Note {
         return Note(
             id = entity.id,
             title = entity.title,
@@ -46,10 +43,7 @@ constructor(
         )
     }
 
-    override fun mapToEntity(domainModel: Note?): NoteCacheEntity {
-        if(domainModel == null){
-            throw Exception("Cannot convert a null Note to a NoteCacheEntity.")
-        }
+    override fun mapToEntity(domainModel: Note): NoteCacheEntity {
         return NoteCacheEntity(
             id = domainModel.id,
             title = domainModel.title,

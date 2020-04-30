@@ -2,6 +2,7 @@ package com.codingwithmitch.cleannotes.framework.presentation.notedetail.state
 
 import android.os.Parcelable
 import com.codingwithmitch.cleannotes.business.domain.model.Note
+import com.codingwithmitch.cleannotes.business.state.ViewState
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -11,7 +12,7 @@ data class NoteDetailViewState(
 
     var isUpdatePending: Boolean? = null
 
-) : Parcelable
+) : Parcelable, ViewState
 
 
 

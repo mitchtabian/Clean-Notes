@@ -184,14 +184,13 @@ object AppModule {
     fun provideSyncNotes(
         noteCacheDataSource: NoteCacheDataSource,
         noteNetworkDataSource: NoteNetworkDataSource,
-        dateUtil: DateUtil,
-        networkMapper: NetworkMapper
+        dateUtil: DateUtil
     ): SyncNotes{
         return SyncNotes(
             noteCacheDataSource,
             noteNetworkDataSource,
-            dateUtil,
-            networkMapper
+            dateUtil
+
         )
     }
 
@@ -200,13 +199,11 @@ object AppModule {
     @Provides
     fun provideSyncDeletedNotes(
         noteCacheDataSource: NoteCacheDataSource,
-        noteNetworkDataSource: NoteNetworkDataSource,
-        networkMapper: NetworkMapper
+        noteNetworkDataSource: NoteNetworkDataSource
     ): SyncDeletedNotes{
         return SyncDeletedNotes(
             noteCacheDataSource,
-            noteNetworkDataSource,
-            networkMapper
+            noteNetworkDataSource
         )
     }
 

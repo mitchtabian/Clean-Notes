@@ -1,7 +1,6 @@
-package com.codingwithmitch.cleannotes.business.interactors
+package com.codingwithmitch.cleannotes.business.interactors.notelist
 
 import com.codingwithmitch.cleannotes.business.data.cache.abstraction.NoteCacheDataSource
-import com.codingwithmitch.cleannotes.business.interactors.notelist.SearchNotes
 import com.codingwithmitch.cleannotes.business.state.DataState
 import com.codingwithmitch.cleannotes.business.data.NoteDataFactory
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListStateEvent.*
@@ -28,14 +27,11 @@ class SearchNotesTest {
     // system in test
     private var searchNotes: SearchNotes? = null
 
-    private lateinit var noteFactory: NoteDataFactory
+    private lateinit var noteDataFactory: NoteDataFactory
 
     init {
         this.javaClass.classLoader?.let { classLoader ->
-            noteFactory =
-                NoteDataFactory(
-                    classLoader
-                )
+            noteDataFactory = NoteDataFactory(classLoader)
         }
     }
 
@@ -48,7 +44,7 @@ class SearchNotesTest {
     @Test
     fun searchNotes_returnList_messageSuccess() = runBlocking {
         val noteCacheDataSource = mockk<NoteCacheDataSource>()
-        val dummyListOfNotes = noteFactory.produceListOfNotes()
+        val dummyListOfNotes = noteDataFactory.produceListOfNotes()
         every {
             runBlocking {
                 noteCacheDataSource.searchNotes(any(), any(), any())
@@ -77,7 +73,7 @@ class SearchNotesTest {
     @Test
     fun searchNotes_returnEmptyList_messageSuccess() = runBlocking {
         val noteCacheDataSource = mockk<NoteCacheDataSource>()
-        val dummyListOfNotes = noteFactory.produceEmptyListOfNotes()
+        val dummyListOfNotes = noteDataFactory.produceEmptyListOfNotes()
         every {
             runBlocking {
                 noteCacheDataSource.searchNotes(any(), any(), any())

@@ -34,10 +34,7 @@ constructor(
         return entities
     }
 
-    override fun mapFromEntity(entity: NoteNetworkEntity?): Note {
-        if(entity == null){
-            throw Exception("Cannot convert a null NoteNetworkEntity to a Note.")
-        }
+    override fun mapFromEntity(entity: NoteNetworkEntity): Note {
         return Note(
             id = entity.id,
             title = entity.title,
@@ -47,10 +44,7 @@ constructor(
         )
     }
 
-    override fun mapToEntity(domainModel: Note?): NoteNetworkEntity {
-        if(domainModel == null){
-            throw Exception("Cannot convert a null Note to a NoteNetworkEntity.")
-        }
+    override fun mapToEntity(domainModel: Note): NoteNetworkEntity {
         return NoteNetworkEntity(
             id = domainModel.id,
             title = domainModel.title,
