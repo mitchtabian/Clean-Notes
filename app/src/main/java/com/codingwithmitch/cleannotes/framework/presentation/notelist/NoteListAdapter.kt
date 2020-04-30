@@ -71,6 +71,7 @@ class NoteListAdapter(
             // very annoying
             interaction?.restoreListPosition()
         }
+        printLogD("listadapter", "size: ${list.size}")
         differ.submitList(list, commitCallback)
     }
 

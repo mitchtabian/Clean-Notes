@@ -37,6 +37,7 @@ import com.codingwithmitch.cleannotes.framework.presentation.notedetail.NOTE_DET
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.*
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListStateEvent.*
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListToolbarState.*
+import com.codingwithmitch.cleannotes.util.AndroidTestUtils
 import com.codingwithmitch.cleannotes.util.TodoCallback
 import com.codingwithmitch.cleannotes.util.printLogD
 import kotlinx.android.synthetic.main.fragment_note_list.*
@@ -59,6 +60,9 @@ constructor(
     NoteListAdapter.Interaction,
     ItemTouchHelperAdapter
 {
+
+    @Inject
+    lateinit var androidTestUtils: AndroidTestUtils
 
     val viewModel: NoteListViewModel by viewModels {
         viewModelFactory
@@ -429,14 +433,34 @@ constructor(
             val searchPlate: SearchView.SearchAutoComplete?
                     = searchView.findViewById(androidx.appcompat.R.id.search_src_text)
 
-            searchPlate?.setOnEditorActionListener { v, actionId, event ->
-                if (actionId == EditorInfo.IME_ACTION_UNSPECIFIED
-                    || actionId == EditorInfo.IME_ACTION_SEARCH ) {
-                    val searchQuery = v.text.toString()
-                    viewModel.setQuery(searchQuery)
-                    startNewSearch()
+            // can't use QueryTextListener in production b/c can't submit an empty string
+            when{
+                androidTestUtils.isTest() -> {
+                    searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+                        override fun onQueryTextSubmit(query: String?): Boolean {
+                            viewModel.setQuery(query)
+                            startNewSearch()
+                            return true
+                        }
+
+                        override fun onQueryTextChange(newText: String?): Boolean {
+                            return true
+                        }
+
+                    })
                 }
-                true
+
+                else ->{
+                    searchPlate?.setOnEditorActionListener { v, actionId, event ->
+                        if (actionId == EditorInfo.IME_ACTION_UNSPECIFIED
+                            || actionId == EditorInfo.IME_ACTION_SEARCH ) {
+                            val searchQuery = v.text.toString()
+                            viewModel.setQuery(searchQuery)
+                            startNewSearch()
+                        }
+                        true
+                    }
+                }
             }
         }
     }

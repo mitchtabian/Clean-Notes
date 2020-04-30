@@ -26,6 +26,7 @@ import com.codingwithmitch.cleannotes.framework.datasource.network.mappers.Netwo
 import com.codingwithmitch.cleannotes.framework.datasource.preferences.PreferenceKeys
 import com.codingwithmitch.cleannotes.framework.presentation.BaseApplication
 import com.codingwithmitch.cleannotes.framework.presentation.splash.NoteNetworkSyncManager
+import com.codingwithmitch.cleannotes.util.AndroidTestUtils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
@@ -36,6 +37,13 @@ import javax.inject.Singleton
 
 @Module
 object AppModule {
+
+    @JvmStatic
+    @Singleton
+    @Provides
+    fun provideAndroidTestUtils(): AndroidTestUtils{
+        return AndroidTestUtils(false)
+    }
 
 
     // https://developer.android.com/reference/java/text/SimpleDateFormat.html?hl=pt-br

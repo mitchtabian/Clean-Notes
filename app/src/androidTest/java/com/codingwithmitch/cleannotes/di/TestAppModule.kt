@@ -12,6 +12,7 @@ import com.codingwithmitch.cleannotes.framework.datasource.data.NoteDataFactory
 import com.codingwithmitch.cleannotes.framework.datasource.network.mappers.NetworkMapper
 import com.codingwithmitch.cleannotes.framework.datasource.preferences.PreferenceKeys
 import com.codingwithmitch.cleannotes.framework.presentation.TestBaseApplication
+import com.codingwithmitch.cleannotes.util.AndroidTestUtils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
@@ -27,6 +28,13 @@ import javax.inject.Singleton
 @FlowPreview
 @Module
 object TestAppModule {
+
+    @JvmStatic
+    @Singleton
+    @Provides
+    fun provideAndroidTestUtils(): AndroidTestUtils {
+        return AndroidTestUtils(true)
+    }
 
     // https://developer.android.com/reference/java/text/SimpleDateFormat.html?hl=pt-br
     @JvmStatic
@@ -124,19 +132,23 @@ object TestAppModule {
     @JvmStatic
     @Singleton
     @Provides
-    fun provideFirebaseFirestore(): FirebaseFirestore {
-        return FirebaseFirestore.getInstance()
-    }
-
-    @JvmStatic
-    @Singleton
-    @Provides
     fun provideFirestoreSettings(): FirebaseFirestoreSettings {
         return FirebaseFirestoreSettings.Builder()
             .setHost("10.0.2.2:8080")
             .setSslEnabled(false)
             .setPersistenceEnabled(false)
             .build()
+    }
+
+    @JvmStatic
+    @Singleton
+    @Provides
+    fun provideFirebaseFirestore(
+        firestoreSettings: FirebaseFirestoreSettings
+    ): FirebaseFirestore {
+        val firestore = FirebaseFirestore.getInstance()
+        firestore.firestoreSettings = firestoreSettings
+        return firestore
     }
 
 

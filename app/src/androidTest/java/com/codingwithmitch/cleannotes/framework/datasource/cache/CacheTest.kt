@@ -45,9 +45,7 @@ open class CacheTest: BaseTest() {
         val entityList = cacheMapper.noteListToEntityList(
             noteDataFactory.produceListOfNotes()
         )
-        for(entity in entityList){
-            dao.insertNotes(entityList)
-        }
+        dao.insertNotes(entityList)
     }
 
 

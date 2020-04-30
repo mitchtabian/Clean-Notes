@@ -26,9 +26,6 @@ import javax.inject.Inject
 open class FirestoreTest: BaseTest() {
 
     @Inject
-    lateinit var firestoreSettings: FirebaseFirestoreSettings
-
-    @Inject
     lateinit var firestore: FirebaseFirestore
 
     @Inject
@@ -45,8 +42,6 @@ open class FirestoreTest: BaseTest() {
 
     init {
         injectTest()
-        firestore.firestoreSettings = firestoreSettings
-        firestore.firestoreSettings = firestoreSettings
         signIn()
         insertTestData()
     }

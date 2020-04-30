@@ -94,10 +94,14 @@ constructor(
             this.uiController = mockController
         }
         else{ // PRODUCTION: if no mock, get from context
-            try{
-                uiController = context as MainActivity
-            }catch (e: ClassCastException){
-                e.printStackTrace()
+            activity?.let {
+                if(it is MainActivity){
+                    try{
+                        uiController = context as UIController
+                    }catch (e: ClassCastException){
+                        e.printStackTrace()
+                    }
+                }
             }
         }
     }

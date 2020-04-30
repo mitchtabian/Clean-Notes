@@ -84,7 +84,7 @@ dependencies {
     implementation Dependencies.firebase_firestore
     implementation Dependencies.firebase_auth
     implementation Dependencies.kotlin_coroutines_play_services
-
+    implementation AndroidTestDependencies.idling_resource
 
     implementation SupportDependencies.swipe_refresh_layout
     implementation SupportDependencies.appcompat
@@ -103,6 +103,7 @@ dependencies {
     androidTestImplementation AndroidTestDependencies.kotlin_test
     androidTestImplementation AndroidTestDependencies.coroutines_test
     androidTestImplementation AndroidTestDependencies.espresso_core
+    androidTestImplementation AndroidTestDependencies.espresso_contrib
     androidTestImplementation AndroidTestDependencies.idling_resource
     androidTestImplementation AndroidTestDependencies.mockk_android
     androidTestImplementation AndroidTestDependencies.test_runner

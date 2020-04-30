@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_background_color"
-    style="@style/Theme.AppCompat"
-    android:theme="@style/Theme.AppCompat"
+    style="@style/Theme.AppCompat.Light"
+    android:theme="@style/Theme.AppCompat.Light"
     >
 
     <com.google.android.material.appbar.AppBarLayout

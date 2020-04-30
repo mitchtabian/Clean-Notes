@@ -246,6 +246,7 @@ constructor(
         setViewState(update)
     }
 
+
     // if a note is deleted and then restored, the id will be incorrect.
     // So need to reset it here.
     private fun setRestoredNoteId(restoredNote: Note){
@@ -384,6 +385,14 @@ constructor(
         val update = getCurrentViewStateOrNew()
         update.noteList = ArrayList()
         setViewState(update)
+    }
+
+    // workaround for tests
+    // can't submit an empty string because SearchViews SUCK
+    fun clearSearchQuery(){
+        setQuery("")
+        clearList()
+        loadFirstPage()
     }
 
     fun loadFirstPage() {

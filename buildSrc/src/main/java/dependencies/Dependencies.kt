@@ -13,7 +13,6 @@ object Versions {
     val room = "2.1.0"
     val appcompat = "1.1.0-rc01"
     val constraintlayout = "1.1.3"
-//    val material_design = "1.2.0-alpha05"
     val material_design = "1.1.0"
     val play_core = "1.7.1"
     val play_services = "4.3.3"
@@ -69,6 +68,7 @@ object AndroidTestDependencies{
     val kotlin_test = "org.jetbrains.kotlin:kotlin-test-junit:${Versions.kotlin}"
     val coroutines_test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines_version}"
     val espresso_core = "androidx.test.espresso:espresso-core:${Versions.espresso_core}"
+    val espresso_contrib = "androidx.test.espresso:espresso-contrib:${Versions.espresso_core}"
     val idling_resource = "androidx.test.espresso:espresso-idling-resource:${Versions.espresso_idling_resource}"
     val test_runner = "androidx.test:runner:${Versions.test_runner}"
     val test_rules = "androidx.test:rules:${Versions.test_runner}"
@@ -121,6 +121,7 @@ object SupportDependencies {
     val constraintlayout = "androidx.constraintlayout:constraintlayout:${Versions.constraintlayout}"
     val material_design = "com.google.android.material:material:${Versions.material_design}"
     val swipe_refresh_layout = "androidx.swiperefreshlayout:swiperefreshlayout:${Versions.swipe_refresh_layout}"
+
 }
 
 
