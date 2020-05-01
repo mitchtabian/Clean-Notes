@@ -9,6 +9,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
+const val FORCE_DELETE_NOTE_EXCEPTION = "FORCE_EXCEPTION"
+
 class FakeNoteCacheDataSourceImpl
 constructor(
     private val notesData: HashMap<String, Note>
@@ -23,6 +25,9 @@ constructor(
     }
 
     override suspend fun deleteNote(primaryKey: String): Int {
+        if(primaryKey.equals(FORCE_DELETE_NOTE_EXCEPTION)){
+            throw Exception("Something went wrong deleting the note.")
+        }
         return notesData.remove(primaryKey)?.let { note ->
             1 // return 1 for success
         }?: - 1 // -1 for failure

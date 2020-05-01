@@ -14,5 +14,8 @@ fun printLogD(className: String?, message: String ) {
 /*
     Priorities: Log.DEBUG, Log. etc....
  */
-fun cLog(priority: Int, tag: String, msg: String?)
-        = Crashlytics.log(Log.DEBUG, tag, msg)
+fun cLog(priority: Int, tag: String, msg: String?){
+    if(!DEBUG){
+        Crashlytics.log(priority, tag, msg)
+    }
+}

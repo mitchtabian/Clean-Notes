@@ -34,9 +34,11 @@ android {
     buildTypes {
         debug {
             minifyEnabled false
+            manifestPlaceholders = [enableCrashReporting:"false"]
         }
         release {
             minifyEnabled false
+            manifestPlaceholders = [enableCrashReporting:"true"]
         }
     }
 
