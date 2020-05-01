@@ -12,6 +12,9 @@ import kotlin.collections.HashMap
 const val FORCE_DELETE_NOTE_EXCEPTION = "FORCE_DELETE_NOTE_EXCEPTION"
 const val FORCE_DELETES_NOTE_EXCEPTION = "FORCE_DELETES_NOTE_EXCEPTION"
 const val FORCE_UPDATE_NOTE_EXCEPTION = "FORCE_UPDATE_NOTE_EXCEPTION"
+const val FORCE_NEW_NOTE_EXCEPTION = "FORCE_NEW_NOTE_EXCEPTION"
+const val FORCE_SEARCH_NOTES_EXCEPTION = "FORCE_SEARCH_NOTES_EXCEPTION"
+const val FORCE_GENERAL_FAILURE = "FORCE_GENERAL_FAILURE"
 
 class FakeNoteCacheDataSourceImpl
 constructor(
@@ -20,8 +23,14 @@ constructor(
 ): NoteCacheDataSource{
 
     override suspend fun insertNote(note: Note): Long {
+        if(note.id.equals(FORCE_NEW_NOTE_EXCEPTION)){
+            throw Exception("Something went wrong inserting the note.")
+        }
+        if(note.id.equals(FORCE_GENERAL_FAILURE)){
+            return -1 // fail
+        }
         notesData.put(note.id, note)
-        return 1 // always successful
+        return 1 // success
     }
 
     override suspend fun deleteNote(primaryKey: String): Int {
@@ -75,6 +84,9 @@ constructor(
         String,
         page: Int
     ): List<Note> {
+        if(query.equals(FORCE_SEARCH_NOTES_EXCEPTION)){
+            throw Exception("Something went searching the cache for notes.")
+        }
         val results: ArrayList<Note> = ArrayList()
         for(note in notesData.values){
             if(note.title.contains(query)){
