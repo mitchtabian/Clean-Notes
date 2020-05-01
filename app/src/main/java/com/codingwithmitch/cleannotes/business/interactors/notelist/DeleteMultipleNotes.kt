@@ -38,7 +38,7 @@ class DeleteMultipleNotes(
                 noteCacheDataSource.deleteNote(note.id)
             }
 
-            object: CacheResponseHandler<NoteListViewState, Int>(
+            val response = object: CacheResponseHandler<NoteListViewState, Int>(
                 response = cacheResult,
                 stateEvent = stateEvent
             ){
@@ -52,6 +52,13 @@ class DeleteMultipleNotes(
                     return null
                 }
             }.getResult()
+
+            // check for random errors
+            if(response?.stateMessage?.response?.message
+                    ?.contains(stateEvent.errorInfo()) == true){
+                onDeleteError = true
+            }
+
         }
 
         if(onDeleteError){

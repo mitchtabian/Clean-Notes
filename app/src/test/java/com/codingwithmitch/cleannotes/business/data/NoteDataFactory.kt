@@ -29,9 +29,10 @@ class NoteDataFactory(
         return ArrayList()
     }
 
-    fun getNotesFromFile(fileName: String): String{
+    fun getNotesFromFile(fileName: String): String {
         return testClassLoader.getResource(fileName).readText()
     }
+
 }
 
 

@@ -9,15 +9,15 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-const val FORCE_DELETE_NOTE_EXCEPTION = "FORCE_EXCEPTION"
+const val FORCE_DELETE_NOTE_EXCEPTION = "FORCE_DELETE_NOTE_EXCEPTION"
+const val FORCE_DELETES_NOTE_EXCEPTION = "FORCE_DELETES_NOTE_EXCEPTION"
+const val FORCE_UPDATE_NOTE_EXCEPTION = "FORCE_UPDATE_NOTE_EXCEPTION"
 
 class FakeNoteCacheDataSourceImpl
 constructor(
-    private val notesData: HashMap<String, Note>
+    private val notesData: HashMap<String, Note>,
+    private val dateUtil: DateUtil
 ): NoteCacheDataSource{
-
-    private val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss a", Locale.ENGLISH)
-    private val dateUtil = DateUtil(sdf)
 
     override suspend fun insertNote(note: Note): Long {
         notesData.put(note.id, note)
@@ -26,6 +26,9 @@ constructor(
 
     override suspend fun deleteNote(primaryKey: String): Int {
         if(primaryKey.equals(FORCE_DELETE_NOTE_EXCEPTION)){
+            throw Exception("Something went wrong deleting the note.")
+        }
+        else if(primaryKey.equals(FORCE_DELETES_NOTE_EXCEPTION)){
             throw Exception("Something went wrong deleting the note.")
         }
         return notesData.remove(primaryKey)?.let { note ->
@@ -48,6 +51,9 @@ constructor(
         newTitle: String,
         newBody: String?
     ): Int {
+        if(primaryKey.equals(FORCE_UPDATE_NOTE_EXCEPTION)){
+            throw Exception("Something went wrong updating the note.")
+        }
         val updatedNote = Note(
             id = primaryKey,
             title = newTitle,
@@ -74,7 +80,7 @@ constructor(
             if(note.title.contains(query)){
                 results.add(note)
             }
-            if(note.body.contains(query)){
+            else if(note.body.contains(query)){
                 results.add(note)
             }
             if(results.size > (page * NOTE_PAGINATION_PAGE_SIZE)){
