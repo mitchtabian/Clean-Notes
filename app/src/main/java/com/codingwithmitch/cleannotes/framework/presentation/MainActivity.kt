@@ -67,8 +67,10 @@ class MainActivity : AppCompatActivity(),
         FirebaseAuth.getInstance()
             .signInWithEmailAndPassword(EMAIL, PASSWORD)
             .addOnCompleteListener {
-                printLogD("MainActivity",
-                    "Signing in to Firebase: ${it.result}")
+                if(it.isSuccessful){
+                    printLogD("MainActivity",
+                        "Signing in to Firebase: ${it.result}")
+                }
             }
     }
 

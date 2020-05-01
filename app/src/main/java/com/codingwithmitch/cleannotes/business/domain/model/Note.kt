@@ -10,4 +10,6 @@ data class Note(
     val body: String,
     val updated_at: String,
     val created_at: String
-) : Parcelable
+) : Parcelable{
+
+}

@@ -1,12 +1,15 @@
 package com.codingwithmitch.cleannotes.framework.datasource.network.implementation
 
+import android.util.Log
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.framework.datasource.network.abstraction.NoteFirestoreService
 import com.codingwithmitch.cleannotes.framework.datasource.network.mappers.NetworkMapper
-import com.google.android.gms.tasks.Task
+import com.codingwithmitch.cleannotes.framework.datasource.network.model.NoteNetworkEntity
+import com.codingwithmitch.cleannotes.util.cLog
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
+import kotlinx.coroutines.tasks.await
 import java.lang.Exception
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -28,37 +31,64 @@ constructor(
     private val networkMapper: NetworkMapper
 ): NoteFirestoreService {
 
-    override suspend fun insertOrUpdateNote(note: Note): Task<Void> {
+    override suspend fun insertOrUpdateNote(note: Note) {
         val entity = networkMapper.mapToEntity(note)
         entity.updated_at = Timestamp.now() // for updates
-        return firestore
+        firestore
             .collection(NOTES_COLLECTION)
             .document(USER_ID)
             .collection(NOTES_COLLECTION)
             .document(entity.id)
             .set(entity)
+            .addOnFailureListener {
+                // send error reports to Firebase Crashlytics
+                cLog(
+                    Log.ERROR,
+                    "NoteFirestoreServiceImpl: insertOrUpdateNote",
+                    it.message
+                )
+            }
+            .await()
     }
 
-    override suspend fun deleteNote(primaryKey: String): Task<Void> {
-        return firestore
+    override suspend fun deleteNote(primaryKey: String) {
+        firestore
             .collection(NOTES_COLLECTION)
             .document(USER_ID)
             .collection(NOTES_COLLECTION)
             .document(primaryKey)
             .delete()
+            .addOnFailureListener {
+                // send error reports to Firebase Crashlytics
+                cLog(
+                    Log.ERROR,
+                    "NoteFirestoreServiceImpl: deleteNote",
+                    it.message
+                )
+            }
+            .await()
     }
 
-    override suspend fun insertDeletedNote(note: Note): Task<Void> {
+    override suspend fun insertDeletedNote(note: Note) {
         val entity = networkMapper.mapToEntity(note)
-        return firestore
+        firestore
             .collection(DELETES_COLLECTION)
             .document(USER_ID)
             .collection(NOTES_COLLECTION)
             .document(entity.id)
             .set(entity)
+            .addOnFailureListener {
+                // send error reports to Firebase Crashlytics
+                cLog(
+                    Log.ERROR,
+                    "NoteFirestoreServiceImpl: insertDeletedNote",
+                    it.message
+                )
+            }
+            .await()
     }
 
-    override suspend fun insertDeletedNotes(notes: List<Note>): Task<Void> {
+    override suspend fun insertDeletedNotes(notes: List<Note>) {
         if(notes.size > 500){
             throw Exception("Cannot delete more than 500 notes at a time in firestore.")
         }
@@ -68,50 +98,101 @@ constructor(
             .document(USER_ID)
             .collection(NOTES_COLLECTION)
 
-        return firestore.runBatch { batch ->
+        firestore.runBatch { batch ->
             for(note in notes){
                 val documentRef = collectionRef.document(note.id)
                 batch.set(documentRef, networkMapper.mapToEntity(note))
             }
-        }
+        }.addOnFailureListener {
+            // send error reports to Firebase Crashlytics
+            cLog(
+                Log.ERROR,
+                "NoteFirestoreServiceImpl: insertDeletedNotes",
+                it.message
+            )
+        }.await()
     }
 
-    override suspend fun deleteDeletedNote(note: Note): Task<Void> {
+    override suspend fun deleteDeletedNote(note: Note) {
         val entity = networkMapper.mapToEntity(note)
-        return firestore
+        firestore
             .collection(DELETES_COLLECTION)
             .document(USER_ID)
             .collection(NOTES_COLLECTION)
             .document(entity.id)
             .delete()
+            .addOnFailureListener {
+                // send error reports to Firebase Crashlytics
+                cLog(
+                    Log.ERROR,
+                    "NoteFirestoreServiceImpl: deleteDeletedNote",
+                    it.message
+                )
+            }
+            .await()
     }
 
-    override suspend fun getDeletedNotes(): Task<QuerySnapshot> {
-        return firestore
-            .collection(DELETES_COLLECTION)
-            .document(USER_ID)
-            .collection(NOTES_COLLECTION)
-            .get()
+    override suspend fun getDeletedNotes(): List<Note> {
+        return networkMapper.entityListToNoteList(
+            firestore
+                .collection(DELETES_COLLECTION)
+                .document(USER_ID)
+                .collection(NOTES_COLLECTION)
+                .get()
+                .addOnFailureListener {
+                    // send error reports to Firebase Crashlytics
+                    cLog(
+                        Log.ERROR,
+                        "NoteFirestoreServiceImpl: deleteDeletedNote",
+                        it.message
+                    )
+                }
+            .await().toObjects(NoteNetworkEntity::class.java)
+        )
     }
 
-    override suspend fun searchNote(note: Note): Task<DocumentSnapshot> {
+    override suspend fun searchNote(note: Note): Note? {
         return firestore
             .collection(NOTES_COLLECTION)
             .document(USER_ID)
             .collection(NOTES_COLLECTION)
             .document(note.id)
             .get()
+            .addOnFailureListener {
+                // send error reports to Firebase Crashlytics
+                cLog(
+                    Log.ERROR,
+                    "NoteFirestoreServiceImpl: searchNote",
+                    it.message
+                )
+            }
+            .await()
+            .toObject(NoteNetworkEntity::class.java)?.let {
+                networkMapper.mapFromEntity(it)
+            }
     }
 
-    override suspend fun getAllNotes(): Task<QuerySnapshot> {
-        return firestore
-            .collection(NOTES_COLLECTION)
-            .document(USER_ID)
-            .collection(NOTES_COLLECTION)
-            .get()
+    override suspend fun getAllNotes(): List<Note> {
+        return networkMapper.entityListToNoteList(
+            firestore
+                .collection(NOTES_COLLECTION)
+                .document(USER_ID)
+                .collection(NOTES_COLLECTION)
+                .get()
+                .addOnFailureListener {
+                    // send error reports to Firebase Crashlytics
+                    cLog(
+                        Log.ERROR,
+                        "NoteFirestoreServiceImpl: getAllNotes",
+                        it.message
+                    )
+                }
+                .await()
+                .toObjects(NoteNetworkEntity::class.java)
+        )
     }
 
-    override suspend fun insertOrUpdateNotes(notes: List<Note>): Task<Void> {
+    override suspend fun insertOrUpdateNotes(notes: List<Note>) {
 
         if(notes.size > 500){
             throw Exception("Cannot insert more than 500 notes at a time into firestore.")
@@ -122,12 +203,20 @@ constructor(
             .document(USER_ID)
             .collection(NOTES_COLLECTION)
 
-        return firestore.runBatch { batch ->
+        firestore.runBatch { batch ->
             for(note in notes){
                 val documentRef = collectionRef.document(note.id)
                 batch.set(documentRef, networkMapper.mapToEntity(note))
             }
-        }
+        }.addOnFailureListener {
+            // send error reports to Firebase Crashlytics
+            cLog(
+                Log.ERROR,
+                "NoteFirestoreServiceImpl: insertOrUpdateNotes",
+                it.message
+            )
+        }.await()
+
     }
 
     companion object {

@@ -8,12 +8,8 @@ import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.state.DataState
 import com.codingwithmitch.cleannotes.business.util.safeApiCall
 import com.codingwithmitch.cleannotes.business.util.safeCacheCall
-import com.codingwithmitch.cleannotes.framework.datasource.cache.mappers.CacheMapper
-import com.codingwithmitch.cleannotes.framework.datasource.network.mappers.NetworkMapper
-import com.codingwithmitch.cleannotes.framework.datasource.network.model.NoteNetworkEntity
 import com.codingwithmitch.cleannotes.util.printLogD
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.tasks.await
 
 /*
     Search firestore for all notes in the "deleted" node.
@@ -22,21 +18,19 @@ import kotlinx.coroutines.tasks.await
  */
 class SyncDeletedNotes(
     private val noteCacheDataSource: NoteCacheDataSource,
-    private val noteNetworkDataSource: NoteNetworkDataSource,
-    private val networkMapper: NetworkMapper
+    private val noteNetworkDataSource: NoteNetworkDataSource
 ){
 
     suspend fun syncDeletedNotes(){
 
         val apiResult = safeApiCall(IO){
-            noteNetworkDataSource.getDeletedNotes().await()
-                .toObjects(NoteNetworkEntity::class.java)
+            noteNetworkDataSource.getDeletedNotes()
         }
-        val response = object: ApiResponseHandler<List<NoteNetworkEntity>, List<NoteNetworkEntity>>(
+        val response = object: ApiResponseHandler<List<Note>, List<Note>>(
             response = apiResult,
             stateEvent = null
         ){
-            override suspend fun handleSuccess(resultObj: List<NoteNetworkEntity>): DataState<List<NoteNetworkEntity>>? {
+            override suspend fun handleSuccess(resultObj: List<Note>): DataState<List<Note>>? {
                 return DataState.data(
                     response = null,
                     data = resultObj,
@@ -45,7 +39,7 @@ class SyncDeletedNotes(
             }
         }
 
-        val notes = networkMapper.entityListToNoteList(response.getResult()?.data?: ArrayList())
+        val notes = response.getResult()?.data?: ArrayList()
 
         val cacheResult = safeCacheCall(IO){
             noteCacheDataSource.deleteNotes(notes)
@@ -57,7 +51,7 @@ class SyncDeletedNotes(
         ){
             override suspend fun handleSuccess(resultObj: Int): DataState<Int>? {
                 printLogD("SyncNotes",
-                "num deleted notes: ${resultObj}")
+                    "num deleted notes: ${resultObj}")
                 return DataState.data(
                     response = null,
                     data = resultObj,
@@ -67,6 +61,7 @@ class SyncDeletedNotes(
         }.getResult()
 
     }
+
 
 }
 

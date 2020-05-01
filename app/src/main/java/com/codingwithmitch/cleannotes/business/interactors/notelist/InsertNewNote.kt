@@ -82,32 +82,9 @@ class InsertNewNote(
     private suspend fun updateNetwork(cacheResponse: String?, newNote: Note ){
         if(cacheResponse.equals(INSERT_NOTE_SUCCESS)){
 
-            // not listening for success/failure here b/c we don't take any action either way
-            val apiResult = safeApiCall(IO){
+            safeApiCall(IO){
                 noteNetworkDataSource.insertOrUpdateNote(newNote)
             }
-
-            object: ApiResponseHandler<NoteDetailViewState, Task<Void>>(
-                response = apiResult,
-                stateEvent = null
-            ){
-                override suspend fun handleSuccess(resultObj: Task<Void>): DataState<NoteDetailViewState>? {
-                    resultObj.addOnFailureListener {
-
-                        // Good place to send error report
-                        printLogD("InsertNote",
-                            "Network: onFailure: ${it.message}")
-
-                        printLogD("InsertNote",
-                            "Network: onFailure: ${it.cause}")
-
-                        printLogD("InsertNote",
-                            "Network: onFailure: ${it}")
-                    }
-                    return null
-                }
-
-            }.getResult()
         }
     }
 

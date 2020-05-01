@@ -1,29 +1,26 @@
 package com.codingwithmitch.cleannotes.framework.datasource.network.abstraction
 
 import com.codingwithmitch.cleannotes.business.domain.model.Note
-import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.QuerySnapshot
 
 interface NoteFirestoreService {
 
-    suspend fun insertOrUpdateNote(note: Note): Task<Void>
+    suspend fun insertOrUpdateNote(note: Note)
 
-    suspend fun insertOrUpdateNotes(notes: List<Note>): Task<Void>
+    suspend fun insertOrUpdateNotes(notes: List<Note>)
 
-    suspend fun deleteNote(primaryKey: String): Task<Void>
+    suspend fun deleteNote(primaryKey: String)
 
-    suspend fun insertDeletedNote(note: Note): Task<Void>
+    suspend fun insertDeletedNote(note: Note)
 
-    suspend fun insertDeletedNotes(notes: List<Note>): Task<Void>
+    suspend fun insertDeletedNotes(notes: List<Note>)
 
-    suspend fun deleteDeletedNote(note: Note): Task<Void>
+    suspend fun deleteDeletedNote(note: Note)
 
-    suspend fun getDeletedNotes(): Task<QuerySnapshot>
+    suspend fun getDeletedNotes(): List<Note>
 
-    suspend fun searchNote(note: Note): Task<DocumentSnapshot>
+    suspend fun searchNote(note: Note): Note?
 
-    suspend fun getAllNotes(): Task<QuerySnapshot>
+    suspend fun getAllNotes(): List<Note>
 
 
 }

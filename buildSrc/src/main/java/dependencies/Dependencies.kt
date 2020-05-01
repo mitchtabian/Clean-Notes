@@ -19,6 +19,8 @@ object Versions {
     val leak_canary = "2.0-alpha-3"
     val swipe_refresh_layout = "1.1.0-alpha03"
     val firebase_firestore = "21.4.2"
+    val firebase_analytics = "17.4.0"
+    val firebase_crashlytics = "2.10.1"
     val firebase_auth = "19.3.0"
     val espresso_core = "3.1.1"
     val espresso_idling_resource = "3.2.0"
@@ -34,6 +36,7 @@ object Versions {
     val junit_4_version = "4.12"
     val fragment_version = "1.2.0"
     val androidx_test_ext = "1.1.1"
+    val fabric_version = "1.31.2"
 }
 
 object Dependencies {
@@ -56,6 +59,8 @@ object Dependencies {
     val leak_canary = "com.squareup.leakcanary:leakcanary-android:${Versions.leak_canary}"
     val firebase_firestore = "com.google.firebase:firebase-firestore-ktx:${Versions.firebase_firestore}"
     val firebase_auth = "com.google.firebase:firebase-auth:${Versions.firebase_auth}"
+    val firebase_analytics = "com.google.firebase:firebase-analytics:${Versions.firebase_analytics}"
+    val firebase_crashlytics = "com.crashlytics.sdk.android:crashlytics:${Versions.firebase_crashlytics}"
     val lifecycle_runtime = "androidx.lifecycle:lifecycle-runtime:${Versions.lifecycle_version}"
     val lifecycle_coroutines = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycle_version}"
     val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit2_version}"
@@ -99,6 +104,12 @@ object Build {
     val kotlin_gradle_plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     val google_services = "com.google.gms:google-services:${Versions.play_services}"
     val junit5 = "de.mannodermaus.gradle.plugins:android-junit5:1.3.2.0"
+    val fabric = "io.fabric.tools:gradle:${Versions.fabric_version}"
+}
+
+object Repositories{
+
+    val fabric = "https://maven.fabric.io/public"
 }
 
 object JavaVersion {

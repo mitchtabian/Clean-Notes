@@ -17,13 +17,22 @@ class NoteDataFactory(
         return notes
     }
 
+    fun produceHashMapOfNotes(noteList: List<Note>): HashMap<String, Note>{
+        val map = HashMap<String, Note>()
+        for(note in noteList){
+            map.put(note.id, note)
+        }
+        return map
+    }
+
     fun produceEmptyListOfNotes(): List<Note>{
         return ArrayList()
     }
 
-    fun getNotesFromFile(fileName: String): String{
+    fun getNotesFromFile(fileName: String): String {
         return testClassLoader.getResource(fileName).readText()
     }
+
 }
 
 

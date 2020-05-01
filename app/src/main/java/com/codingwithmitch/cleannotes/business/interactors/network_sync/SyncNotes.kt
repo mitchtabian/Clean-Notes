@@ -8,12 +8,9 @@ import com.codingwithmitch.cleannotes.business.state.DataState
 import com.codingwithmitch.cleannotes.business.util.DateUtil
 import com.codingwithmitch.cleannotes.business.util.safeApiCall
 import com.codingwithmitch.cleannotes.business.util.safeCacheCall
-import com.codingwithmitch.cleannotes.framework.datasource.network.mappers.NetworkMapper
-import com.codingwithmitch.cleannotes.framework.datasource.network.model.NoteNetworkEntity
 import com.codingwithmitch.cleannotes.util.printLogD
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.tasks.await
 
 /*
     Query all notes in the cache. It will then search firestore for
@@ -27,8 +24,7 @@ import kotlinx.coroutines.tasks.await
 class SyncNotes(
     private val noteCacheDataSource: NoteCacheDataSource,
     private val noteNetworkDataSource: NoteNetworkDataSource,
-    private val dateUtil: DateUtil,
-    private val networkMapper: NetworkMapper
+    private val dateUtil: DateUtil
 ){
 
     suspend fun syncNotes() {
@@ -70,15 +66,14 @@ class SyncNotes(
         cachedNotes: ArrayList<Note>
     ) = withContext(IO){
 
-        val querySnapshot = noteNetworkDataSource.getAllNotes().await()
-        val noteList = querySnapshot.toObjects(NoteNetworkEntity::class.java)
+        val noteList = noteNetworkDataSource.getAllNotes()
 
         val job = launch {
             for(note in noteList){
                 noteCacheDataSource.searchNoteById(note.id)?.let { cachedNote ->
                     cachedNotes.remove(cachedNote)
                     checkIfCachedNoteRequiresUpdate(cachedNote, note)
-                }?: noteCacheDataSource.insertNote(networkMapper.mapFromEntity(note))
+                }?: noteCacheDataSource.insertNote(note)
             }
         }
         job.join()
@@ -91,10 +86,10 @@ class SyncNotes(
 
     private suspend fun checkIfCachedNoteRequiresUpdate(
         cachedNote: Note,
-        networkNote: NoteNetworkEntity
+        networkNote: Note
     ){
         val cacheUpdatedAt = dateUtil.convertServerStringDateToLong(cachedNote.updated_at) / 1000
-        val networkUpdatedAt = networkNote.updated_at.toDate().time / 1000
+        val networkUpdatedAt = dateUtil.convertServerStringDateToLong(networkNote.updated_at) / 1000
 
         // update cache (network has newest data)
         if(networkUpdatedAt > cacheUpdatedAt){
