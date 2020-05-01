@@ -169,31 +169,6 @@ class SearchNotesTest {
     }
 
 
-//
-//    // 3) Returns stateMessage=ERROR due to exception
-//    @Test
-//    fun searchNotes_throwException_showErrorMessage() = runBlocking {
-//        val noteCacheDataSource = mockk<NoteCacheDataSource>()
-//        every {
-//            runBlocking {
-//                noteCacheDataSource.searchNotes(any(), any(), any())
-//            }
-//        } throws Exception("Something went wrong")
-//
-//        searchNotes = SearchNotes(noteCacheDataSource)
-//        (searchNotes as SearchNotes).searchNotes("", "", 0, SearchNotesEvent())
-//            .collect(object: FlowCollector<DataState<NoteListViewState>?>{
-//                override suspend fun emit(value: DataState<NoteListViewState>?) {
-//
-//                    assertThat(
-//                        value?.stateMessage?.response?.message,
-//                        containsString(SearchNotesEvent().errorInfo())
-//                    )
-//                }
-//            })
-//    }
-
-
 }
 
 
