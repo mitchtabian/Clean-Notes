@@ -1,6 +1,8 @@
 # Clean-Notes
 Android example with Clean Architecture by layer.
-I got rid of dynamic feature modules because you cannot write tests currently. See bug: [google issue tracker](https://issuetracker.google.com/issues/145191501).
+
+
+**NOTE** I got rid of dynamic feature modules because you cannot write tests currently. See bug: [google issue tracker](https://issuetracker.google.com/issues/145191501).
 
 After this course I will make another course on Dynamic Feature Modules.
 
