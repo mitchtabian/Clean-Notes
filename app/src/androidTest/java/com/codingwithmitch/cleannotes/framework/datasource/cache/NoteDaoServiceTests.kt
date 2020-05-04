@@ -1,17 +1,27 @@
 package com.codingwithmitch.cleannotes.framework.datasource.cache
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import com.codingwithmitch.cleannotes.BaseTest
 import com.codingwithmitch.cleannotes.business.domain.model.Note
+import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
+import com.codingwithmitch.cleannotes.business.util.DateUtil
+import com.codingwithmitch.cleannotes.di.TestAppComponent
 import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NoteDaoService
+import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NoteDao
 import com.codingwithmitch.cleannotes.framework.datasource.cache.implementation.NoteDaoServiceImpl
+import com.codingwithmitch.cleannotes.framework.datasource.cache.mappers.CacheMapper
+import com.codingwithmitch.cleannotes.framework.datasource.data.NoteDataFactory
+import com.codingwithmitch.cleannotes.util.EspressoIdlingResourceRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking
 import org.junit.FixMethodOrder
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import java.util.*
+import javax.inject.Inject
 import kotlin.collections.ArrayList
 import kotlin.random.Random
 import kotlin.test.assertEquals
@@ -45,17 +55,51 @@ import kotlin.test.assertTrue
 @FlowPreview
 @RunWith(AndroidJUnit4ClassRunner::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-class NoteDaoServiceTests: CacheTest() {
+class NoteDaoServiceTests: BaseTest(){
+
+    @get: Rule
+    val espressoIdlingResourceRule = EspressoIdlingResourceRule()
+
 
     // system in test
     private val noteDaoService: NoteDaoService
 
+    // dependencies
+    @Inject
+    lateinit var dao: NoteDao
+
+    @Inject
+    lateinit var noteDataFactory: NoteDataFactory
+
+    @Inject
+    lateinit var dateUtil: DateUtil
+
+    @Inject
+    lateinit var noteFactory: NoteFactory
+
+    @Inject
+    lateinit var cacheMapper: CacheMapper
+
     init {
+        injectTest()
+        insertTestData()
         noteDaoService = NoteDaoServiceImpl(
             noteDao = dao,
             noteMapper = cacheMapper,
             dateUtil = dateUtil
         )
+    }
+
+    override fun injectTest() {
+        (application.appComponent as TestAppComponent)
+            .inject(this)
+    }
+
+    fun insertTestData() = runBlocking{
+        val entityList = cacheMapper.noteListToEntityList(
+            noteDataFactory.produceListOfNotes()
+        )
+        dao.insertNotes(entityList)
     }
 
     /**

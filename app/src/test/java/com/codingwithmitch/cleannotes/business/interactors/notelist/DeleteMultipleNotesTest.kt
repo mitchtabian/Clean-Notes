@@ -14,10 +14,10 @@ import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.Note
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.runBlocking
-import org.junit.After
-import org.junit.Before
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.*
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -65,12 +65,12 @@ class DeleteMultipleNotesTest {
     private lateinit var noteNetworkDataSource: NoteNetworkDataSource
     private lateinit var noteFactory: NoteFactory
 
-    @After
+    @AfterEach
     fun afterEach(){
         deleteNotes = null
     }
 
-    @Before
+    @BeforeEach
     fun beforeEach(){
         // recreate the dataset before each test
         dependencyContainer = DependencyContainer()

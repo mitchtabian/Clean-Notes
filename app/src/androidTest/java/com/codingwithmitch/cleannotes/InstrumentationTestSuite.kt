@@ -1,4 +1,4 @@
-package com.codingwithmitch.cleannotes.framework.datasource
+package com.codingwithmitch.cleannotes
 
 import com.codingwithmitch.cleannotes.framework.datasource.cache.NoteDaoServiceTests
 import com.codingwithmitch.cleannotes.framework.datasource.network.NoteFirestoreServiceTests
@@ -8,7 +8,6 @@ import com.codingwithmitch.cleannotes.framework.presentation.notelist.NoteListFr
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
-import org.junit.Ignore
 import org.junit.runner.RunWith
 import org.junit.runners.Suite
 
@@ -20,8 +19,33 @@ import org.junit.runners.Suite
 @Suite.SuiteClasses(
     NoteDaoServiceTests::class,
     NoteFirestoreServiceTests::class,
-    NotesFeatureTest::class,
     NoteDetailFragmentTests::class,
-    NoteListFragmentTests::class
+    NoteListFragmentTests::class,
+    NotesFeatureTest::class
 )
-class DataSourceTestSuite
+class InstrumentationTestSuite
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -15,8 +15,8 @@ import javax.inject.Singleton
 @Module
 object TestNoteFragmentFactoryModule {
 
-    @JvmStatic
     @Singleton
+    @JvmStatic
     @Provides
     fun provideNoteFragmentFactory(
         viewModelFactory: ViewModelProvider.Factory,

@@ -17,12 +17,14 @@ import com.codingwithmitch.cleannotes.framework.datasource.cache.mappers.CacheMa
 import com.codingwithmitch.cleannotes.framework.datasource.data.NoteDataFactory
 import com.codingwithmitch.cleannotes.framework.presentation.TestNoteFragmentFactory
 import com.codingwithmitch.cleannotes.framework.presentation.UIController
+import com.codingwithmitch.cleannotes.util.EspressoIdlingResourceRule
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import org.hamcrest.Matchers.not
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.*
@@ -39,6 +41,9 @@ import javax.inject.Inject
 @FlowPreview
 @RunWith(AndroidJUnit4ClassRunner::class)
 class NoteDetailFragmentTests: BaseTest() {
+
+    @get: Rule
+    val espressoIdlingResourceRule = EspressoIdlingResourceRule()
 
     @Inject
     lateinit var fragmentFactory: TestNoteFragmentFactory
@@ -121,6 +126,7 @@ class NoteDetailFragmentTests: BaseTest() {
         verify {
             navController.popBackStack()
         }
+
     }
 
     override fun injectTest() {
