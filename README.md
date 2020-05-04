@@ -1,7 +1,11 @@
 # Clean-Notes
-Dynamic Feature Modules & Clean Architecture by layer
-
 **Work in progress**
+
+Android example with Clean Architecture by layer.
+
+**NOTE** I got rid of dynamic feature modules because you cannot write tests currently. See bug: [google issue tracker](https://issuetracker.google.com/issues/145191501).
+
+After this course I will make another course on Dynamic Feature Modules.
 
 # Credits
 1. https://proandroiddev.com/gradle-dependency-management-with-kotlin-94eed4df9a28
