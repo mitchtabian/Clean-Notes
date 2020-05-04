@@ -15,8 +15,8 @@ import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.Note
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.runBlocking
+import org.junit.Test
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Test
 import java.util.*
 
 

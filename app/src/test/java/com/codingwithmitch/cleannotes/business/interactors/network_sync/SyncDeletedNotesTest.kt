@@ -9,7 +9,7 @@ import com.codingwithmitch.cleannotes.di.DependencyContainer
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Test
+import org.junit.Test
 
 /*
 

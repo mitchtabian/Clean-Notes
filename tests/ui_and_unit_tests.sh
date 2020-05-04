@@ -20,7 +20,7 @@ print_blue "\n\n\ncd into working directory...\n"
 cd "/d/Android Studio Projects/CleanNotes/"
 
 print_blue "\n\n\nrun unit tests...\n"
-./gradlew test
+./gradlew clean test
 print_green "\n\n\n unit tests COMPLETE.\n"
 
 print_blue "\n\n\n run androidTests...\n"
