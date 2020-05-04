@@ -9,7 +9,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.core.content.ContextCompat
-import com.codingwithmitch.cleannotes.business.state.StateMessageCallback
+import com.codingwithmitch.cleannotes.business.domain.state.StateMessageCallback
 import com.codingwithmitch.cleannotes.util.TodoCallback
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay

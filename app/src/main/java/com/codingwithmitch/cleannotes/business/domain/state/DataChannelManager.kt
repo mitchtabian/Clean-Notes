@@ -1,4 +1,4 @@
-package com.codingwithmitch.cleannotes.business.state
+package com.codingwithmitch.cleannotes.business.domain.state
 
 import com.codingwithmitch.cleannotes.util.printLogD
 import kotlinx.coroutines.*

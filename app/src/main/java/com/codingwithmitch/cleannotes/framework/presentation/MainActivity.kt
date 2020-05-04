@@ -12,8 +12,8 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.callbacks.onDismiss
 import com.afollestad.materialdialogs.input.input
 import com.codingwithmitch.cleannotes.R
-import com.codingwithmitch.cleannotes.business.state.*
-import com.codingwithmitch.cleannotes.business.state.UIComponentType.*
+import com.codingwithmitch.cleannotes.business.domain.state.*
+import com.codingwithmitch.cleannotes.business.domain.state.UIComponentType.*
 import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteFirestoreServiceImpl.Companion.EMAIL
 import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteFirestoreServiceImpl.Companion.PASSWORD
 import com.codingwithmitch.cleannotes.framework.presentation.common.displayToast

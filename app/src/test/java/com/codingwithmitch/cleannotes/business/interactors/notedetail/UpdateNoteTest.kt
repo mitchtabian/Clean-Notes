@@ -8,7 +8,7 @@ import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
 import com.codingwithmitch.cleannotes.business.interactors.notedetail.UpdateNote.Companion.UPDATE_NOTE_FAILED
 import com.codingwithmitch.cleannotes.business.interactors.notedetail.UpdateNote.Companion.UPDATE_NOTE_SUCCESS
-import com.codingwithmitch.cleannotes.business.state.DataState
+import com.codingwithmitch.cleannotes.business.domain.state.DataState
 import com.codingwithmitch.cleannotes.di.DependencyContainer
 import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.NoteDetailStateEvent.*
 import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.NoteDetailViewState

@@ -7,7 +7,7 @@ import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
 import com.codingwithmitch.cleannotes.business.interactors.notelist.DeleteMultipleNotes.Companion.DELETE_NOTES_YOU_MUST_SELECT
 import com.codingwithmitch.cleannotes.business.interactors.notelist.NoteListInteractors
-import com.codingwithmitch.cleannotes.business.state.*
+import com.codingwithmitch.cleannotes.business.domain.state.*
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NOTE_FILTER_DATE_CREATED
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NOTE_ORDER_DESC
 import com.codingwithmitch.cleannotes.framework.datasource.preferences.PreferenceKeys.Companion.NOTE_FILTER
@@ -19,7 +19,6 @@ import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.Note
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListViewState
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListViewState.*
 import com.codingwithmitch.cleannotes.util.printLogD
-import com.google.protobuf.LazyStringArrayList
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

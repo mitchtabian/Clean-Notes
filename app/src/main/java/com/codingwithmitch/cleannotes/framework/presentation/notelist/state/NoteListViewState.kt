@@ -2,7 +2,7 @@ package com.codingwithmitch.cleannotes.framework.presentation.notelist.state
 
 import android.os.Parcelable
 import com.codingwithmitch.cleannotes.business.domain.model.Note
-import com.codingwithmitch.cleannotes.business.state.ViewState
+import com.codingwithmitch.cleannotes.business.domain.state.ViewState
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize

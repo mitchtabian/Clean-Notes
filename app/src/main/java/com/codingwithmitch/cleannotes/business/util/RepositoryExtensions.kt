@@ -9,7 +9,6 @@ import com.codingwithmitch.cleannotes.business.data.network.ApiResult
 import com.codingwithmitch.cleannotes.business.data.network.NetworkConstants.NETWORK_TIMEOUT
 import com.codingwithmitch.cleannotes.business.data.network.NetworkErrors.NETWORK_ERROR_TIMEOUT
 import com.codingwithmitch.cleannotes.business.data.network.NetworkErrors.NETWORK_ERROR_UNKNOWN
-import com.codingwithmitch.cleannotes.business.state.*
 import com.codingwithmitch.cleannotes.business.util.GenericErrors.ERROR_UNKNOWN
 import com.codingwithmitch.cleannotes.util.cLog
 import kotlinx.coroutines.*

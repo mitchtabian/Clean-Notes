@@ -8,7 +8,7 @@ import com.codingwithmitch.cleannotes.business.data.network.abstraction.NoteNetw
 import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
 import com.codingwithmitch.cleannotes.business.interactors.notelist.RestoreDeletedNote.Companion.RESTORE_NOTE_FAILED
 import com.codingwithmitch.cleannotes.business.interactors.notelist.RestoreDeletedNote.Companion.RESTORE_NOTE_SUCCESS
-import com.codingwithmitch.cleannotes.business.state.DataState
+import com.codingwithmitch.cleannotes.business.domain.state.DataState
 import com.codingwithmitch.cleannotes.di.DependencyContainer
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListStateEvent.*
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListViewState

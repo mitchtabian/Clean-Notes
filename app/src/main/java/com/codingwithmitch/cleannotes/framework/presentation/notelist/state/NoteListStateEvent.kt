@@ -1,9 +1,8 @@
 package com.codingwithmitch.cleannotes.framework.presentation.notelist.state
 
 import com.codingwithmitch.cleannotes.business.domain.model.Note
-import com.codingwithmitch.cleannotes.business.state.StateEvent
-import com.codingwithmitch.cleannotes.business.state.StateMessage
-import com.google.protobuf.LazyStringArrayList
+import com.codingwithmitch.cleannotes.business.domain.state.StateEvent
+import com.codingwithmitch.cleannotes.business.domain.state.StateMessage
 
 
 sealed class NoteListStateEvent: StateEvent {

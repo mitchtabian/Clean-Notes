@@ -1,8 +1,8 @@
 package com.codingwithmitch.cleannotes.framework.presentation
 
-import com.codingwithmitch.cleannotes.business.state.DialogInputCaptureCallback
-import com.codingwithmitch.cleannotes.business.state.Response
-import com.codingwithmitch.cleannotes.business.state.StateMessageCallback
+import com.codingwithmitch.cleannotes.business.domain.state.DialogInputCaptureCallback
+import com.codingwithmitch.cleannotes.business.domain.state.Response
+import com.codingwithmitch.cleannotes.business.domain.state.StateMessageCallback
 
 
 interface UIController {

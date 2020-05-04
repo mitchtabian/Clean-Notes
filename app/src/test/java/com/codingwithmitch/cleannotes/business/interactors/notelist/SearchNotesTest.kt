@@ -1,7 +1,7 @@
 package com.codingwithmitch.cleannotes.business.interactors.notelist
 
 import com.codingwithmitch.cleannotes.business.data.cache.abstraction.NoteCacheDataSource
-import com.codingwithmitch.cleannotes.business.state.DataState
+import com.codingwithmitch.cleannotes.business.domain.state.DataState
 import com.codingwithmitch.cleannotes.business.data.cache.CacheErrors
 import com.codingwithmitch.cleannotes.business.data.cache.FORCE_SEARCH_NOTES_EXCEPTION
 import com.codingwithmitch.cleannotes.business.data.network.abstraction.NoteNetworkDataSource

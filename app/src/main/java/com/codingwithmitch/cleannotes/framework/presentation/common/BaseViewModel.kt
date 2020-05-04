@@ -1,7 +1,7 @@
 package com.codingwithmitch.cleannotes.framework.presentation.common
 
 import androidx.lifecycle.*
-import com.codingwithmitch.cleannotes.business.state.*
+import com.codingwithmitch.cleannotes.business.domain.state.*
 import com.codingwithmitch.cleannotes.business.util.GenericErrors
 import com.codingwithmitch.cleannotes.util.printLogD
 import kotlinx.coroutines.*

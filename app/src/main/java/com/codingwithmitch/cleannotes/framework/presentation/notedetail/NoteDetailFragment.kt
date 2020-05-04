@@ -15,23 +15,19 @@ import com.codingwithmitch.cleannotes.business.interactors.common.DeleteNote.Com
 import com.codingwithmitch.cleannotes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_SUCCESS
 import com.codingwithmitch.cleannotes.business.interactors.notedetail.UpdateNote.Companion.UPDATE_NOTE_FAILED_PK
 import com.codingwithmitch.cleannotes.business.interactors.notedetail.UpdateNote.Companion.UPDATE_NOTE_SUCCESS
-import com.codingwithmitch.cleannotes.business.state.*
+import com.codingwithmitch.cleannotes.business.domain.state.*
 import com.codingwithmitch.cleannotes.framework.presentation.common.*
 import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.CollapsingToolbarState.*
 import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.NoteDetailStateEvent.*
 import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.NoteDetailViewState
 import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.NoteInteractionState.*
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.NOTE_PENDING_DELETE_BUNDLE_KEY
-import com.codingwithmitch.cleannotes.util.EspressoIdlingResource
 import com.google.android.material.appbar.AppBarLayout
 import com.yydcdut.markdown.MarkdownProcessor
 import com.yydcdut.markdown.syntax.edit.EditFactory
 import kotlinx.android.synthetic.main.fragment_note_detail.*
 import kotlinx.android.synthetic.main.layout_note_detail_toolbar.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.Main
-import javax.inject.Inject
-import javax.inject.Singleton
 
 const val NOTE_DETAIL_STATE_BUNDLE_KEY = "com.codingwithmitch.cleannotes.notes.framework.presentation.notedetail.state"
 
