@@ -36,6 +36,10 @@ constructor(
         return firestoreService.getDeletedNotes()
     }
 
+    override suspend fun deleteAllNotes() {
+        firestoreService.deleteAllNotes()
+    }
+
     override suspend fun searchNote(note: Note): Note? {
         return firestoreService.searchNote(note)
     }

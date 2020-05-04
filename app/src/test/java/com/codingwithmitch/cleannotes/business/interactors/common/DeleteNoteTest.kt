@@ -70,7 +70,7 @@ class DeleteNoteTest {
             .searchNotes("", "", 1).get(0)
 
         deleteNotes.deleteNote(
-            noteToDelete as Note,
+            noteToDelete,
             DeleteNoteEvent(noteToDelete)
         ).collect(object: FlowCollector<DataState<NoteListViewState>?>{
             override suspend fun emit(value: DataState<NoteListViewState>?) {

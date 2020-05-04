@@ -1,28 +1,23 @@
 package com.codingwithmitch.cleannotes.framework.presentation.end_to_end
 
-import androidx.navigation.findNavController
 import androidx.test.core.app.launchActivity
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions.*
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.codingwithmitch.cleannotes.BaseTest
 import com.codingwithmitch.cleannotes.R
+import com.codingwithmitch.cleannotes.business.data.network.abstraction.NoteNetworkDataSource
 import com.codingwithmitch.cleannotes.di.TestAppComponent
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NoteDao
 import com.codingwithmitch.cleannotes.framework.datasource.cache.mappers.CacheMapper
 import com.codingwithmitch.cleannotes.framework.datasource.cache.model.NoteCacheEntity
 import com.codingwithmitch.cleannotes.framework.datasource.data.NoteDataFactory
 import com.codingwithmitch.cleannotes.framework.presentation.MainActivity
-import com.codingwithmitch.cleannotes.framework.presentation.notelist.NoteListAdapter
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.NoteListAdapter.*
 import com.codingwithmitch.cleannotes.util.EspressoIdlingResourceRule
-import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking
@@ -59,6 +54,9 @@ class NotesFeatureTest: BaseTest() {
     @Inject
     lateinit var dao: NoteDao
 
+    @Inject
+    lateinit var noteNetworkDataSource: NoteNetworkDataSource
+
     private val testEntityList: List<NoteCacheEntity>
 
     init {
@@ -66,10 +64,14 @@ class NotesFeatureTest: BaseTest() {
         testEntityList = cacheMapper.noteListToEntityList(
             noteDataFactory.produceListOfNotes()
         )
-        insertTestData(testEntityList)
+        prepareDataSet(testEntityList)
     }
 
-    private fun insertTestData(testData: List<NoteCacheEntity>) = runBlocking{
+    // ** Must clear network and cache so there is no previous state issues **
+    private fun prepareDataSet(testData: List<NoteCacheEntity>) = runBlocking{
+        // clear any existing data so recyclerview isn't overwhelmed
+        dao.deleteAllNotes()
+        noteNetworkDataSource.deleteAllNotes()
         dao.insertNotes(testData)
     }
 
@@ -77,9 +79,6 @@ class NotesFeatureTest: BaseTest() {
     fun generalEndToEndTest(){
 
         val scenario = launchActivity<MainActivity>()
-
-        // confirm SplashFragment in view
-        onView(withId(R.id.splash_fragment_container)).check(matches(isDisplayed()))
 
         // Wait for NoteListFragment to come into view
         waitViewShown(withId(R.id.recycler_view))

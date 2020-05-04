@@ -16,6 +16,8 @@ interface NoteFirestoreService {
 
     suspend fun deleteDeletedNote(note: Note)
 
+    suspend fun deleteAllNotes()
+
     suspend fun getDeletedNotes(): List<Note>
 
     suspend fun searchNote(note: Note): Note?

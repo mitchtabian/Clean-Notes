@@ -64,7 +64,7 @@ abstract class DataChannelManager<ViewState> {
             jobFunction
                 .onEach { dataState ->
                     dataState?.let { dState ->
-                        offerToDataChannel(dataState)
+                        offerToDataChannel(dState)
                     }
                 }
                 .launchIn(getChannelScope())

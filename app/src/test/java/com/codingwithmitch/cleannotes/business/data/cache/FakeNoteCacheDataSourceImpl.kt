@@ -40,7 +40,7 @@ constructor(
         else if(primaryKey.equals(FORCE_DELETES_NOTE_EXCEPTION)){
             throw Exception("Something went wrong deleting the note.")
         }
-        return notesData.remove(primaryKey)?.let { note ->
+        return notesData.remove(primaryKey)?.let {
             1 // return 1 for success
         }?: - 1 // -1 for failure
     }
@@ -70,7 +70,7 @@ constructor(
             updated_at = dateUtil.getCurrentTimestamp(),
             created_at = notesData.get(primaryKey)?.created_at?: dateUtil.getCurrentTimestamp()
         )
-        return notesData.get(primaryKey)?.let { note ->
+        return notesData.get(primaryKey)?.let {
             notesData.put(primaryKey, updatedNote)
             1 // success
         }?: -1 // nothing to update

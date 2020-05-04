@@ -8,6 +8,7 @@ import com.codingwithmitch.cleannotes.business.data.network.abstraction.NoteNetw
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
 import com.codingwithmitch.cleannotes.business.util.DateUtil
+import com.codingwithmitch.cleannotes.util.isUnitTest
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
@@ -15,12 +16,15 @@ import kotlin.collections.HashMap
 class DependencyContainer {
 
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd hh:mm:ss a", Locale.ENGLISH)
-    private val dateUtil = DateUtil(dateFormat)
-
+    val dateUtil = DateUtil(dateFormat)
     lateinit var noteNetworkDataSource: NoteNetworkDataSource
     lateinit var noteCacheDataSource: NoteCacheDataSource
     lateinit var noteFactory: NoteFactory
     lateinit var noteDataFactory: NoteDataFactory
+
+    init {
+        isUnitTest = true // for Logger.kt
+    }
 
     // data sets
     lateinit var notesData: HashMap<String, Note>

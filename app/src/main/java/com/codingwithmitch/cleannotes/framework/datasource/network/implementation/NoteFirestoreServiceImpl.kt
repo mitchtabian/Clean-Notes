@@ -132,6 +132,20 @@ constructor(
             .await()
     }
 
+    // used in testing
+    override suspend fun deleteAllNotes() {
+        firestore
+            .collection(NOTES_COLLECTION)
+            .document(USER_ID)
+            .delete()
+            .await()
+        firestore
+            .collection(DELETES_COLLECTION)
+            .document(USER_ID)
+            .delete()
+            .await()
+    }
+
     override suspend fun getDeletedNotes(): List<Note> {
         return networkMapper.entityListToNoteList(
             firestore

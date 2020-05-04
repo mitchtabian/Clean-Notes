@@ -30,6 +30,9 @@ interface NoteDao {
     @Query("DELETE FROM notes WHERE id IN (:ids)")
     suspend fun deleteNotes(ids: List<String>): Int
 
+    @Query("DELETE FROM notes")
+    suspend fun deleteAllNotes()
+
     @Query("""
         UPDATE notes 
         SET 

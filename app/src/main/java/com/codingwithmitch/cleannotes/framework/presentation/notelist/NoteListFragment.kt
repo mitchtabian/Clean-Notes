@@ -226,7 +226,7 @@ constructor(
     }
 
     private fun disableMultiSelectToolbarState(){
-        view?.let { v ->
+        view?.let {
             val view = toolbar_content_container
                 .findViewById<Toolbar>(R.id.multiselect_toolbar)
             toolbar_content_container.removeView(view)
@@ -235,7 +235,7 @@ constructor(
     }
 
     private fun disableSearchViewToolbarState(){
-        view?.let { v ->
+        view?.let {
             val view = toolbar_content_container
                 .findViewById<Toolbar>(R.id.searchview_toolbar)
             toolbar_content_container.removeView(view)
@@ -447,7 +447,7 @@ constructor(
                 }
 
                 else ->{
-                    searchPlate?.setOnEditorActionListener { v, actionId, event ->
+                    searchPlate?.setOnEditorActionListener { v, actionId, _ ->
                         if (actionId == EditorInfo.IME_ACTION_UNSPECIFIED
                             || actionId == EditorInfo.IME_ACTION_SEARCH ) {
                             val searchQuery = v.text.toString()

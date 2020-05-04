@@ -9,9 +9,11 @@ import com.codingwithmitch.cleannotes.framework.presentation.splash.SplashFragme
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import javax.inject.Inject
+import javax.inject.Singleton
 
 @ExperimentalCoroutinesApi
 @FlowPreview
+@Singleton
 class TestNoteFragmentFactory
 @Inject
 constructor(

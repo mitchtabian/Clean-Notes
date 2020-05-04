@@ -6,7 +6,6 @@ import com.codingwithmitch.cleannotes.business.data.cache.abstraction.NoteCacheD
 import com.codingwithmitch.cleannotes.business.data.network.abstraction.NoteNetworkDataSource
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
-import com.codingwithmitch.cleannotes.business.interactors.common.DeleteNote
 import com.codingwithmitch.cleannotes.business.interactors.notedetail.UpdateNote.Companion.UPDATE_NOTE_FAILED
 import com.codingwithmitch.cleannotes.business.interactors.notedetail.UpdateNote.Companion.UPDATE_NOTE_SUCCESS
 import com.codingwithmitch.cleannotes.business.state.DataState

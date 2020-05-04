@@ -1,18 +1,28 @@
 package com.codingwithmitch.cleannotes.framework.datasource.network
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import com.codingwithmitch.cleannotes.BaseTest
+import com.codingwithmitch.cleannotes.business.domain.model.Note
+import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
+import com.codingwithmitch.cleannotes.business.util.DateUtil
+import com.codingwithmitch.cleannotes.di.TestAppComponent
+import com.codingwithmitch.cleannotes.framework.datasource.data.NoteDataFactory
 import com.codingwithmitch.cleannotes.framework.datasource.network.abstraction.NoteFirestoreService
 import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteFirestoreServiceImpl
-import com.codingwithmitch.cleannotes.framework.datasource.network.model.NoteNetworkEntity
+import com.codingwithmitch.cleannotes.framework.datasource.network.mappers.NetworkMapper
+import com.codingwithmitch.cleannotes.util.EspressoIdlingResourceRule
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.*
+import javax.inject.Inject
 import kotlin.collections.ArrayList
 import kotlin.random.Random
 import kotlin.test.assertEquals
@@ -36,10 +46,59 @@ import kotlin.test.assertTrue
 @ExperimentalCoroutinesApi
 @FlowPreview
 @RunWith(AndroidJUnit4ClassRunner::class)
-class NoteFirestoreServiceTests: FirestoreTest() {
+class NoteFirestoreServiceTests: BaseTest(){
+
+    @get: Rule
+    val espressoIdlingResourceRule = EspressoIdlingResourceRule()
 
     // system in test
     private lateinit var noteFirestoreService: NoteFirestoreService
+
+
+    // dependencies
+    @Inject
+    lateinit var firestore: FirebaseFirestore
+
+    @Inject
+    lateinit var noteDataFactory: NoteDataFactory
+
+    @Inject
+    lateinit var noteFactory: NoteFactory
+
+    @Inject
+    lateinit var networkMapper: NetworkMapper
+
+    init {
+        injectTest()
+        signIn()
+        insertTestData()
+    }
+
+    override fun injectTest() {
+        (application.appComponent as TestAppComponent)
+            .inject(this)
+    }
+
+    fun insertTestData() {
+        val entityList = networkMapper.noteListToEntityList(
+            noteDataFactory.produceListOfNotes()
+        )
+        for(entity in entityList){
+            firestore
+                .collection(NoteFirestoreServiceImpl.NOTES_COLLECTION)
+                .document(NoteFirestoreServiceImpl.USER_ID)
+                .collection(NoteFirestoreServiceImpl.NOTES_COLLECTION)
+                .document(entity.id)
+                .set(entity)
+        }
+    }
+
+    private fun signIn() = runBlocking{
+        FirebaseAuth.getInstance().signInWithEmailAndPassword(
+            NoteFirestoreServiceImpl.EMAIL,
+            NoteFirestoreServiceImpl.PASSWORD
+        ).await()
+    }
 
     @Before
     fun before(){
@@ -59,13 +118,10 @@ class NoteFirestoreServiceTests: FirestoreTest() {
         )
 
         noteFirestoreService.insertOrUpdateNote(note)
-            .await()
 
         val searchResult = noteFirestoreService.searchNote(note)
-            .await()
-            .toObject(NoteNetworkEntity::class.java)
 
-        assertEquals(note, networkMapper.mapFromEntity(searchResult))
+        assertEquals(note, searchResult)
     }
 
 
@@ -73,27 +129,25 @@ class NoteFirestoreServiceTests: FirestoreTest() {
     fun updateSingleNote_CBS() = runBlocking{
 
         val searchResults = noteFirestoreService.getAllNotes()
-            .await()
-            .toObjects(NoteNetworkEntity::class.java)
 
         // choose a random note from list to update
-        val note = searchResults.get(Random.nextInt(0,searchResults.size-1) + 1)
+        val randomNote = searchResults.get(Random.nextInt(0,searchResults.size-1) + 1)
         val UPDATED_TITLE = UUID.randomUUID().toString()
         val UPDATED_BODY = UUID.randomUUID().toString()
-        note.title = UPDATED_TITLE
-        note.body = UPDATED_BODY
+        var updatedNote = noteFactory.createSingleNote(
+            id = randomNote.id,
+            title = UPDATED_TITLE,
+            body = UPDATED_BODY
+        )
 
         // make the update
-        noteFirestoreService.insertOrUpdateNote(networkMapper.mapFromEntity(note))
-            .await()
+        noteFirestoreService.insertOrUpdateNote(updatedNote)
 
         // query the note after update
-        val updatedNote = noteFirestoreService.searchNote(networkMapper.mapFromEntity(note))
-            .await()
-            .toObject(NoteNetworkEntity::class.java)
+        updatedNote = noteFirestoreService.searchNote(updatedNote)!!
 
-        assertEquals(UPDATED_TITLE, updatedNote?.title)
-        assertEquals(UPDATED_BODY, updatedNote?.body)
+        assertEquals(UPDATED_TITLE, updatedNote.title)
+        assertEquals(UPDATED_BODY, updatedNote.body)
     }
 
     @Test
@@ -101,33 +155,23 @@ class NoteFirestoreServiceTests: FirestoreTest() {
         val list = noteDataFactory.produceListOfNotes()
 
         noteFirestoreService.insertOrUpdateNotes(list)
-            .await()
 
         val searchResults = noteFirestoreService.getAllNotes()
-            .await()
-            .toObjects(NoteNetworkEntity::class.java)
 
-        for(note in list){
-            assertTrue { searchResults.contains(networkMapper.mapToEntity(note)) }
-        }
+        assertTrue { searchResults.containsAll(list) }
     }
 
     @Test
     fun deleteSingleNote_CBS() = runBlocking {
         val noteList = noteFirestoreService.getAllNotes()
-            .await()
-            .toObjects(NoteNetworkEntity::class.java)
 
         // choose one at random to delete
         val noteToDelete = noteList.get(Random.nextInt(0, noteList.size - 1) + 1)
 
         noteFirestoreService.deleteNote(noteToDelete.id)
-            .await()
 
         // confirm it no longer exists in firestore
         val searchResults = noteFirestoreService.getAllNotes()
-            .await()
-            .toObjects(NoteNetworkEntity::class.java)
 
         assertFalse { searchResults.contains(noteToDelete) }
     }
@@ -135,31 +179,24 @@ class NoteFirestoreServiceTests: FirestoreTest() {
     @Test
     fun insertIntoDeletesNode_CBS() = runBlocking {
         val noteList = noteFirestoreService.getAllNotes()
-            .await()
-            .toObjects(NoteNetworkEntity::class.java)
 
         // choose one at random to insert into "deletes" node
         val noteToDelete = noteList.get(Random.nextInt(0, noteList.size - 1) + 1)
 
-        noteFirestoreService.insertDeletedNote(networkMapper.mapFromEntity(noteToDelete))
-            .await()
+        noteFirestoreService.insertDeletedNote(noteToDelete)
 
         // confirm it is now in the "deletes" node
         val searchResults = noteFirestoreService.getDeletedNotes()
-            .await()
-            .toObjects(NoteNetworkEntity::class.java)
 
         assertTrue { searchResults.contains(noteToDelete) }
     }
 
     @Test
     fun insertListIntoDeletesNode_CBS() = runBlocking {
-        val noteList = noteFirestoreService.getAllNotes()
-            .await()
-            .toObjects(NoteNetworkEntity::class.java)
+        val noteList = ArrayList(noteFirestoreService.getAllNotes())
 
         // choose some random notes to add to "deletes" node
-        val notesToDelete: ArrayList<NoteNetworkEntity> = ArrayList()
+        val notesToDelete: ArrayList<Note> = ArrayList()
 
         // 1st
         var noteToDelete = noteList.get(Random.nextInt(0, noteList.size - 1) + 1)
@@ -183,13 +220,10 @@ class NoteFirestoreServiceTests: FirestoreTest() {
 
         // insert into "deletes" node
         noteFirestoreService
-            .insertDeletedNotes(networkMapper.entityListToNoteList(notesToDelete))
-            .await()
+            .insertDeletedNotes(notesToDelete)
 
         // confirm the notes are in "deletes" node
         val searchResults = noteFirestoreService.getDeletedNotes()
-            .await()
-            .toObjects(NoteNetworkEntity::class.java)
 
         assertTrue { searchResults.containsAll(notesToDelete) }
     }
@@ -203,22 +237,20 @@ class NoteFirestoreServiceTests: FirestoreTest() {
         )
 
         // insert into "deletes" node
-        noteFirestoreService.insertDeletedNote(note).await()
+        noteFirestoreService.insertDeletedNote(note)
 
         // confirm note is in "deletes" node
         var searchResults = noteFirestoreService.getDeletedNotes()
-            .await()
-            .toObjects(NoteNetworkEntity::class.java)
-        assertTrue { searchResults.contains(networkMapper.mapToEntity(note)) }
+
+        assertTrue { searchResults.contains(note) }
 
         // delete from "deletes" node
-        noteFirestoreService.deleteDeletedNote(note).await()
+        noteFirestoreService.deleteDeletedNote(note)
 
         // confirm note is deleted from "deletes" node
         searchResults = noteFirestoreService.getDeletedNotes()
-            .await()
-            .toObjects(NoteNetworkEntity::class.java)
-        assertFalse { searchResults.contains(networkMapper.mapToEntity(note)) }
+
+        assertFalse { searchResults.contains(note) }
     }
 
 }

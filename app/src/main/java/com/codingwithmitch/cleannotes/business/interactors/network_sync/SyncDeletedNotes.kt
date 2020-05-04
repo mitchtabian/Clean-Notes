@@ -45,7 +45,7 @@ class SyncDeletedNotes(
             noteCacheDataSource.deleteNotes(notes)
         }
 
-        val result = object: CacheResponseHandler<Int, Int>(
+        object: CacheResponseHandler<Int, Int>(
             response = cacheResult,
             stateEvent = null
         ){

@@ -7,4 +7,8 @@ object EspressoIdlingResource {
 
     fun decrement() {
     }
+
+    fun clear(){
+
+    }
 }
