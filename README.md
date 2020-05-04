@@ -1,5 +1,5 @@
 # Clean-Notes
-Dynamic Feature Modules & Clean Architecture by layer
+Android example with Clean Architecture by layer.
 
 **Work in progress**
 
