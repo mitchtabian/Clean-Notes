@@ -1,6 +1,6 @@
 package com.codingwithmitch.cleannotes.business.domain.model
 
-import com.codingwithmitch.cleannotes.business.util.DateUtil
+import com.codingwithmitch.cleannotes.business.domain.util.DateUtil
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton

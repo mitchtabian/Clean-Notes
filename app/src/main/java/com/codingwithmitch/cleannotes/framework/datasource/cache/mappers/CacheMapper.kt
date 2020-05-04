@@ -1,10 +1,9 @@
 package com.codingwithmitch.cleannotes.framework.datasource.cache.mappers
 
 import com.codingwithmitch.cleannotes.business.domain.model.Note
-import com.codingwithmitch.cleannotes.business.util.DateUtil
+import com.codingwithmitch.cleannotes.business.domain.util.DateUtil
 import com.codingwithmitch.cleannotes.business.util.EntityMapper
 import com.codingwithmitch.cleannotes.framework.datasource.cache.model.NoteCacheEntity
-import java.lang.Exception
 import javax.inject.Inject
 
 /**

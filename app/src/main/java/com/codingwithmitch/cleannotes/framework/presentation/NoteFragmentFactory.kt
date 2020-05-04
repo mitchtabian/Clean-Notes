@@ -2,7 +2,7 @@ package com.codingwithmitch.cleannotes.framework.presentation
 
 import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.ViewModelProvider
-import com.codingwithmitch.cleannotes.business.util.DateUtil
+import com.codingwithmitch.cleannotes.business.domain.util.DateUtil
 import com.codingwithmitch.cleannotes.framework.presentation.notedetail.NoteDetailFragment
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.NoteListFragment
 import com.codingwithmitch.cleannotes.framework.presentation.splash.SplashFragment

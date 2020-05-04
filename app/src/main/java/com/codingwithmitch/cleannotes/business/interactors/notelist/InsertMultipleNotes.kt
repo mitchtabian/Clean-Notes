@@ -4,7 +4,7 @@ import com.codingwithmitch.cleannotes.business.data.cache.abstraction.NoteCacheD
 import com.codingwithmitch.cleannotes.business.data.network.abstraction.NoteNetworkDataSource
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.state.*
-import com.codingwithmitch.cleannotes.business.util.DateUtil
+import com.codingwithmitch.cleannotes.business.domain.util.DateUtil
 import com.codingwithmitch.cleannotes.business.util.safeApiCall
 import com.codingwithmitch.cleannotes.business.util.safeCacheCall
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListViewState
@@ -58,7 +58,8 @@ class InsertMultipleNotes(
 private object NoteListTester {
 
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-    private val dateUtil = DateUtil(dateFormat)
+    private val dateUtil =
+        DateUtil(dateFormat)
 
     fun generateNoteList(numNotes: Int): List<Note>{
         val list: ArrayList<Note> = ArrayList()

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import com.codingwithmitch.cleannotes.R
 import com.codingwithmitch.cleannotes.business.domain.model.Note
-import com.codingwithmitch.cleannotes.business.util.DateUtil
+import com.codingwithmitch.cleannotes.business.domain.util.DateUtil
 import com.codingwithmitch.cleannotes.framework.presentation.common.changeColor
 import com.codingwithmitch.cleannotes.util.printLogD
 import kotlinx.android.synthetic.main.layout_note_list_item.view.*

@@ -6,7 +6,7 @@ import com.codingwithmitch.cleannotes.business.data.network.abstraction.NoteNetw
 import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
 import com.codingwithmitch.cleannotes.business.interactors.common.DeleteNote
 import com.codingwithmitch.cleannotes.business.interactors.notelist.*
-import com.codingwithmitch.cleannotes.business.util.DateUtil
+import com.codingwithmitch.cleannotes.business.domain.util.DateUtil
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NoteDao
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NoteDatabase
 import com.codingwithmitch.cleannotes.business.data.cache.implementation.NoteCacheDataSourceImpl
@@ -51,7 +51,9 @@ object AppModule {
     @Singleton
     @Provides
     fun provideDateUtil(dateFormat: SimpleDateFormat): DateUtil {
-        return DateUtil(dateFormat)
+        return DateUtil(
+            dateFormat
+        )
     }
 
     @JvmStatic

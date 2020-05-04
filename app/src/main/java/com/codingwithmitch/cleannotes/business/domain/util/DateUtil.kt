@@ -1,4 +1,4 @@
-package com.codingwithmitch.cleannotes.business.util
+package com.codingwithmitch.cleannotes.business.domain.util
 
 import com.google.firebase.Timestamp
 import java.text.SimpleDateFormat
