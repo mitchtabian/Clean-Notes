@@ -19,6 +19,7 @@ import com.codingwithmitch.cleannotes.business.interactors.notedetail.NoteDetail
 import com.codingwithmitch.cleannotes.business.interactors.notedetail.UpdateNote
 import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NoteDaoService
 import com.codingwithmitch.cleannotes.framework.datasource.cache.implementation.NoteDaoServiceImpl
+import com.codingwithmitch.cleannotes.framework.datasource.network.abstraction.NoteFirestoreService
 import com.codingwithmitch.cleannotes.framework.datasource.network.mappers.NetworkMapper
 import com.codingwithmitch.cleannotes.framework.presentation.splash.NoteNetworkSyncManager
 import com.google.firebase.auth.FirebaseAuth
@@ -129,7 +130,7 @@ object AppModule {
         firebaseAuth: FirebaseAuth,
         firebaseFirestore: FirebaseFirestore,
         networkMapper: NetworkMapper
-    ): NoteFirestoreServiceImpl {
+    ): NoteFirestoreService {
         return NoteFirestoreServiceImpl(
             firebaseAuth,
             firebaseFirestore,

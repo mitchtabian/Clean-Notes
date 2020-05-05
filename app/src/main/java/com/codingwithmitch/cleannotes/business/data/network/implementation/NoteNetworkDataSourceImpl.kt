@@ -3,11 +3,13 @@ package com.codingwithmitch.cleannotes.business.data.network.implementation
 import com.codingwithmitch.cleannotes.business.data.network.abstraction.NoteNetworkDataSource
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.framework.datasource.network.abstraction.NoteFirestoreService
+import javax.inject.Inject
 import javax.inject.Singleton
 
 
 @Singleton
 class NoteNetworkDataSourceImpl
+@Inject
 constructor(
     private val firestoreService: NoteFirestoreService
 ): NoteNetworkDataSource {
