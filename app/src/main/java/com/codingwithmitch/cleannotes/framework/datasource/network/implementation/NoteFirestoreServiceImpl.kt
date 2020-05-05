@@ -238,7 +238,6 @@ constructor(
         const val USERS_COLLECTION = "users"
         const val DELETES_COLLECTION = "deletes"
         const val USER_ID = "9E7fDYAUTNUPFirw4R28NhBZE1u1" // hardcoded for single user
-        const val PASSWORD = "HR19jyR5r2h5k8lY"
         const val EMAIL = "mitch@tabian.ca"
     }
 

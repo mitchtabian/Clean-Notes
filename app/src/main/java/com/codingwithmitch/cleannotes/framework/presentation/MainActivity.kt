@@ -3,6 +3,7 @@ package com.codingwithmitch.cleannotes.framework.presentation
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import androidx.navigation.findNavController
@@ -14,13 +15,10 @@ import com.afollestad.materialdialogs.input.input
 import com.codingwithmitch.cleannotes.R
 import com.codingwithmitch.cleannotes.business.domain.state.*
 import com.codingwithmitch.cleannotes.business.domain.state.UIComponentType.*
-import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteFirestoreServiceImpl.Companion.EMAIL
-import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteFirestoreServiceImpl.Companion.PASSWORD
 import com.codingwithmitch.cleannotes.framework.presentation.common.displayToast
 import com.codingwithmitch.cleannotes.framework.presentation.common.gone
 import com.codingwithmitch.cleannotes.framework.presentation.common.visible
 import com.codingwithmitch.cleannotes.util.TodoCallback
-import com.codingwithmitch.cleannotes.util.printLogD
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -50,8 +48,6 @@ class MainActivity : AppCompatActivity(),
         setFragmentFactory()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        loginToFirebase()
     }
 
     private fun setFragmentFactory(){
@@ -61,17 +57,6 @@ class MainActivity : AppCompatActivity(),
     private fun inject(){
         (application as BaseApplication).appComponent
             .inject(this)
-    }
-
-    private fun loginToFirebase(){
-        FirebaseAuth.getInstance()
-            .signInWithEmailAndPassword(EMAIL, PASSWORD)
-            .addOnCompleteListener {
-                if(it.isSuccessful){
-                    printLogD("MainActivity",
-                        "Signing in to Firebase: ${it.result}")
-                }
-            }
     }
 
     override fun displayProgressBar(isDisplayed: Boolean) {
@@ -91,9 +76,12 @@ class MainActivity : AppCompatActivity(),
         title: String,
         callback: DialogInputCaptureCallback
     ) {
-        MaterialDialog(this).show {
+        dialogInView = MaterialDialog(this).show {
             title(text = title)
-            input(waitForPositiveButton = true){ _, text ->
+            input(
+                waitForPositiveButton = true,
+                inputType = InputType.TYPE_TEXT_VARIATION_PASSWORD
+            ){ _, text ->
                 callback.onTextCaptured(text.toString())
             }
             positiveButton(R.string.text_ok)
