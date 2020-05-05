@@ -1,12 +1,8 @@
-import dependencies.AndroidTestDependencies
-import dependencies.ApplicationId
-import dependencies.Dependencies
-import dependencies.Releases
-import dependencies.SupportDependencies
-import dependencies.TestDependencies
+import dependencies.dependencies.*
+import dependencies.Application
 import dependencies.Versions
-import dependencies.AnnotationProcessorsDependencies
-import dependencies.JavaVersion
+import dependencies.AnnotationProcessing
+import dependencies.Java
 
 apply plugin: 'com.android.application'
 
@@ -22,14 +18,13 @@ apply plugin: 'io.fabric'
 android {
     compileSdkVersion Versions.compilesdk
     defaultConfig {
-        applicationId ApplicationId.id
+        applicationId Application.id
         minSdkVersion Versions.minsdk
         targetSdkVersion Versions.targetsdk
-        versionCode Releases.version_code
-        versionName Releases.version_name
+        versionCode Application.version_code
+        versionName Application.version_name
 
-//        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunner "com.codingwithmitch.cleannotes.framework.MockTestRunner"
+        testInstrumentationRunner AndroidTestDependencies.instrumentation_runner
     }
     buildTypes {
         debug {
@@ -43,12 +38,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.version_1_8
-        targetCompatibility = JavaVersion.version_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.version_1_8.toString()
+        jvmTarget = Java.java_version
     }
 
     sourceSets {
@@ -95,8 +90,8 @@ dependencies {
     implementation SupportDependencies.constraintlayout
     implementation SupportDependencies.material_design
 
-    kapt AnnotationProcessorsDependencies.room_compiler
-    kapt AnnotationProcessorsDependencies.dagger_compiler
+    kapt AnnotationProcessing.room_compiler
+    kapt AnnotationProcessing.dagger_compiler
 
     testImplementation TestDependencies.mockk
     testImplementation TestDependencies.jupiter_api
@@ -115,7 +110,7 @@ dependencies {
     androidTestImplementation AndroidTestDependencies.text_core_ktx
     androidTestImplementation AndroidTestDependencies.navigation_testing
     debugImplementation AndroidTestDependencies.fragment_testing
-    kaptAndroidTest  AnnotationProcessorsDependencies.dagger_compiler
+    kaptAndroidTest  AnnotationProcessing.dagger_compiler
 
 }
 apply plugin: 'com.google.gms.google-services'
