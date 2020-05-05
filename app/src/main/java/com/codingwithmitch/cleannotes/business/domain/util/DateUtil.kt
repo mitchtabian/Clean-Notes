@@ -12,25 +12,6 @@ constructor(
 )
 {
 
-//    // dates from server look like this: "2019-07-23 HH:mm:ss"
-//    fun convertServerStringDateToLong(sd: String): Long{
-//        try {
-//            val time = dateFormat.parse(sd).time
-//            return time
-//        } catch (e: Exception) {
-//            throw Exception(e)
-//        }
-//    }
-
-//    fun convertLongToStringDate(longDate: Long): String{
-//        try {
-//            val date = dateFormat.format(Date(longDate))
-//            return date
-//        } catch (e: Exception) {
-//            throw Exception(e)
-//        }
-//    }
-
     fun removeTimeFromDateString(sd: String): String{
         return sd.substring(0, sd.indexOf(" "))
     }
@@ -38,17 +19,6 @@ constructor(
     fun convertFirebaseTimestampToStringData(timestamp: Timestamp): String{
         return dateFormat.format(timestamp.toDate())
     }
-
-//    fun convertLongDateToFirebaseTimestamp(date: Long): Timestamp{
-//        return Timestamp(date/1000, 0)
-//    }
-
-//    fun convertStringDateToFirebaseTimestamp(date: String): Timestamp{
-//        return Timestamp(
-//            convertServerStringDateToLong(date) / 1000, // convert to seconds from ms
-//            0
-//        )
-//    }
 
     // Date format: "2019-07-23 HH:mm:ss"
     fun convertStringDateToFirebaseTimestamp(date: String): Timestamp{
