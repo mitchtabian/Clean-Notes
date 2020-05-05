@@ -167,10 +167,6 @@ class NoteDaoServiceTests: BaseTest(){
                 page = 1,
                 pageSize = 1
             )
-//            println("result: size: ${result.size}")
-//            println("result: ${randomIndex}: " +
-//                    "expected: ${noteList.get(randomIndex).title}, " +
-//                    "actual: ${result.get(0).title}")
             assertEquals(noteList.get(randomIndex).title, result.get(0).title)
         }
     }
@@ -274,13 +270,9 @@ class NoteDaoServiceTests: BaseTest(){
         )
 
         // check that the date gets larger (newer) as iterate down the list
-        var previousNoteDate = dateUtil.convertServerStringDateToLong(
-            noteList.get(0).updated_at
-        )
+        var previousNoteDate = noteList.get(0).updated_at
         for(index in 1..noteList.size - 1){
-            val currentNoteDate = dateUtil.convertServerStringDateToLong(
-                noteList.get(index).updated_at
-            )
+            val currentNoteDate = noteList.get(index).updated_at
             assertTrue { currentNoteDate >= previousNoteDate }
             previousNoteDate = currentNoteDate
         }
@@ -296,13 +288,9 @@ class NoteDaoServiceTests: BaseTest(){
         )
 
         // check that the date gets larger (newer) as iterate down the list
-        var previous = dateUtil.convertServerStringDateToLong(
-            noteList.get(0).updated_at
-        )
+        var previous = noteList.get(0).updated_at
         for(index in 1..noteList.size - 1){
-            val current = dateUtil.convertServerStringDateToLong(
-                noteList.get(index).updated_at
-            )
+            val current = noteList.get(index).updated_at
             assertTrue { current <= previous }
             previous = current
         }

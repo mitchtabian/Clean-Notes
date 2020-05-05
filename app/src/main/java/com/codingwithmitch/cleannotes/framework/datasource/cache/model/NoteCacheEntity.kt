@@ -18,10 +18,10 @@ data class NoteCacheEntity(
     var body: String,
 
     @ColumnInfo(name = "updated_at")
-    var updated_at: Long,
+    var updated_at: String,
 
     @ColumnInfo(name = "created_at")
-    var created_at: Long
+    var created_at: String
 
 ){
 

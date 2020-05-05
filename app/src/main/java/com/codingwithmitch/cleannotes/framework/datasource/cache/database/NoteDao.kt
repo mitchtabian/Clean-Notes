@@ -45,7 +45,7 @@ interface NoteDao {
         primaryKey: String,
         title: String,
         body: String?,
-        updated_at: Long
+        updated_at: String
     ): Int
 
     @Query("DELETE FROM notes WHERE id = :primaryKey")

@@ -43,7 +43,7 @@ constructor(
             primaryKey = primaryKey,
             title = title,
             body = body,
-            updated_at = dateUtil.convertServerStringDateToLong(dateUtil.getCurrentTimestamp())
+            updated_at = dateUtil.getCurrentTimestamp()
         )
     }
 

@@ -35,6 +35,10 @@ constructor(
         return ArrayList(deletedNotesData.values)
     }
 
+    override suspend fun deleteAllNotes() {
+        deletedNotesData.clear()
+    }
+
     override suspend fun searchNote(note: Note): Note? {
         return notesData.get(note.id)
     }

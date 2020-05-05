@@ -37,8 +37,8 @@ constructor(
             id = entity.id,
             title = entity.title,
             body = entity.body,
-            updated_at = dateUtil.convertLongToStringDate(entity.updated_at),
-            created_at = dateUtil.convertLongToStringDate(entity.created_at)
+            updated_at = entity.updated_at,
+            created_at = entity.created_at
         )
     }
 
@@ -47,8 +47,8 @@ constructor(
             id = domainModel.id,
             title = domainModel.title,
             body = domainModel.body,
-            updated_at = dateUtil.convertServerStringDateToLong(domainModel.updated_at),
-            created_at = dateUtil.convertServerStringDateToLong(domainModel.created_at)
+            updated_at = domainModel.updated_at,
+            created_at = domainModel.created_at
         )
     }
 }

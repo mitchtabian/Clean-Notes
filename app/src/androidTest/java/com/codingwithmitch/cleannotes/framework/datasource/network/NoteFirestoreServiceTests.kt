@@ -94,8 +94,8 @@ class NoteFirestoreServiceTests: BaseTest(){
 
     private fun signIn() = runBlocking{
         FirebaseAuth.getInstance().signInWithEmailAndPassword(
-            NoteFirestoreServiceImpl.EMAIL,
-            NoteFirestoreServiceImpl.PASSWORD
+            EMAIL,
+            PASSWORD
         ).await()
     }
 
@@ -250,6 +250,11 @@ class NoteFirestoreServiceTests: BaseTest(){
         searchResults = noteFirestoreService.getDeletedNotes()
 
         assertFalse { searchResults.contains(note) }
+    }
+
+    companion object{
+        const val EMAIL = "mitchtest@tabian.ca"
+        const val PASSWORD = "password"
     }
 
 }

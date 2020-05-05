@@ -88,8 +88,8 @@ class SyncNotes(
         cachedNote: Note,
         networkNote: Note
     ){
-        val cacheUpdatedAt = dateUtil.convertServerStringDateToLong(cachedNote.updated_at) / 1000
-        val networkUpdatedAt = dateUtil.convertServerStringDateToLong(networkNote.updated_at) / 1000
+        val cacheUpdatedAt = cachedNote.updated_at
+        val networkUpdatedAt = networkNote.updated_at
 
         // update cache (network has newest data)
         if(networkUpdatedAt > cacheUpdatedAt){
