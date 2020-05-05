@@ -40,7 +40,7 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = Java.version_1_8
+        jvmTarget = Java.java_version
     }
 }
 

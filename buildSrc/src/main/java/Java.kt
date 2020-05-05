@@ -1,5 +1,5 @@
 package dependencies
 
 object Java {
-    val version_1_8 = "1.8"
+    val java_version = "1.8"
 }
