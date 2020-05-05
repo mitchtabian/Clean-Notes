@@ -1,3 +1,9 @@
+import dependencies.dependencies.AndroidTestDependencies
+import dependencies.dependencies.Dependencies
+import dependencies.Application
+import dependencies.Versions
+import dependencies.Java
+import dependencies.dependencies.SupportDependencies
 
 apply plugin: 'com.android.application'
 
@@ -9,15 +15,15 @@ apply plugin: 'kotlin-kapt'
 
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion Versions.compilesdk
     defaultConfig {
-        applicationId "com.codingwithmitch.cleannotes"
-        minSdkVersion 21
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
+        applicationId Application.id
+        minSdkVersion Versions.minsdk
+        targetSdkVersion Versions.targetsdk
+        versionCode Application.version_code
+        versionName Application.version_name
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner AndroidTestDependencies.instrumentation_runner
     }
     buildTypes {
         debug {
@@ -29,12 +35,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = "1.8"
-        targetCompatibility = "1.8"
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = Java.version_1_8
     }
 }
 
@@ -43,14 +49,18 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // Kotlin
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.61"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:1.3.61"
-    implementation "androidx.core:core-ktx:1.2.0"
+    implementation Dependencies.kotlin_standard_library
+    implementation Dependencies.kotlin_reflect
+    implementation Dependencies.ktx
 
     // Support
-    implementation "androidx.appcompat:appcompat:1.1.0-rc01"
-    implementation "androidx.constraintlayout:constraintlayout:1.1.3"
-    implementation "com.google.android.material:material:1.1.0"
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha03"
+    implementation SupportDependencies.appcompat
+    implementation SupportDependencies.constraintlayout
+    implementation SupportDependencies.material_design
+    implementation SupportDependencies.swipe_refresh_layout
 
 }
+
+
+
+
