@@ -2,6 +2,7 @@ package com.codingwithmitch.cleannotes.business.data.cache.implementation
 
 import com.codingwithmitch.cleannotes.business.data.cache.abstraction.NoteCacheDataSource
 import com.codingwithmitch.cleannotes.business.domain.model.Note
+import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NoteDaoService
 import javax.inject.Inject
 import javax.inject.Singleton
 
