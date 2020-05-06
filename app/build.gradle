@@ -53,6 +53,7 @@ dependencies {
     implementation Dependencies.kotlin_standard_library
     implementation Dependencies.kotlin_reflect
     implementation Dependencies.ktx
+    implementation Dependencies.kotlin_coroutines_play_services
 
     // Dependencies
     implementation Dependencies.dagger
