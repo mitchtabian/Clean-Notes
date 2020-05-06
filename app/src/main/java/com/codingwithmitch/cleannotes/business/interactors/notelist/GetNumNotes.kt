@@ -3,7 +3,7 @@ package com.codingwithmitch.cleannotes.business.interactors.notelist
 import com.codingwithmitch.cleannotes.business.data.cache.CacheResponseHandler
 import com.codingwithmitch.cleannotes.business.data.cache.abstraction.NoteCacheDataSource
 import com.codingwithmitch.cleannotes.business.domain.state.*
-import com.codingwithmitch.cleannotes.business.util.safeCacheCall
+import com.codingwithmitch.cleannotes.business.data.util.safeCacheCall
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListViewState
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow

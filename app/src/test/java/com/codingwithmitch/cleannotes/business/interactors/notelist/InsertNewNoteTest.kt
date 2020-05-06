@@ -32,7 +32,12 @@ Test cases:
     c) listen for INSERT_NOTE_FAILED emission from flow
     e) confirm cache was not updated
     e) confirm network was not updated
-
+3. throwException_checkGenericError_confirmNetworkAndCacheUnchanged()
+    a) insert a new note
+    b) force an exception
+    c) listen for CACHE_ERROR_UNKNOWN emission from flow
+    e) confirm cache was not updated
+    e) confirm network was not updated
  */
 @InternalCoroutinesApi
 class InsertNewNoteTest {

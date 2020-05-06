@@ -5,8 +5,8 @@ import com.codingwithmitch.cleannotes.business.data.network.abstraction.NoteNetw
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.domain.state.*
 import com.codingwithmitch.cleannotes.business.domain.util.DateUtil
-import com.codingwithmitch.cleannotes.business.util.safeApiCall
-import com.codingwithmitch.cleannotes.business.util.safeCacheCall
+import com.codingwithmitch.cleannotes.business.data.util.safeApiCall
+import com.codingwithmitch.cleannotes.business.data.util.safeCacheCall
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListViewState
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.Flow

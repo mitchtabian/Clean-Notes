@@ -1,4 +1,4 @@
-package com.codingwithmitch.cleannotes.business.util
+package com.codingwithmitch.cleannotes.business.domain.util
 
 interface EntityMapper <Entity, DomainModel>{
 

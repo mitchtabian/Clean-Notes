@@ -1,4 +1,4 @@
-package com.codingwithmitch.cleannotes.business.util
+package com.codingwithmitch.cleannotes.business.data.util
 
 import android.util.Log
 import com.codingwithmitch.cleannotes.business.data.cache.CacheConstants.CACHE_TIMEOUT
@@ -9,7 +9,7 @@ import com.codingwithmitch.cleannotes.business.data.network.ApiResult
 import com.codingwithmitch.cleannotes.business.data.network.NetworkConstants.NETWORK_TIMEOUT
 import com.codingwithmitch.cleannotes.business.data.network.NetworkErrors.NETWORK_ERROR_TIMEOUT
 import com.codingwithmitch.cleannotes.business.data.network.NetworkErrors.NETWORK_ERROR_UNKNOWN
-import com.codingwithmitch.cleannotes.business.util.GenericErrors.ERROR_UNKNOWN
+import com.codingwithmitch.cleannotes.business.data.util.GenericErrors.ERROR_UNKNOWN
 import com.codingwithmitch.cleannotes.util.cLog
 import kotlinx.coroutines.*
 import retrofit2.HttpException
