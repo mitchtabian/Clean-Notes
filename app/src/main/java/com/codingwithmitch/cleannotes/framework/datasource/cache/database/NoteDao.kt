@@ -1,4 +1,4 @@
-package com.codingwithmitch.cleannotes.framework.datasource.database
+package com.codingwithmitch.cleannotes.framework.datasource.cache.database
 
 const val NOTE_ORDER_ASC: String = ""
 const val NOTE_ORDER_DESC: String = "-"
