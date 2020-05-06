@@ -54,6 +54,8 @@ dependencies {
     implementation Dependencies.kotlin_reflect
     implementation Dependencies.ktx
     implementation Dependencies.kotlin_coroutines_play_services
+    implementation Dependencies.retrofit
+    implementation Dependencies.retrofit_gson
 
     // Dependencies
     implementation Dependencies.dagger
