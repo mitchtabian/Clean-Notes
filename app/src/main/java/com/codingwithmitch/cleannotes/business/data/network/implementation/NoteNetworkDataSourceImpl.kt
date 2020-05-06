@@ -6,7 +6,6 @@ import com.codingwithmitch.cleannotes.framework.datasource.network.abstraction.N
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 @Singleton
 class NoteNetworkDataSourceImpl
 @Inject
