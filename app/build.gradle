@@ -1,3 +1,4 @@
+import dependencies.AnnotationProcessing
 import dependencies.dependencies.AndroidTestDependencies
 import dependencies.dependencies.Dependencies
 import dependencies.Application
@@ -52,6 +53,12 @@ dependencies {
     implementation Dependencies.kotlin_standard_library
     implementation Dependencies.kotlin_reflect
     implementation Dependencies.ktx
+
+    // Dependencies
+    implementation Dependencies.dagger
+
+    // Annotation processing
+    kapt AnnotationProcessing.dagger_compiler
 
     // Support
     implementation SupportDependencies.appcompat
