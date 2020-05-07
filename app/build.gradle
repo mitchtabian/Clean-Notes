@@ -72,12 +72,15 @@ dependencies {
     implementation Dependencies.firebase_auth
     implementation Dependencies.firebase_analytics
     implementation Dependencies.firebase_crashlytics
+    implementation Dependencies.room_runtime
+    implementation Dependencies.room_ktx
 
     // Dependencies
     implementation Dependencies.dagger
 
     // Annotation processing
     kapt AnnotationProcessing.dagger_compiler
+    kapt AnnotationProcessing.room_compiler
 
     // Support
     implementation SupportDependencies.appcompat
