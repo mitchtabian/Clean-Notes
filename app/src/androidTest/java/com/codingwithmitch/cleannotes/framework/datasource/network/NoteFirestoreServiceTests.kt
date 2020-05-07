@@ -47,9 +47,6 @@ import kotlin.test.assertTrue
 @RunWith(AndroidJUnit4ClassRunner::class)
 class NoteFirestoreServiceTests: BaseTest(){
 
-    @get: Rule
-    val espressoIdlingResourceRule = EspressoIdlingResourceRule()
-
     // system in test
     private lateinit var noteFirestoreService: NoteFirestoreService
 

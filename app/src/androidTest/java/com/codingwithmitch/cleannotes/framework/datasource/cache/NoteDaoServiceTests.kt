@@ -57,9 +57,6 @@ import kotlin.test.assertTrue
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class NoteDaoServiceTests: BaseTest(){
 
-    @get: Rule
-    val espressoIdlingResourceRule = EspressoIdlingResourceRule()
-
 
     // system in test
     private val noteDaoService: NoteDaoService
