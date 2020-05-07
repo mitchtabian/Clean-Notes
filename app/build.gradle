@@ -56,6 +56,12 @@ dependencies {
 
     // Dependencies
     implementation Dependencies.dagger
+    implementation Dependencies.firebase_firestore
+    implementation Dependencies.firebase_auth
+    implementation Dependencies.firebase_analytics
+    implementation Dependencies.firebase_crashlytics
+
+    // Annotation Processing
     kapt AnnotationProcessing.dagger_compiler
 
     // Support
