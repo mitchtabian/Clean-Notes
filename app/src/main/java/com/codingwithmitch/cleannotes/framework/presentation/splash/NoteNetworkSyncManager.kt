@@ -2,15 +2,12 @@ package com.codingwithmitch.cleannotes.framework.presentation.splash
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.codingwithmitch.cleannotes.business.interactors.network_sync.SyncDeletedNotes
-import com.codingwithmitch.cleannotes.business.interactors.network_sync.SyncNotes
-import com.codingwithmitch.cleannotes.util.EspressoIdlingResource
+import com.codingwithmitch.cleannotes.business.interactors.splash.SyncDeletedNotes
+import com.codingwithmitch.cleannotes.business.interactors.splash.SyncNotes
 import com.codingwithmitch.cleannotes.util.printLogD
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 

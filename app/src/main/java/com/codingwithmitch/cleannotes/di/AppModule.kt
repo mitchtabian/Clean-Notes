@@ -13,8 +13,8 @@ import com.codingwithmitch.cleannotes.business.data.cache.implementation.NoteCac
 import com.codingwithmitch.cleannotes.framework.datasource.cache.mappers.CacheMapper
 import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteFirestoreServiceImpl
 import com.codingwithmitch.cleannotes.business.data.network.implementation.NoteNetworkDataSourceImpl
-import com.codingwithmitch.cleannotes.business.interactors.network_sync.SyncDeletedNotes
-import com.codingwithmitch.cleannotes.business.interactors.network_sync.SyncNotes
+import com.codingwithmitch.cleannotes.business.interactors.splash.SyncDeletedNotes
+import com.codingwithmitch.cleannotes.business.interactors.splash.SyncNotes
 import com.codingwithmitch.cleannotes.business.interactors.notedetail.NoteDetailInteractors
 import com.codingwithmitch.cleannotes.business.interactors.notedetail.UpdateNote
 import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NoteDaoService

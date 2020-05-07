@@ -1,4 +1,4 @@
-package com.codingwithmitch.cleannotes.business.interactors.network_sync
+package com.codingwithmitch.cleannotes.business.interactors.splash
 
 import com.codingwithmitch.cleannotes.business.data.cache.CacheResponseHandler
 import com.codingwithmitch.cleannotes.business.data.cache.abstraction.NoteCacheDataSource
