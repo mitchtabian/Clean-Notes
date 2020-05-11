@@ -62,7 +62,7 @@ dependencies {
     implementation Dependencies.firebase_crashlytics
 
     // Annotation Processing
-    implementation AnnotationProcessing.dagger_compiler
+    kapt AnnotationProcessing.dagger_compiler
 
 
     // Support
