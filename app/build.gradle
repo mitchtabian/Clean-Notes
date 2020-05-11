@@ -1,3 +1,4 @@
+import dependencies.AnnotationProcessing
 import dependencies.dependencies.AndroidTestDependencies
 import dependencies.dependencies.Dependencies
 import dependencies.Application
@@ -52,10 +53,16 @@ dependencies {
     implementation Dependencies.kotlin_standard_library
     implementation Dependencies.kotlin_reflect
     implementation Dependencies.ktx
+
+    // dependencies
+    implementation Dependencies.dagger
     implementation Dependencies.firebase_firestore
     implementation Dependencies.firebase_auth
     implementation Dependencies.firebase_analytics
     implementation Dependencies.firebase_crashlytics
+
+    // Annotation Processing
+    implementation AnnotationProcessing.dagger_compiler
 
 
     // Support
