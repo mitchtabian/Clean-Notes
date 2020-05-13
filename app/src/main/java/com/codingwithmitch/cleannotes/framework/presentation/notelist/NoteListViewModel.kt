@@ -95,7 +95,6 @@ constructor(
                 is InsertNewNoteEvent -> {
                     noteInteractors.insertNewNote.insertNewNote(
                         title = stateEvent.title,
-                        body = stateEvent.body,
                         stateEvent = stateEvent
                     )
                 }

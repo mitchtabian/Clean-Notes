@@ -23,14 +23,13 @@ class InsertNewNote(
     fun insertNewNote(
         id: String? = null,
         title: String,
-        body: String,
         stateEvent: StateEvent
     ): Flow<DataState<NoteListViewState>?> = flow {
 
         val newNote = noteFactory.createSingleNote(
             id = id ?: UUID.randomUUID().toString(),
             title = title,
-            body = body
+            body = ""
         )
         val cacheResult = safeCacheCall(IO){
             noteCacheDataSource.insertNote(newNote)

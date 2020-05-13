@@ -469,8 +469,7 @@ constructor(
                         val newNote = viewModel.createNewNote(title = text)
                         viewModel.setStateEvent(
                             InsertNewNoteEvent(
-                                title = newNote.title,
-                                body = ""
+                                title = newNote.title
                             )
                         )
                     }
