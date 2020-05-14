@@ -4,7 +4,6 @@ import com.codingwithmitch.cleannotes.business.data.cache.abstraction.NoteCacheD
 import com.codingwithmitch.cleannotes.business.domain.state.DataState
 import com.codingwithmitch.cleannotes.business.data.cache.CacheErrors
 import com.codingwithmitch.cleannotes.business.data.cache.FORCE_SEARCH_NOTES_EXCEPTION
-import com.codingwithmitch.cleannotes.business.data.network.abstraction.NoteNetworkDataSource
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
 import com.codingwithmitch.cleannotes.business.interactors.notelist.SearchNotes.Companion.SEARCH_NOTES_NO_MATCHING_RESULTS
@@ -50,14 +49,12 @@ class SearchNotesTest {
     // dependencies
     private val dependencyContainer: DependencyContainer
     private val noteCacheDataSource: NoteCacheDataSource
-    private val noteNetworkDataSource: NoteNetworkDataSource
     private val noteFactory: NoteFactory
 
     init {
         dependencyContainer = DependencyContainer()
         dependencyContainer.build()
         noteCacheDataSource = dependencyContainer.noteCacheDataSource
-        noteNetworkDataSource = dependencyContainer.noteNetworkDataSource
         noteFactory = dependencyContainer.noteFactory
         searchNotes = SearchNotes(
             noteCacheDataSource = noteCacheDataSource
