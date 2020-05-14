@@ -48,14 +48,12 @@ class SearchNotesTest {
     // dependencies
     private val dependencyContainer: DependencyContainer
     private val noteCacheDataSource: NoteCacheDataSource
-    private val noteNetworkDataSource: NoteNetworkDataSource
     private val noteFactory: NoteFactory
 
     init {
         dependencyContainer = DependencyContainer()
         dependencyContainer.build()
         noteCacheDataSource = dependencyContainer.noteCacheDataSource
-        noteNetworkDataSource = dependencyContainer.noteNetworkDataSource
         noteFactory = dependencyContainer.noteFactory
         searchNotes = SearchNotes(
             noteCacheDataSource = noteCacheDataSource
