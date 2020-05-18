@@ -100,6 +100,10 @@ constructor(
         return results
     }
 
+    override suspend fun getAllNotes(): List<Note> {
+        return ArrayList(notesData.values)
+    }
+
     override suspend fun searchNoteById(id: String): Note? {
         return notesData.get(id)
     }

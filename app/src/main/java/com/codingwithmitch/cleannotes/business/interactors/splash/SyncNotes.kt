@@ -32,13 +32,12 @@ class SyncNotes(
 
         val cachedNotesList = getCachedNotes()
 
-        printLogD("SyncNotes", "notelist: ${cachedNotesList.size}")
         syncNetworkNotesWithCachedNotes(ArrayList(cachedNotesList))
     }
 
     private suspend fun getCachedNotes(): List<Note> {
         val cacheResult = safeCacheCall(IO){
-            noteCacheDataSource.searchNotes("", "", 1)
+            noteCacheDataSource.getAllNotes()
         }
 
         val response = object: CacheResponseHandler<List<Note>, List<Note>>(
