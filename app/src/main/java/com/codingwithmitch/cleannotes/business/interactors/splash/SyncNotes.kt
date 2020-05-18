@@ -2,6 +2,7 @@ package com.codingwithmitch.cleannotes.business.interactors.splash
 
 import com.codingwithmitch.cleannotes.business.data.cache.CacheResponseHandler
 import com.codingwithmitch.cleannotes.business.data.cache.abstraction.NoteCacheDataSource
+import com.codingwithmitch.cleannotes.business.data.network.ApiResponseHandler
 import com.codingwithmitch.cleannotes.business.data.network.abstraction.NoteNetworkDataSource
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.domain.state.DataState
@@ -66,7 +67,24 @@ class SyncNotes(
         cachedNotes: ArrayList<Note>
     ) = withContext(IO){
 
-        val noteList = noteNetworkDataSource.getAllNotes()
+        val networkResult = safeApiCall(IO){
+            noteNetworkDataSource.getAllNotes()
+        }
+
+        val response = object: ApiResponseHandler<List<Note>, List<Note>>(
+            response = networkResult,
+            stateEvent = null
+        ){
+            override suspend fun handleSuccess(resultObj: List<Note>): DataState<List<Note>>? {
+                return DataState.data(
+                    response = null,
+                    data = resultObj,
+                    stateEvent = null
+                )
+            }
+        }.getResult()
+
+        val noteList = response?.data ?: ArrayList()
 
         val job = launch {
             for(note in noteList){
