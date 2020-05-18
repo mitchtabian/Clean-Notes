@@ -17,7 +17,8 @@ import kotlinx.coroutines.Dispatchers.IO
     each corresponding note but with an extra filter: It will only return notes where
     cached_note.updated_at < network_note.updated_at. It will update the cached notes
     where that condition is met. If the note does not exist in Firestore (maybe due to
-    network being down at time of insertion), insert it (**This must be done AFTER
+    network being down at time of insertion), insert it
+    (**This must be done AFTER
     checking for deleted notes and performing that sync**).
  */
 @Suppress("IMPLICIT_CAST_TO_ANY")
@@ -31,13 +32,12 @@ class SyncNotes(
 
         val cachedNotesList = getCachedNotes()
 
-        printLogD("SyncNotes", "notelist: ${cachedNotesList.size}")
         syncNetworkNotesWithCachedNotes(ArrayList(cachedNotesList))
     }
 
     private suspend fun getCachedNotes(): List<Note> {
         val cacheResult = safeCacheCall(IO){
-            noteCacheDataSource.searchNotes("", "", 1)
+            noteCacheDataSource.getAllNotes()
         }
 
         val response = object: CacheResponseHandler<List<Note>, List<Note>>(
@@ -122,17 +122,6 @@ class SyncNotes(
 //    }
 
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 

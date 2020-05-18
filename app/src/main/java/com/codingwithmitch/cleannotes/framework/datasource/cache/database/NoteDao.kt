@@ -33,6 +33,9 @@ interface NoteDao {
     @Query("DELETE FROM notes")
     suspend fun deleteAllNotes()
 
+    @Query("SELECT * FROM notes")
+    suspend fun getAllNotes(): List<NoteCacheEntity>
+
     @Query("""
         UPDATE notes 
         SET 

@@ -3,10 +3,6 @@ package com.codingwithmitch.cleannotes.business.data.cache.implementation
 import com.codingwithmitch.cleannotes.business.data.cache.abstraction.NoteCacheDataSource
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.framework.datasource.cache.abstraction.NoteDaoService
-import com.codingwithmitch.cleannotes.framework.datasource.cache.database.ORDER_BY_ASC_DATE_UPDATED
-import com.codingwithmitch.cleannotes.framework.datasource.cache.database.ORDER_BY_ASC_TITLE
-import com.codingwithmitch.cleannotes.framework.datasource.cache.database.ORDER_BY_DESC_DATE_UPDATED
-import com.codingwithmitch.cleannotes.framework.datasource.cache.database.ORDER_BY_DESC_TITLE
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -29,7 +25,11 @@ constructor(
         return noteDaoService.deleteNotes(notes)
     }
 
-    override suspend fun updateNote(primaryKey: String, newTitle: String, newBody: String?): Int {
+    override suspend fun updateNote(
+        primaryKey: String,
+        newTitle: String,
+        newBody: String?
+    ): Int {
         return noteDaoService.updateNote(primaryKey, newTitle, newBody)
     }
 
@@ -38,37 +38,11 @@ constructor(
         filterAndOrder: String,
         page: Int
     ): List<Note> {
-        return when{
+        TODO("Check filterAndOrder and make query")
+    }
 
-            filterAndOrder.contains(ORDER_BY_DESC_DATE_UPDATED) ->{
-                noteDaoService.searchNotesOrderByDateDESC(
-                    query = query,
-                    page = page)
-            }
-
-            filterAndOrder.contains(ORDER_BY_ASC_DATE_UPDATED) ->{
-                noteDaoService.searchNotesOrderByDateASC(
-                    query = query,
-                    page = page)
-            }
-
-            filterAndOrder.contains(ORDER_BY_DESC_TITLE) ->{
-                noteDaoService.searchNotesOrderByTitleDESC(
-                    query = query,
-                    page = page)
-            }
-
-            filterAndOrder.contains(ORDER_BY_ASC_TITLE) ->{
-                noteDaoService.searchNotesOrderByTitleASC(
-                    query = query,
-                    page = page)
-            }
-            else ->
-                noteDaoService.searchNotesOrderByDateDESC(
-                    query = query,
-                    page = page
-                )
-        }
+    override suspend fun getAllNotes(): List<Note> {
+        return noteDaoService.getAllNotes()
     }
 
     override suspend fun searchNoteById(id: String): Note? {
@@ -83,7 +57,6 @@ constructor(
         return noteDaoService.insertNotes(notes)
     }
 }
-
 
 
 
