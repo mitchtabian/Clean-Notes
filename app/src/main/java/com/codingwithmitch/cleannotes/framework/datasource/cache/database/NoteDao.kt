@@ -3,7 +3,6 @@ package com.codingwithmitch.cleannotes.framework.datasource.cache.database
 import androidx.room.*
 import com.codingwithmitch.cleannotes.framework.datasource.cache.model.NoteCacheEntity
 
-
 const val NOTE_ORDER_ASC: String = ""
 const val NOTE_ORDER_DESC: String = "-"
 const val NOTE_FILTER_TITLE = "title"
@@ -15,7 +14,6 @@ const val ORDER_BY_ASC_TITLE = NOTE_ORDER_ASC + NOTE_FILTER_TITLE
 const val ORDER_BY_DESC_TITLE = NOTE_ORDER_DESC + NOTE_FILTER_TITLE
 
 const val NOTE_PAGINATION_PAGE_SIZE = 30
-
 
 @Dao
 interface NoteDao {
@@ -34,6 +32,9 @@ interface NoteDao {
 
     @Query("DELETE FROM notes")
     suspend fun deleteAllNotes()
+
+    @Query("SELECT * FROM notes")
+    suspend fun getAllNotes(): List<NoteCacheEntity>
 
     @Query("""
         UPDATE notes 
@@ -148,5 +149,3 @@ suspend fun NoteDao.returnOrderedQuery(
             )
     }
 }
-
-
