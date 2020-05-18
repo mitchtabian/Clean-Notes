@@ -6,18 +6,22 @@ import com.codingwithmitch.cleannotes.business.data.cache.abstraction.NoteCacheD
 import com.codingwithmitch.cleannotes.business.data.network.abstraction.NoteNetworkDataSource
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
+import com.codingwithmitch.cleannotes.business.domain.state.DataState
 import com.codingwithmitch.cleannotes.business.interactors.notedetail.UpdateNote.Companion.UPDATE_NOTE_FAILED
 import com.codingwithmitch.cleannotes.business.interactors.notedetail.UpdateNote.Companion.UPDATE_NOTE_SUCCESS
-import com.codingwithmitch.cleannotes.business.domain.state.DataState
+import com.codingwithmitch.cleannotes.business.interactors.notelist.InsertNewNote
 import com.codingwithmitch.cleannotes.di.DependencyContainer
+import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.NoteDetailStateEvent
 import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.NoteDetailStateEvent.*
 import com.codingwithmitch.cleannotes.framework.presentation.notedetail.state.NoteDetailViewState
+import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.util.*
+
 
 /*
 Test cases:
@@ -60,13 +64,11 @@ class UpdateNoteTest {
         )
     }
 
-
     @Test
-    fun updateNote_success_confirmNetworkAndCacheUpdated() =  runBlocking {
+    fun updateNote_success_confirmNetworkAndCacheUpdated() = runBlocking {
 
-        // select a random note to update
-        val randomNote = noteCacheDataSource
-            .searchNotes("", "", 1).get(0)
+        val randomNote = noteCacheDataSource.searchNotes("", "", 1)
+            .get(0)
         val updatedNote = noteFactory.createSingleNote(
             id = randomNote.id,
             title = UUID.randomUUID().toString(),
@@ -84,19 +86,19 @@ class UpdateNoteTest {
             }
         })
 
-        // confirm network was updated
-        val networkNoteThatWasUpdated = noteNetworkDataSource.searchNote(updatedNote)
-        assertTrue { networkNoteThatWasUpdated == updatedNote }
-
         // confirm cache was updated
-        val cacheNoteThatWasUpdated = noteCacheDataSource.searchNoteById(updatedNote.id)
-        assertTrue { cacheNoteThatWasUpdated == updatedNote }
+        val cacheNote = noteCacheDataSource.searchNoteById(updatedNote.id)
+        assertTrue { cacheNote == updatedNote }
+
+        // confirm that network was updated
+        val networkNote = noteNetworkDataSource.searchNote(updatedNote)
+        assertTrue { networkNote == updatedNote }
     }
 
     @Test
-    fun updateNote_fail_confirmNetworkAndCacheUnchanged() =  runBlocking {
+    fun updateNote_fail_confirmNetworkAndCacheUnchanged() = runBlocking {
 
-        // create a note to delete that doesn't exist in data set
+        // create a note that doesnt exist in cache
         val noteToUpdate = Note(
             id = UUID.randomUUID().toString(),
             title = UUID.randomUUID().toString(),
@@ -107,7 +109,7 @@ class UpdateNoteTest {
         updateNote.updateNote(
             note = noteToUpdate,
             stateEvent = UpdateNoteEvent()
-        ).collect(object: FlowCollector<DataState<NoteDetailViewState>?>{
+        ).collect(object : FlowCollector<DataState<NoteDetailViewState>?>{
             override suspend fun emit(value: DataState<NoteDetailViewState>?) {
                 assertEquals(
                     value?.stateMessage?.response?.message,
@@ -116,41 +118,73 @@ class UpdateNoteTest {
             }
         })
 
-        // confirm nothing was updated in the cache
-        val wasNoteUpdated = noteCacheDataSource.searchNoteById(noteToUpdate.id) == null
-        assertTrue { wasNoteUpdated }
+        // confirm nothing updated in cache
+        val cacheNote = noteCacheDataSource.searchNoteById(noteToUpdate.id)
+        assertTrue { cacheNote == null }
+
+        // confirm nothing updated in network
+        val networkNote = noteNetworkDataSource.searchNote(noteToUpdate)
+        assertTrue { networkNote == null }
     }
 
     @Test
-    fun throwException_checkGenericError_confirmNetworkAndCacheUnchanged() = runBlocking{
+    fun throwException_checkGenericError_confirmNetworkAndCacheUnchanged() = runBlocking {
 
-        // create a note to update that will throw exception
+        // create a note that doesnt exist in cache
         val noteToUpdate = Note(
-            id = FORCE_UPDATE_NOTE_EXCEPTION ,
+            id = FORCE_UPDATE_NOTE_EXCEPTION,
             title = UUID.randomUUID().toString(),
             body = UUID.randomUUID().toString(),
             updated_at = UUID.randomUUID().toString(),
             created_at = UUID.randomUUID().toString()
         )
-
-
         updateNote.updateNote(
-            noteToUpdate,
-            UpdateNoteEvent()
-        ).collect(object: FlowCollector<DataState<NoteDetailViewState>?>{
+            note = noteToUpdate,
+            stateEvent = UpdateNoteEvent()
+        ).collect(object : FlowCollector<DataState<NoteDetailViewState>?>{
             override suspend fun emit(value: DataState<NoteDetailViewState>?) {
                 assert(
                     value?.stateMessage?.response?.message
-                        ?.contains(CACHE_ERROR_UNKNOWN) ?: false
+                        ?.contains(CACHE_ERROR_UNKNOWN)?: false
                 )
             }
         })
 
-        // confirm nothing was updated in the cache
-        val wasNoteUpdated = noteCacheDataSource.searchNoteById(noteToUpdate.id) == null
-        assertTrue { wasNoteUpdated }
-    }
+        // confirm nothing updated in cache
+        val cacheNote = noteCacheDataSource.searchNoteById(noteToUpdate.id)
+        assertTrue { cacheNote == null }
 
+        // confirm nothing updated in network
+        val networkNote = noteNetworkDataSource.searchNote(noteToUpdate)
+        assertTrue { networkNote == null }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
