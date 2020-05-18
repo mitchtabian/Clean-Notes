@@ -19,6 +19,8 @@ interface NoteCacheDataSource{
         page: Int
     ): List<Note>
 
+    suspend fun getAllNotes(): List<Note>
+
     suspend fun searchNoteById(id: String): Note?
 
     suspend fun getNumNotes(): Int
