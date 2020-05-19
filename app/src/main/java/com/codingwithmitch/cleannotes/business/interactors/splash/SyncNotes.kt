@@ -25,8 +25,7 @@ import kotlinx.coroutines.Dispatchers.IO
 @Suppress("IMPLICIT_CAST_TO_ANY")
 class SyncNotes(
     private val noteCacheDataSource: NoteCacheDataSource,
-    private val noteNetworkDataSource: NoteNetworkDataSource,
-    private val dateUtil: DateUtil
+    private val noteNetworkDataSource: NoteNetworkDataSource
 ){
 
     suspend fun syncNotes() {
