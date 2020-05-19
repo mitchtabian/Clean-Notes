@@ -31,7 +31,6 @@ class SyncDeletedNotesTest {
     private val noteCacheDataSource: NoteCacheDataSource
     private val noteNetworkDataSource: NoteNetworkDataSource
     private val noteFactory: NoteFactory
-    private val dateUtil: DateUtil
 
     init {
         dependencyContainer = DependencyContainer()
@@ -39,7 +38,6 @@ class SyncDeletedNotesTest {
         noteCacheDataSource = dependencyContainer.noteCacheDataSource
         noteNetworkDataSource = dependencyContainer.noteNetworkDataSource
         noteFactory = dependencyContainer.noteFactory
-        dateUtil = dependencyContainer.dateUtil
         syncDeletedNotes = SyncDeletedNotes(
             noteCacheDataSource = noteCacheDataSource,
             noteNetworkDataSource = noteNetworkDataSource
