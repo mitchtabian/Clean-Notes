@@ -153,8 +153,7 @@ object AppModule {
     @Provides
     fun provideSyncNotes(
         noteCacheDataSource: NoteCacheDataSource,
-        noteNetworkDataSource: NoteNetworkDataSource,
-        dateUtil: DateUtil
+        noteNetworkDataSource: NoteNetworkDataSource
     ): SyncNotes{
         return SyncNotes(
             noteCacheDataSource,
