@@ -15,6 +15,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+apply plugin: 'io.fabric'
+
 
 android {
     compileSdkVersion Versions.compilesdk
@@ -30,9 +32,11 @@ android {
     buildTypes {
         debug {
             minifyEnabled false
+            manifestPlaceholders = [enableCrashReporting:"false"]
         }
         release {
             minifyEnabled false
+            manifestPlaceholders = [enableCrashReporting:"true"]
         }
     }
 
@@ -96,13 +100,4 @@ dependencies {
     testRuntimeOnly TestDependencies.jupiter_engine
 
 }
-
-
-
-
-
-
-
-
-
-
+apply plugin: 'com.google.gms.google-services'
