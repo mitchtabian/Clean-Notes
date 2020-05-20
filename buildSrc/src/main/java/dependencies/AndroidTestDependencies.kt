@@ -17,5 +17,5 @@ object AndroidTestDependencies{
     val androidx_test_ext = "androidx.test.ext:junit-ktx:${Versions.androidx_test_ext}"
     val navigation_testing = "androidx.navigation:navigation-testing:${Versions.nav_components}"
 
-    val instrumentation_runner = "androidx.test.runner.AndroidJUnitRunner"
+    val instrumentation_runner = "com.codingwithmitch.cleannotes.framework.MockTestRunner"
 }
