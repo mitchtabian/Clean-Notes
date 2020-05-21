@@ -1,6 +1,5 @@
 package com.codingwithmitch.cleannotes.business.data.util
 
-
 import android.util.Log
 import com.codingwithmitch.cleannotes.business.data.cache.CacheConstants.CACHE_TIMEOUT
 import com.codingwithmitch.cleannotes.business.data.cache.CacheErrors.CACHE_ERROR_TIMEOUT
@@ -43,14 +42,14 @@ suspend fun <T> safeApiCall(
                 is HttpException -> {
                     val code = throwable.code()
                     val errorResponse = convertErrorBody(throwable)
-                    cLog(Log.ERROR, "safeApiCall: HttpException", errorResponse)
+                    cLog(errorResponse)
                     ApiResult.GenericError(
                         code,
                         errorResponse
                     )
                 }
                 else -> {
-                    cLog(Log.ERROR, "safeApiCall: HttpException", NETWORK_ERROR_UNKNOWN)
+                    cLog(NETWORK_ERROR_UNKNOWN)
                     ApiResult.GenericError(
                         null,
                         NETWORK_ERROR_UNKNOWN
@@ -79,7 +78,7 @@ suspend fun <T> safeCacheCall(
                     CacheResult.GenericError(CACHE_ERROR_TIMEOUT)
                 }
                 else -> {
-                    cLog(Log.ERROR, "safeCacheCall: HttpException", CACHE_ERROR_UNKNOWN)
+                    cLog(CACHE_ERROR_UNKNOWN)
                     CacheResult.GenericError(CACHE_ERROR_UNKNOWN)
                 }
             }
@@ -95,6 +94,8 @@ private fun convertErrorBody(throwable: HttpException): String? {
         ERROR_UNKNOWN
     }
 }
+
+
 
 
 
