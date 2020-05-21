@@ -1,6 +1,5 @@
 package com.codingwithmitch.cleannotes.framework.datasource.network.implementation
 
-import android.util.Log
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.framework.datasource.network.abstraction.NoteFirestoreService
 import com.codingwithmitch.cleannotes.framework.datasource.network.mappers.NetworkMapper
@@ -42,11 +41,7 @@ constructor(
             .set(entity)
             .addOnFailureListener {
                 // send error reports to Firebase Crashlytics
-                cLog(
-                    Log.ERROR,
-                    "NoteFirestoreServiceImpl: insertOrUpdateNote",
-                    it.message
-                )
+                cLog(it.message)
             }
             .await()
     }
@@ -60,11 +55,7 @@ constructor(
             .delete()
             .addOnFailureListener {
                 // send error reports to Firebase Crashlytics
-                cLog(
-                    Log.ERROR,
-                    "NoteFirestoreServiceImpl: deleteNote",
-                    it.message
-                )
+                cLog(it.message)
             }
             .await()
     }
@@ -79,11 +70,7 @@ constructor(
             .set(entity)
             .addOnFailureListener {
                 // send error reports to Firebase Crashlytics
-                cLog(
-                    Log.ERROR,
-                    "NoteFirestoreServiceImpl: insertDeletedNote",
-                    it.message
-                )
+                cLog(it.message)
             }
             .await()
     }
@@ -105,11 +92,7 @@ constructor(
             }
         }.addOnFailureListener {
             // send error reports to Firebase Crashlytics
-            cLog(
-                Log.ERROR,
-                "NoteFirestoreServiceImpl: insertDeletedNotes",
-                it.message
-            )
+            cLog(it.message)
         }.await()
     }
 
@@ -123,11 +106,7 @@ constructor(
             .delete()
             .addOnFailureListener {
                 // send error reports to Firebase Crashlytics
-                cLog(
-                    Log.ERROR,
-                    "NoteFirestoreServiceImpl: deleteDeletedNote",
-                    it.message
-                )
+                cLog(it.message)
             }
             .await()
     }
@@ -155,11 +134,7 @@ constructor(
                 .get()
                 .addOnFailureListener {
                     // send error reports to Firebase Crashlytics
-                    cLog(
-                        Log.ERROR,
-                        "NoteFirestoreServiceImpl: deleteDeletedNote",
-                        it.message
-                    )
+                    cLog(it.message)
                 }
                 .await().toObjects(NoteNetworkEntity::class.java)
         )
@@ -174,11 +149,7 @@ constructor(
             .get()
             .addOnFailureListener {
                 // send error reports to Firebase Crashlytics
-                cLog(
-                    Log.ERROR,
-                    "NoteFirestoreServiceImpl: searchNote",
-                    it.message
-                )
+                cLog(it.message)
             }
             .await()
             .toObject(NoteNetworkEntity::class.java)?.let {
@@ -195,11 +166,7 @@ constructor(
                 .get()
                 .addOnFailureListener {
                     // send error reports to Firebase Crashlytics
-                    cLog(
-                        Log.ERROR,
-                        "NoteFirestoreServiceImpl: getAllNotes",
-                        it.message
-                    )
+                    cLog(it.message)
                 }
                 .await()
                 .toObjects(NoteNetworkEntity::class.java)
@@ -219,16 +186,14 @@ constructor(
 
         firestore.runBatch { batch ->
             for(note in notes){
+                val entity = networkMapper.mapToEntity(note)
+                entity.updated_at = Timestamp.now()
                 val documentRef = collectionRef.document(note.id)
-                batch.set(documentRef, networkMapper.mapToEntity(note))
+                batch.set(documentRef, entity)
             }
         }.addOnFailureListener {
             // send error reports to Firebase Crashlytics
-            cLog(
-                Log.ERROR,
-                "NoteFirestoreServiceImpl: insertOrUpdateNotes",
-                it.message
-            )
+            cLog(it.message)
         }.await()
 
     }
@@ -243,3 +208,6 @@ constructor(
 
 
 }
+
+
+
