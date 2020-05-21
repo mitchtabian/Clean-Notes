@@ -5,5 +5,5 @@ object Build {
     val kotlin_gradle_plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     val google_services = "com.google.gms:google-services:${Versions.play_services}"
     val junit5 = "de.mannodermaus.gradle.plugins:android-junit5:1.3.2.0"
-    val fabric = "io.fabric.tools:gradle:${Versions.fabric_version}"
+    val crashlytics_gradle = "com.google.firebase:firebase-crashlytics-gradle:${Versions.crashlytics_gradle}"
 }
