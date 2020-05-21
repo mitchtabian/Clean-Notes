@@ -22,16 +22,11 @@ object Dependencies {
     val leak_canary = "com.squareup.leakcanary:leakcanary-android:${Versions.leak_canary}"
     val firebase_firestore = "com.google.firebase:firebase-firestore-ktx:${Versions.firebase_firestore}"
     val firebase_auth = "com.google.firebase:firebase-auth:${Versions.firebase_auth}"
-    val firebase_analytics = "com.google.firebase:firebase-analytics:${Versions.firebase_analytics}"
-    val firebase_crashlytics = "com.crashlytics.sdk.android:crashlytics:${Versions.firebase_crashlytics}"
+    val firebase_analytics = "com.google.firebase:firebase-analytics-ktx:${Versions.firebase_analytics}"
+    val firebase_crashlytics = "com.google.firebase:firebase-crashlytics:${Versions.firebase_crashlytics}"
     val lifecycle_runtime = "androidx.lifecycle:lifecycle-runtime:${Versions.lifecycle_version}"
     val lifecycle_coroutines = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycle_version}"
     val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit2_version}"
     val retrofit_gson = "com.squareup.retrofit2:converter-gson:${Versions.retrofit2_version}"
     val markdown_processor = "com.yydcdut:markdown-processor:${Versions.markdown_processor}"
 }
-
-
-
-
-
