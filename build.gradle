@@ -16,7 +16,7 @@ buildscript {
         classpath Build.build_tools
         classpath Build.kotlin_gradle_plugin
         classpath Build.google_services
-        classpath Build.fabric
+        classpath Build.crashlytics_gradle
     }
 }
 
