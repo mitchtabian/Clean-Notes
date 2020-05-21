@@ -219,8 +219,10 @@ constructor(
 
         firestore.runBatch { batch ->
             for(note in notes){
+                val entity = networkMapper.mapToEntity(note)
+                entity.updated_at = Timestamp.now()
                 val documentRef = collectionRef.document(note.id)
-                batch.set(documentRef, networkMapper.mapToEntity(note))
+                batch.set(documentRef, entity)
             }
         }.addOnFailureListener {
             // send error reports to Firebase Crashlytics
