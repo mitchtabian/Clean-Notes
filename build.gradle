@@ -1,21 +1,19 @@
 import dependencies.Versions
 import dependencies.Build
 
+
 buildscript {
     ext.kotlin_version = Versions.kotlin
 
     repositories {
         google()
         jcenter()
-        maven {
-            url dependencies.Repositories.fabric
-        }
     }
     dependencies {
         classpath Build.build_tools
         classpath Build.kotlin_gradle_plugin
         classpath Build.google_services
-        classpath Build.fabric
+        classpath Build.crashlytics_gradle
     }
 }
 
@@ -23,6 +21,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+
     }
 }
 

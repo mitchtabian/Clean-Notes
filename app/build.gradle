@@ -1,11 +1,8 @@
-import dependencies.AnnotationProcessing
-import dependencies.dependencies.AndroidTestDependencies
-import dependencies.dependencies.Dependencies
+import dependencies.dependencies.*
 import dependencies.Application
 import dependencies.Versions
+import dependencies.AnnotationProcessing
 import dependencies.Java
-import dependencies.dependencies.SupportDependencies
-import dependencies.dependencies.TestDependencies
 
 apply plugin: 'com.android.application'
 
@@ -15,7 +12,7 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
-apply plugin: 'io.fabric'
+apply plugin: 'com.google.firebase.crashlytics'
 
 
 android {
@@ -53,46 +50,49 @@ android {
         test.resources.srcDirs += 'src/test/res'
     }
 
-    // remove need for apply plugin: 'de.mannodermaus.android-junit5'
     testOptions {
         unitTests.all {
             useJUnitPlatform()
         }
     }
+
 }
 
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-    // Kotlin
     implementation Dependencies.kotlin_standard_library
     implementation Dependencies.kotlin_reflect
     implementation Dependencies.ktx
-    implementation Dependencies.kotlin_coroutines_play_services
+    implementation Dependencies.navigation_runtime
+    implementation Dependencies.navigation_ui
+    implementation Dependencies.navigation_fragment
+    implementation Dependencies.navigation_dynamic
+    implementation Dependencies.material_dialogs
+    implementation Dependencies.material_dialogs_input
+    implementation Dependencies.play_core
+    implementation Dependencies.leak_canary
+    implementation Dependencies.dagger
+    implementation Dependencies.room_runtime
+    implementation Dependencies.room_ktx
+    implementation Dependencies.markdown_processor
     implementation Dependencies.retrofit
     implementation Dependencies.retrofit_gson
     implementation Dependencies.firebase_firestore
     implementation Dependencies.firebase_auth
+    implementation Dependencies.kotlin_coroutines_play_services
     implementation Dependencies.firebase_analytics
     implementation Dependencies.firebase_crashlytics
-    implementation Dependencies.room_runtime
-    implementation Dependencies.room_ktx
+    implementation AndroidTestDependencies.idling_resource
 
-    // Dependencies
-    implementation Dependencies.dagger
-
-    // Annotation processing
-    kapt AnnotationProcessing.dagger_compiler
-    kapt AnnotationProcessing.room_compiler
-
-    // Support
+    implementation SupportDependencies.swipe_refresh_layout
     implementation SupportDependencies.appcompat
     implementation SupportDependencies.constraintlayout
     implementation SupportDependencies.material_design
-    implementation SupportDependencies.swipe_refresh_layout
 
-    // Unit Tests
+    kapt AnnotationProcessing.room_compiler
+    kapt AnnotationProcessing.dagger_compiler
+
     testImplementation TestDependencies.mockk
     testImplementation TestDependencies.jupiter_api
     testImplementation TestDependencies.jupiter_params
@@ -114,11 +114,3 @@ dependencies {
 
 }
 apply plugin: 'com.google.gms.google-services'
-
-
-
-
-
-
-
-
