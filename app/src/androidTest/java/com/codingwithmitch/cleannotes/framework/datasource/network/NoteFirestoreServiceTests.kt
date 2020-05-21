@@ -4,9 +4,11 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.codingwithmitch.cleannotes.BaseTest
 import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
 import com.codingwithmitch.cleannotes.di.TestAppComponent
+import com.codingwithmitch.cleannotes.framework.datasource.data.NoteDataFactory
 import com.codingwithmitch.cleannotes.framework.datasource.network.abstraction.NoteFirestoreService
 import com.codingwithmitch.cleannotes.framework.datasource.network.implementation.NoteFirestoreServiceImpl
 import com.codingwithmitch.cleannotes.framework.datasource.network.mappers.NetworkMapper
+import com.codingwithmitch.cleannotes.util.printLogD
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -19,6 +21,7 @@ import org.junit.runner.RunWith
 import java.util.*
 import javax.inject.Inject
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
 @FlowPreview
@@ -41,9 +44,13 @@ class NoteFirestoreServiceTests: BaseTest(){
     @Inject
     lateinit var networkMapper: NetworkMapper
 
+    @Inject
+    lateinit var noteDataFactory: NoteDataFactory
+
     init {
         injectTest()
         signIn()
+        insertTestData()
     }
 
     @Before
@@ -62,6 +69,20 @@ class NoteFirestoreServiceTests: BaseTest(){
         ).await()
     }
 
+    fun insertTestData() {
+        val entityList = networkMapper.noteListToEntityList(
+            noteDataFactory.produceListOfNotes()
+        )
+        for(entity in entityList){
+            firestore
+                .collection(NoteFirestoreServiceImpl.NOTES_COLLECTION)
+                .document(NoteFirestoreServiceImpl.USER_ID)
+                .collection(NoteFirestoreServiceImpl.NOTES_COLLECTION)
+                .document(entity.id)
+                .set(entity)
+        }
+    }
+
     @Test
     fun insertSingleNote_CBS() = runBlocking{
         val note = noteFactory.createSingleNote(
@@ -75,6 +96,13 @@ class NoteFirestoreServiceTests: BaseTest(){
         val searchResult = noteFirestoreService.searchNote(note)
 
         assertEquals(note, searchResult)
+    }
+
+    @Test
+    fun queryAllNotes() = runBlocking {
+        val notes = noteFirestoreService.getAllNotes()
+        printLogD("FirestoreServiceTests", "notes: ${notes.size}")
+        assertTrue { notes.size > 5 }
     }
 
     companion object{
