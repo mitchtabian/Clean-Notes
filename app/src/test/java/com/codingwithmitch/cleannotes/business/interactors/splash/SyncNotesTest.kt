@@ -72,8 +72,6 @@ class SyncNotesTest {
     @Test
     fun checkUpdatedAtDates() = runBlocking {
 
-        val notes = noteNetworkDataSource.getAllNotes()
-
         // update a single note with new timestamp
         val newDate = dateUtil.getCurrentTimestamp()
         val updatedNote = Note(
@@ -88,16 +86,17 @@ class SyncNotesTest {
         syncNotes.syncNotes()
 
         // confirm only a single 'updated_at' date was updated
+        val notes = noteNetworkDataSource.getAllNotes()
         for(note in notes){
             noteNetworkDataSource.searchNote(note)?.let { n ->
+                println("date: ${n.updated_at}")
                 if(n.id.equals(updatedNote.id)){
                     assertTrue { n.updated_at.equals(newDate) }
                 }
                 else{
-                    assertFalse {n.updated_at.equals(newDate)}
+                    assertFalse { n.updated_at.equals(newDate) }
                 }
             }
-
         }
     }
 
