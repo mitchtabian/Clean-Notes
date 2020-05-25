@@ -8,6 +8,7 @@ import com.codingwithmitch.cleannotes.business.domain.util.DateUtil
 import com.codingwithmitch.cleannotes.di.DependencyContainer
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.ORDER_BY_ASC_DATE_UPDATED
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -65,8 +66,33 @@ class SyncNotesTest {
     }
 
     @Test
-    fun doSuccessesiveUpdatesOccur() = runBlocking {
+    fun doSuccessiveUpdatesOccur() = runBlocking {
 
+        // update a single note with new timestamp
+        val newDate = dateUtil.getCurrentTimestamp()
+        val updatedNote = Note(
+            id = noteNetworkDataSource.getAllNotes().get(0).id,
+            title = noteNetworkDataSource.getAllNotes().get(0).title,
+            body = noteNetworkDataSource.getAllNotes().get(0).body,
+            created_at = noteNetworkDataSource.getAllNotes().get(0).created_at,
+            updated_at = newDate
+        )
+        noteNetworkDataSource.insertOrUpdateNote(updatedNote)
+
+        syncNotes.syncNotes()
+
+        delay(1001)
+
+        // simulate launch app again
+        syncNotes.syncNotes()
+
+        // confirm the date was not updated a second time
+        val notes = noteNetworkDataSource.getAllNotes()
+        for(note in notes){
+            if(note.id.equals(updatedNote.id)){
+                assertTrue { note.updated_at.equals(newDate) }
+            }
+        }
     }
 
     @Test
