@@ -12,4 +12,5 @@ data class Note(
     val created_at: String
 ) : Parcelable{
 
+
 }
