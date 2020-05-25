@@ -9,8 +9,7 @@ import com.codingwithmitch.cleannotes.di.DependencyContainer
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.ORDER_BY_ASC_DATE_UPDATED
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.util.*
 import kotlin.collections.ArrayList
@@ -63,6 +62,43 @@ class SyncNotesTest {
             noteNetworkDataSource = noteNetworkDataSource,
             dateUtil = dateUtil
         )
+    }
+
+    @Test
+    fun doSuccessesiveUpdatesOccur() = runBlocking {
+
+    }
+
+    @Test
+    fun checkUpdatedAtDates() = runBlocking {
+
+        val notes = noteNetworkDataSource.getAllNotes()
+
+        // update a single note with new timestamp
+        val newDate = dateUtil.getCurrentTimestamp()
+        val updatedNote = Note(
+            id = noteNetworkDataSource.getAllNotes().get(0).id,
+            title = noteNetworkDataSource.getAllNotes().get(0).title,
+            body = noteNetworkDataSource.getAllNotes().get(0).body,
+            created_at = noteNetworkDataSource.getAllNotes().get(0).created_at,
+            updated_at = newDate
+        )
+        noteNetworkDataSource.insertOrUpdateNote(updatedNote)
+
+        syncNotes.syncNotes()
+
+        // confirm only a single 'updated_at' date was updated
+        for(note in notes){
+            noteNetworkDataSource.searchNote(note)?.let { n ->
+                if(n.id.equals(updatedNote.id)){
+                    assertTrue { n.updated_at.equals(newDate) }
+                }
+                else{
+                    assertFalse {n.updated_at.equals(newDate)}
+                }
+            }
+
+        }
     }
 
     @Test
