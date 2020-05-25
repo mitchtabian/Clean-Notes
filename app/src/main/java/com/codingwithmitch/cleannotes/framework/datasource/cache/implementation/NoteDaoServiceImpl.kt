@@ -41,14 +41,14 @@ constructor(
         timestamp: String?
     ): Int {
         return if(timestamp != null){
-            return noteDao.updateNote(
+            noteDao.updateNote(
                 primaryKey = primaryKey,
                 title = title,
                 body = body,
                 updated_at = timestamp
             )
         }else{
-            return noteDao.updateNote(
+            noteDao.updateNote(
                 primaryKey = primaryKey,
                 title = title,
                 body = body,
