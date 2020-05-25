@@ -114,7 +114,7 @@ class SyncNotesTest {
         // confirm only a single 'updated_at' date was updated
         val notes = noteNetworkDataSource.getAllNotes()
         for(note in notes){
-            noteNetworkDataSource.searchNote(note)?.let { n ->
+            noteCacheDataSource.searchNoteById(note.id)?.let { n ->
                 println("date: ${n.updated_at}")
                 if(n.id.equals(updatedNote.id)){
                     assertTrue { n.updated_at.equals(newDate) }
