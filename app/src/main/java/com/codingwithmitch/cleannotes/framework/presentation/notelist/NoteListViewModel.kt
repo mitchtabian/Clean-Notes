@@ -89,7 +89,8 @@ constructor(
 
     override fun setStateEvent(stateEvent: StateEvent) {
 
-        if(!isJobAlreadyActive(stateEvent)){
+//        if(canExecuteNewStateEvent(stateEvent)){
+//            dataChannelManager.addStateEvent(stateEvent)
             val job: Flow<DataState<NoteListViewState>?> = when(stateEvent){
 
                 is InsertNewNoteEvent -> {
@@ -157,7 +158,7 @@ constructor(
                 }
             }
             launchJob(stateEvent, job)
-        }
+//        }
     }
 
     private fun removeSelectedNotesFromList(){
@@ -394,19 +395,20 @@ constructor(
     }
 
     fun loadFirstPage() {
-        if(!isJobAlreadyActive(SearchNotesEvent())){
+//        if(canExecuteNewStateEvent(SearchNotesEvent())){
             setQueryExhausted(false)
             resetPage()
             setStateEvent(SearchNotesEvent())
             printLogD("NoteListViewModel",
                 "loadFirstPage: ${getCurrentViewStateOrNew().searchQuery}")
-        }
+//        }
     }
 
     fun nextPage(){
-        if(!isJobAlreadyActive(SearchNotesEvent())
-            && !isQueryExhausted()
-        ){
+//        if(canExecuteNewStateEvent(SearchNotesEvent())
+//            && !isQueryExhausted()
+//        ){
+        if(!isQueryExhausted()){
             printLogD("NoteListViewModel", "attempting to load next page...")
             clearLayoutManagerState()
             incrementPageNumber()
@@ -422,16 +424,19 @@ constructor(
     }
 
     fun retrieveNumNotesInCache(){
-        if(!isJobAlreadyActive(GetNumNotesInCacheEvent())){
-            setStateEvent(GetNumNotesInCacheEvent())
-        }
+//        if(canExecuteNewStateEvent(GetNumNotesInCacheEvent())){
+//            setStateEvent(GetNumNotesInCacheEvent())
+//        }
+        setStateEvent(GetNumNotesInCacheEvent())
     }
 
     fun refreshSearchQuery(){
-        if(!isJobAlreadyActive(SearchNotesEvent())){
-            setQueryExhausted(false)
-            setStateEvent(SearchNotesEvent(false))
-        }
+//        if(canExecuteNewStateEvent(SearchNotesEvent())){
+//            setQueryExhausted(false)
+//            setStateEvent(SearchNotesEvent(false))
+//        }
+        setQueryExhausted(false)
+        setStateEvent(SearchNotesEvent(false))
     }
 
     fun getLayoutManagerState(): Parcelable? {

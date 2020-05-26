@@ -45,7 +45,7 @@ constructor(
 
     override fun setStateEvent(stateEvent: StateEvent) {
 
-        if(!isJobAlreadyActive(stateEvent)){
+//        if(canExecuteNewStateEvent(stateEvent)){
             val job: Flow<DataState<NoteDetailViewState>?> = when(stateEvent){
 
                 is UpdateNoteEvent -> {
@@ -88,7 +88,7 @@ constructor(
                 }
             }
             launchJob(stateEvent, job)
-        }
+//        }
     }
 
     fun beginPendingDelete(note: Note){

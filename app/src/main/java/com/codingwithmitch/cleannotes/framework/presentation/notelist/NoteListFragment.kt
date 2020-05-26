@@ -43,6 +43,7 @@ import com.codingwithmitch.cleannotes.util.TodoCallback
 import com.codingwithmitch.cleannotes.util.printLogD
 import kotlinx.android.synthetic.main.fragment_note_list.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Main
 import javax.inject.Inject
 
 
@@ -479,6 +480,7 @@ constructor(
     }
 
     private fun startNewSearch(){
+        printLogD("DCM", "start new search")
         viewModel.clearList()
         viewModel.loadFirstPage()
     }

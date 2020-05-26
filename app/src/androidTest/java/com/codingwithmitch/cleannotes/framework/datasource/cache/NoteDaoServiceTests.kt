@@ -235,7 +235,8 @@ class NoteDaoServiceTests: BaseTest(){
         noteDaoService.updateNote(
             primaryKey = newNote.id,
             title = newTitle,
-            body = newBody
+            body = newBody,
+            timestamp = null
         )
 
         val notes = noteDaoService.searchNotes()

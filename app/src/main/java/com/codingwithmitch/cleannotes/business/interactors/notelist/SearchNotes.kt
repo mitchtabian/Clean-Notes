@@ -20,7 +20,6 @@ class SearchNotes(
         page: Int,
         stateEvent: StateEvent
     ): Flow<DataState<NoteListViewState>?> = flow {
-
         var updatedPage = page
         if(page <= 0){
             updatedPage = 1
