@@ -1,44 +1,59 @@
 package com.codingwithmitch.cleannotes.notes.di
 
-import androidx.lifecycle.ViewModel
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModelProvider
+import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
+import com.codingwithmitch.cleannotes.business.interactors.notedetail.NoteDetailInteractors
+import com.codingwithmitch.cleannotes.business.interactors.notelist.NoteListInteractors
 import com.codingwithmitch.cleannotes.framework.presentation.common.NoteViewModelFactory
-import com.codingwithmitch.cleannotes.framework.presentation.notedetail.NoteDetailViewModel
-import com.codingwithmitch.cleannotes.framework.presentation.notelist.NoteListViewModel
-import com.codingwithmitch.cleannotes.framework.presentation.splash.SplashViewModel
-import dagger.Binds
+import com.codingwithmitch.cleannotes.framework.presentation.splash.NoteNetworkSyncManager
 import dagger.Module
-import dagger.multibindings.IntoMap
+import dagger.Provides
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import javax.inject.Singleton
 
-@FlowPreview
 @ExperimentalCoroutinesApi
+@FlowPreview
 @Module
-abstract class NoteViewModelModule{
+object NoteViewModelModule {
 
     @Singleton
-    @Binds
-    abstract fun bindViewModelFactory(factory: NoteViewModelFactory): ViewModelProvider.Factory
-
-    @Singleton
-    @Binds
-    @IntoMap
-    @NoteViewModelKey(SplashViewModel::class)
-    abstract fun bindSplashViewModel(viewModel: SplashViewModel): ViewModel
-
-
-    @Singleton
-    @Binds
-    @IntoMap
-    @NoteViewModelKey(NoteListViewModel::class)
-    abstract fun bindNoteListViewModel(viewModel: NoteListViewModel): ViewModel
-
-    @Singleton
-    @Binds
-    @IntoMap
-    @NoteViewModelKey(NoteDetailViewModel::class)
-    abstract fun bindNoteDetailViewModel(viewModel: NoteDetailViewModel): ViewModel
+    @JvmStatic
+    @Provides
+    fun provideNoteViewModelFactory(
+        noteListInteractors: NoteListInteractors,
+        noteDetailInteractors: NoteDetailInteractors,
+        noteNetworkSyncManager: NoteNetworkSyncManager,
+        noteFactory: NoteFactory,
+        editor: SharedPreferences.Editor,
+        sharedPreferences: SharedPreferences
+    ): ViewModelProvider.Factory{
+        return NoteViewModelFactory(
+            noteListInteractors = noteListInteractors,
+            noteDetailInteractors = noteDetailInteractors,
+            noteNetworkSyncManager = noteNetworkSyncManager,
+            noteFactory = noteFactory,
+            editor = editor,
+            sharedPreferences = sharedPreferences
+        )
+    }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
