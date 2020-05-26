@@ -1,4 +1,4 @@
-package com.codingwithmitch.cleannotes.framework.presentation
+package com.codingwithmitch.cleannotes.framework.presentation.common
 
 import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.ViewModelProvider

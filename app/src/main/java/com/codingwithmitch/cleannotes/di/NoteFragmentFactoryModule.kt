@@ -3,7 +3,7 @@ package com.codingwithmitch.cleannotes.di
 import androidx.fragment.app.FragmentFactory
 import androidx.lifecycle.ViewModelProvider
 import com.codingwithmitch.cleannotes.business.domain.util.DateUtil
-import com.codingwithmitch.cleannotes.framework.presentation.NoteFragmentFactory
+import com.codingwithmitch.cleannotes.framework.presentation.common.NoteFragmentFactory
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,6 +22,9 @@ object NoteFragmentFactoryModule {
         viewModelFactory: ViewModelProvider.Factory,
         dateUtil: DateUtil
     ): FragmentFactory {
-        return NoteFragmentFactory(viewModelFactory, dateUtil)
+        return NoteFragmentFactory(
+            viewModelFactory,
+            dateUtil
+        )
     }
 }

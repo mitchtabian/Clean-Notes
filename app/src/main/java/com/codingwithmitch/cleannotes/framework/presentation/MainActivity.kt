@@ -15,13 +15,13 @@ import com.afollestad.materialdialogs.input.input
 import com.codingwithmitch.cleannotes.R
 import com.codingwithmitch.cleannotes.business.domain.state.*
 import com.codingwithmitch.cleannotes.business.domain.state.UIComponentType.*
+import com.codingwithmitch.cleannotes.framework.presentation.common.NoteFragmentFactory
 import com.codingwithmitch.cleannotes.framework.presentation.common.displayToast
 import com.codingwithmitch.cleannotes.framework.presentation.common.gone
 import com.codingwithmitch.cleannotes.framework.presentation.common.visible
 import com.codingwithmitch.cleannotes.util.TodoCallback
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
