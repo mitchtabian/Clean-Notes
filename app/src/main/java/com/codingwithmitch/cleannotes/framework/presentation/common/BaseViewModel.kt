@@ -73,24 +73,6 @@ abstract class BaseViewModel<ViewState> : ViewModel()
         jobFunction: Flow<DataState<ViewState>?>
     ) = dataChannelManager.launchJob(stateEvent, jobFunction)
 
-//    private fun isJobAlreadyActive(stateEvent: StateEvent): Boolean {
-//        return dataChannelManager.isJobAlreadyActive(stateEvent)
-//    }
-//
-//    private fun isMessageStackEmpty() = dataChannelManager.isMessageStackEmpty()
-//
-//    fun canExecuteNewStateEvent(stateEvent: StateEvent): Boolean{
-//        // If a job is already active, do not allow duplication
-//        if(dataChannelManager.isJobAlreadyActive(stateEvent)){
-//            return false
-//        }
-//        // if a dialog is showing, do not allow new StateEvents
-//        if(!isMessageStackEmpty()){
-//            return false
-//        }
-//        return true
-//    }
-
     fun getCurrentViewStateOrNew(): ViewState{
         return viewState.value ?: initNewViewState()
     }

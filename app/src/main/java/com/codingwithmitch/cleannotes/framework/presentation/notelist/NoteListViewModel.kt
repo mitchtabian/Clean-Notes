@@ -89,76 +89,73 @@ constructor(
 
     override fun setStateEvent(stateEvent: StateEvent) {
 
-//        if(canExecuteNewStateEvent(stateEvent)){
-//            dataChannelManager.addStateEvent(stateEvent)
-            val job: Flow<DataState<NoteListViewState>?> = when(stateEvent){
+        val job: Flow<DataState<NoteListViewState>?> = when(stateEvent){
 
-                is InsertNewNoteEvent -> {
-                    noteInteractors.insertNewNote.insertNewNote(
-                        title = stateEvent.title,
-                        stateEvent = stateEvent
-                    )
-                }
-
-                is InsertMultipleNotesEvent -> {
-                    noteInteractors.insertMultipleNotes.insertNotes(
-                        numNotes = stateEvent.numNotes,
-                        stateEvent = stateEvent
-                    )
-                }
-
-                is DeleteNoteEvent -> {
-                    noteInteractors.deleteNote.deleteNote(
-                        note = stateEvent.note,
-                        stateEvent = stateEvent
-                    )
-                }
-
-                is DeleteMultipleNotesEvent -> {
-                    noteInteractors.deleteMultipleNotes.deleteNotes(
-                        notes = stateEvent.notes,
-                        stateEvent = stateEvent
-                    )
-                }
-
-                is RestoreDeletedNoteEvent -> {
-                    noteInteractors.restoreDeletedNote.restoreDeletedNote(
-                        note = stateEvent.note,
-                        stateEvent = stateEvent
-                    )
-                }
-
-                is SearchNotesEvent -> {
-                    if(stateEvent.clearLayoutManagerState){
-                        clearLayoutManagerState()
-                    }
-                    noteInteractors.searchNotes.searchNotes(
-                        query = getSearchQuery(),
-                        filterAndOrder = getOrder() + getFilter(),
-                        page = getPage(),
-                        stateEvent = stateEvent
-                    )
-                }
-
-                is GetNumNotesInCacheEvent -> {
-                    noteInteractors.getNumNotes.getNumNotes(
-                        stateEvent = stateEvent
-                    )
-                }
-
-                is CreateStateMessageEvent -> {
-                    emitStateMessageEvent(
-                        stateMessage = stateEvent.stateMessage,
-                        stateEvent = stateEvent
-                    )
-                }
-
-                else -> {
-                    emitInvalidStateEvent(stateEvent)
-                }
+            is InsertNewNoteEvent -> {
+                noteInteractors.insertNewNote.insertNewNote(
+                    title = stateEvent.title,
+                    stateEvent = stateEvent
+                )
             }
-            launchJob(stateEvent, job)
-//        }
+
+            is InsertMultipleNotesEvent -> {
+                noteInteractors.insertMultipleNotes.insertNotes(
+                    numNotes = stateEvent.numNotes,
+                    stateEvent = stateEvent
+                )
+            }
+
+            is DeleteNoteEvent -> {
+                noteInteractors.deleteNote.deleteNote(
+                    note = stateEvent.note,
+                    stateEvent = stateEvent
+                )
+            }
+
+            is DeleteMultipleNotesEvent -> {
+                noteInteractors.deleteMultipleNotes.deleteNotes(
+                    notes = stateEvent.notes,
+                    stateEvent = stateEvent
+                )
+            }
+
+            is RestoreDeletedNoteEvent -> {
+                noteInteractors.restoreDeletedNote.restoreDeletedNote(
+                    note = stateEvent.note,
+                    stateEvent = stateEvent
+                )
+            }
+
+            is SearchNotesEvent -> {
+                if(stateEvent.clearLayoutManagerState){
+                    clearLayoutManagerState()
+                }
+                noteInteractors.searchNotes.searchNotes(
+                    query = getSearchQuery(),
+                    filterAndOrder = getOrder() + getFilter(),
+                    page = getPage(),
+                    stateEvent = stateEvent
+                )
+            }
+
+            is GetNumNotesInCacheEvent -> {
+                noteInteractors.getNumNotes.getNumNotes(
+                    stateEvent = stateEvent
+                )
+            }
+
+            is CreateStateMessageEvent -> {
+                emitStateMessageEvent(
+                    stateMessage = stateEvent.stateMessage,
+                    stateEvent = stateEvent
+                )
+            }
+
+            else -> {
+                emitInvalidStateEvent(stateEvent)
+            }
+        }
+        launchJob(stateEvent, job)
     }
 
     private fun removeSelectedNotesFromList(){
@@ -395,19 +392,14 @@ constructor(
     }
 
     fun loadFirstPage() {
-//        if(canExecuteNewStateEvent(SearchNotesEvent())){
-            setQueryExhausted(false)
-            resetPage()
-            setStateEvent(SearchNotesEvent())
-            printLogD("NoteListViewModel",
-                "loadFirstPage: ${getCurrentViewStateOrNew().searchQuery}")
-//        }
+        setQueryExhausted(false)
+        resetPage()
+        setStateEvent(SearchNotesEvent())
+        printLogD("NoteListViewModel",
+            "loadFirstPage: ${getCurrentViewStateOrNew().searchQuery}")
     }
 
     fun nextPage(){
-//        if(canExecuteNewStateEvent(SearchNotesEvent())
-//            && !isQueryExhausted()
-//        ){
         if(!isQueryExhausted()){
             printLogD("NoteListViewModel", "attempting to load next page...")
             clearLayoutManagerState()
@@ -424,17 +416,10 @@ constructor(
     }
 
     fun retrieveNumNotesInCache(){
-//        if(canExecuteNewStateEvent(GetNumNotesInCacheEvent())){
-//            setStateEvent(GetNumNotesInCacheEvent())
-//        }
         setStateEvent(GetNumNotesInCacheEvent())
     }
 
     fun refreshSearchQuery(){
-//        if(canExecuteNewStateEvent(SearchNotesEvent())){
-//            setQueryExhausted(false)
-//            setStateEvent(SearchNotesEvent(false))
-//        }
         setQueryExhausted(false)
         setStateEvent(SearchNotesEvent(false))
     }
