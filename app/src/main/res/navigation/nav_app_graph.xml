@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@id/splashFragment"
+    >
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.codingwithmitch.cleannotes.framework.presentation.splash.SplashFragment">
+
+        <action
+            android:id="@+id/action_splashFragment_to_noteListFragment"
+            app:destination="@id/noteListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
+
+    <fragment
+        android:id="@+id/noteListFragment"
+        android:name="com.codingwithmitch.cleannotes.framework.presentation.notelist.NoteListFragment"
+        >
+        <action
+            android:id="@+id/action_note_list_fragment_to_noteDetailFragment"
+            app:destination="@id/noteDetailFragment"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/noteDetailFragment"
+        android:name="com.codingwithmitch.cleannotes.framework.presentation.notedetail.NoteDetailFragment"
+        >
+
+        <action
+            android:id="@+id/action_note_detail_fragment_to_noteListFragment"
+            app:destination="@id/noteListFragment"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/noteListFragment"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
+
+
+</navigation>

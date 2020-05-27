@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -23,10 +25,13 @@ import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.domain.state.*
 import com.codingwithmitch.cleannotes.business.domain.util.DateUtil
 import com.codingwithmitch.cleannotes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_PENDING
+import com.codingwithmitch.cleannotes.business.interactors.common.DeleteNote.Companion.DELETE_NOTE_SUCCESS
+import com.codingwithmitch.cleannotes.business.interactors.notelist.DeleteMultipleNotes.Companion.DELETE_NOTES_ARE_YOU_SURE
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NOTE_FILTER_DATE_CREATED
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NOTE_FILTER_TITLE
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NOTE_ORDER_ASC
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NOTE_ORDER_DESC
+import com.codingwithmitch.cleannotes.framework.presentation.BaseApplication
 import com.codingwithmitch.cleannotes.framework.presentation.UIController
 import com.codingwithmitch.cleannotes.framework.presentation.common.BaseNoteFragment
 import com.codingwithmitch.cleannotes.framework.presentation.common.TopSpacingItemDecoration
@@ -34,6 +39,9 @@ import com.codingwithmitch.cleannotes.framework.presentation.common.hideKeyboard
 import com.codingwithmitch.cleannotes.framework.presentation.notedetail.NOTE_DETAIL_SELECTED_NOTE_BUNDLE_KEY
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListStateEvent
 import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListStateEvent.*
+import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListToolbarState
+import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListToolbarState.*
+import com.codingwithmitch.cleannotes.framework.presentation.notelist.state.NoteListViewState
 import com.codingwithmitch.cleannotes.util.TodoCallback
 import com.codingwithmitch.cleannotes.util.printLogD
 import kotlinx.android.synthetic.main.fragment_note_list.*
@@ -62,8 +70,102 @@ constructor(
     private var listAdapter: NoteListAdapter? = null
     private var itemTouchHelper: ItemTouchHelper? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.setupChannel()
+        arguments?.let { args ->
+            args.getParcelable<Note>(NOTE_PENDING_DELETE_BUNDLE_KEY)?.let { note ->
+                viewModel.setNotePendingDelete(note)
+                showUndoSnackbar_deleteNote()
+                clearArgs()
+            }
+        }
+    }
+
+    private fun clearArgs(){
+        arguments?.clear()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setupUI()
+        setupRecyclerView()
+        setupSwipeRefresh()
+        setupFAB()
+        subscribeObservers()
+
+        restoreInstanceState(savedInstanceState)
+    }
+
+    private fun subscribeObservers(){
+
+        viewModel.toolbarState.observe(viewLifecycleOwner, Observer{ toolbarState ->
+
+            when(toolbarState){
+
+                is MultiSelectionState -> {
+                    enableMultiSelectToolbarState()
+                    disableSearchViewToolbarState()
+                }
+
+                is SearchViewState -> {
+                    enableSearchViewToolbarState()
+                    disableMultiSelectToolbarState()
+                }
+            }
+        })
+
+        viewModel.viewState.observe(viewLifecycleOwner, Observer{ viewState ->
+
+            if(viewState != null){
+                viewState.noteList?.let { noteList ->
+                    if(viewModel.isPaginationExhausted()
+                        && !viewModel.isQueryExhausted()){
+                        viewModel.setQueryExhausted(true)
+                    }
+                    listAdapter?.submitList(noteList)
+                    listAdapter?.notifyDataSetChanged()
+                }
+
+                // a note been inserted or selected
+                viewState.newNote?.let { newNote ->
+                    navigateToDetailFragment(newNote)
+                }
+
+            }
+        })
+
+        viewModel.shouldDisplayProgressBar.observe(viewLifecycleOwner, Observer {
+            printActiveJobs()
+            uiController.displayProgressBar(it)
+        })
+
+        viewModel.stateMessage.observe(viewLifecycleOwner, Observer { stateMessage ->
+            stateMessage?.let { message ->
+                if(message.response.message?.equals(DELETE_NOTE_SUCCESS) == true){
+                    showUndoSnackbar_deleteNote()
+                }
+                else{
+                    uiController.onResponseReceived(
+                        response = message.response,
+                        stateMessageCallback = object: StateMessageCallback {
+                            override fun removeMessageFromStack() {
+                                viewModel.clearStateMessage()
+                            }
+                        }
+                    )
+                }
+            }
+        })
+    }
+
+    private fun restoreInstanceState(savedInstanceState: Bundle?){
+        savedInstanceState?.let { inState ->
+            (inState[NOTE_LIST_STATE_BUNDLE_KEY] as NoteListViewState?)?.let { viewState ->
+                viewModel.setViewState(viewState)
+            }
+        }
     }
 
     private fun setupRecyclerView(){
@@ -269,10 +371,177 @@ constructor(
         view?.hideKeyboard()
     }
 
-    override fun inject() {
-        getAppComponent().inject(this)
+    private fun saveLayoutManagerState(){
+        recycler_view.layoutManager?.onSaveInstanceState()?.let { lmState ->
+            viewModel.setLayoutManagerState(lmState)
+        }
     }
 
+
+    private fun enableMultiSelectToolbarState(){
+        view?.let { v ->
+            val view = View.inflate(
+                v.context,
+                R.layout.layout_multiselection_toolbar,
+                null
+            )
+            view.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+            )
+            toolbar_content_container.addView(view)
+            setupMultiSelectionToolbar(view)
+        }
+    }
+
+    private fun setupMultiSelectionToolbar(parentView: View){
+        parentView
+            .findViewById<ImageView>(R.id.action_exit_multiselect_state)
+            .setOnClickListener {
+                viewModel.setToolbarState(SearchViewState())
+            }
+
+        parentView
+            .findViewById<ImageView>(R.id.action_delete_notes)
+            .setOnClickListener {
+                deleteNotes()
+            }
+    }
+
+
+    private fun enableSearchViewToolbarState(){
+        view?.let { v ->
+            val view = View.inflate(
+                v.context,
+                R.layout.layout_searchview_toolbar,
+                null
+            )
+            view.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+            )
+            toolbar_content_container.addView(view)
+            setupSearchView()
+            setupFilterButton()
+        }
+    }
+
+    private fun disableMultiSelectToolbarState(){
+        view?.let {
+            val view = toolbar_content_container
+                .findViewById<Toolbar>(R.id.multiselect_toolbar)
+            toolbar_content_container.removeView(view)
+            viewModel.clearSelectedNotes()
+        }
+    }
+
+    private fun disableSearchViewToolbarState(){
+        view?.let {
+            val view = toolbar_content_container
+                .findViewById<Toolbar>(R.id.searchview_toolbar)
+            toolbar_content_container.removeView(view)
+        }
+    }
+
+    override fun inject() {
+        activity?.run {
+            (application as BaseApplication).appComponent
+        }?: throw Exception("AppComponent is null.")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.retrieveNumNotesInCache()
+        viewModel.clearList()
+        viewModel.refreshSearchQuery()
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        saveLayoutManagerState()
+    }
+
+    // Why didn't I use the "SavedStateHandle" here?
+    // It sucks and doesn't work for testing
+    override fun onSaveInstanceState(outState: Bundle) {
+        val viewState = viewModel.viewState.value
+
+        //clear the list. Don't want to save a large list to bundle.
+        viewState?.noteList =  ArrayList()
+
+        outState.putParcelable(
+            NOTE_LIST_STATE_BUNDLE_KEY,
+            viewState
+        )
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun restoreListPosition() {
+        viewModel.getLayoutManagerState()?.let { lmState ->
+            recycler_view?.layoutManager?.onRestoreInstanceState(lmState)
+        }
+    }
+
+    override fun isMultiSelectionModeEnabled()
+            = viewModel.isMultiSelectionStateActive()
+
+    override fun activateMultiSelectionMode()
+            = viewModel.setToolbarState(MultiSelectionState())
+
+    override fun onItemSelected(position: Int, item: Note) {
+        if(isMultiSelectionModeEnabled()){
+            viewModel.addOrRemoveNoteFromSelectedList(item)
+        }
+        else{
+            viewModel.setNote(item)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        listAdapter = null // can leak memory
+        itemTouchHelper = null // can leak memory
+    }
+
+    override fun isNoteSelected(note: Note): Boolean {
+        return viewModel.isNoteSelected(note)
+    }
+
+    override fun onItemSwiped(position: Int) {
+        if(!viewModel.isDeletePending()){
+            listAdapter?.getNote(position)?.let { note ->
+                viewModel.beginPendingDelete(note)
+            }
+        }
+        else{
+            listAdapter?.notifyDataSetChanged()
+        }
+    }
+
+    private fun deleteNotes(){
+        viewModel.setStateEvent(
+            CreateStateMessageEvent(
+                stateMessage = StateMessage(
+                    response = Response(
+                        message = DELETE_NOTES_ARE_YOU_SURE,
+                        uiComponentType = UIComponentType.AreYouSureDialog(
+                            object : AreYouSureCallback {
+                                override fun proceed() {
+                                    viewModel.deleteNotes()
+                                }
+
+                                override fun cancel() {
+                                    // do nothing
+                                }
+                            }
+                        ),
+                        messageType = MessageType.Info()
+                    )
+                )
+            )
+        )
+    }
 }
 
 
