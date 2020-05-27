@@ -1,5 +1,6 @@
 package com.codingwithmitch.cleannotes.framework.presentation.notelist
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.EditorInfo
@@ -541,6 +542,16 @@ constructor(
                 )
             )
         )
+    }
+
+    override fun onAttach(context: Context) {
+        try{
+            uiController = context as UIController
+        }catch (e: ClassCastException){
+            e.printStackTrace()
+        }
+        super.onAttach(context)
+
     }
 }
 
