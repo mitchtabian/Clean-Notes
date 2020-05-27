@@ -49,6 +49,7 @@ abstract class DataChannelManager<ViewState> {
     private fun offerToDataChannel(dataState: DataState<ViewState>){
         dataChannel.let {
             if(!it.isClosedForSend){
+                printLogD("DCM", "offer to channel!")
                 it.offer(dataState)
             }
         }
@@ -58,7 +59,7 @@ abstract class DataChannelManager<ViewState> {
         stateEvent: StateEvent,
         jobFunction: Flow<DataState<ViewState>?>
     ){
-        if(!isStateEventActive(stateEvent)){
+        if(canExecuteNewStateEvent(stateEvent)){
             printLogD("DCM", "launching job: ${stateEvent.eventName()}")
             addStateEvent(stateEvent)
             jobFunction
@@ -71,7 +72,19 @@ abstract class DataChannelManager<ViewState> {
         }
     }
 
-    private fun isMessageStackEmpty(): Boolean {
+    private fun canExecuteNewStateEvent(stateEvent: StateEvent): Boolean{
+        // If a job is already active, do not allow duplication
+        if(isJobAlreadyActive(stateEvent)){
+            return false
+        }
+        // if a dialog is showing, do not allow new StateEvents
+        if(!isMessageStackEmpty()){
+            return false
+        }
+        return true
+    }
+
+    fun isMessageStackEmpty(): Boolean {
         return messageStack.isStackEmpty()
     }
 
@@ -83,7 +96,10 @@ abstract class DataChannelManager<ViewState> {
         messageStack.add(stateMessage)
     }
 
-    fun clearStateMessage(index: Int = 0) = messageStack.removeAt(index)
+    fun clearStateMessage(index: Int = 0){
+        printLogD("DataChannelManager", "clear state message")
+        messageStack.removeAt(index)
+    }
 
     fun clearAllStateMessages() = messageStack.clear()
 
@@ -99,7 +115,7 @@ abstract class DataChannelManager<ViewState> {
     fun clearActiveStateEventCounter()
             = stateEventManager.clearActiveStateEventCounter()
 
-    private fun addStateEvent(stateEvent: StateEvent)
+    fun addStateEvent(stateEvent: StateEvent)
             = stateEventManager.addStateEvent(stateEvent)
 
     fun removeStateEvent(stateEvent: StateEvent?)
@@ -132,5 +148,7 @@ abstract class DataChannelManager<ViewState> {
     }
 
 }
+
+
 
 
