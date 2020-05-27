@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import com.codingwithmitch.cleannotes.business.domain.model.Note
 import com.codingwithmitch.cleannotes.business.domain.model.NoteFactory
 import com.codingwithmitch.cleannotes.business.domain.state.*
+import com.codingwithmitch.cleannotes.business.interactors.notelist.DeleteMultipleNotes.Companion.DELETE_NOTES_YOU_MUST_SELECT
 import com.codingwithmitch.cleannotes.business.interactors.notelist.NoteListInteractors
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NOTE_FILTER_DATE_CREATED
 import com.codingwithmitch.cleannotes.framework.datasource.cache.database.NOTE_ORDER_DESC
@@ -366,9 +367,37 @@ constructor(
         editor.apply()
     }
 
+    private fun removeSelectedNotesFromList(){
+        val update = getCurrentViewStateOrNew()
+        update.noteList?.removeAll(getSelectedNotes())
+        setViewState(update)
+        clearSelectedNotes()
+    }
+
     /*
         StateEvent Triggers
      */
+
+
+    fun deleteNotes(){
+        if(getSelectedNotes().size > 0){
+            setStateEvent(DeleteMultipleNotesEvent(getSelectedNotes()))
+            removeSelectedNotesFromList()
+        }
+        else{
+            setStateEvent(
+                CreateStateMessageEvent(
+                    stateMessage = StateMessage(
+                        response = Response(
+                            message = DELETE_NOTES_YOU_MUST_SELECT,
+                            uiComponentType = UIComponentType.Toast(),
+                            messageType = MessageType.Info()
+                        )
+                    )
+                )
+            )
+        }
+    }
     fun isDeletePending(): Boolean{
         val pendingNote = getCurrentViewStateOrNew().notePendingDelete
         if(pendingNote != null){
