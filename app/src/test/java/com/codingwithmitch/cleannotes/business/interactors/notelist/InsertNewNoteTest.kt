@@ -75,7 +75,7 @@ class InsertNewNoteTest {
         insertNewNote.insertNewNote(
             id = newNote.id,
             title = newNote.title,
-            stateEvent = InsertNewNoteEvent(newNote.title, "")
+            stateEvent = InsertNewNoteEvent(newNote.title)
         ).collect(object: FlowCollector<DataState<NoteListViewState>?>{
             override suspend fun emit(value: DataState<NoteListViewState>?) {
                 assertEquals(
@@ -99,13 +99,14 @@ class InsertNewNoteTest {
 
         val newNote = noteFactory.createSingleNote(
             id = FORCE_GENERAL_FAILURE,
-            title = UUID.randomUUID().toString()
+            title = UUID.randomUUID().toString(),
+            body = UUID.randomUUID().toString()
         )
 
         insertNewNote.insertNewNote(
             id = newNote.id,
             title = newNote.title,
-            stateEvent = InsertNewNoteEvent(newNote.title, "")
+            stateEvent = InsertNewNoteEvent(newNote.title)
         ).collect(object: FlowCollector<DataState<NoteListViewState>?>{
             override suspend fun emit(value: DataState<NoteListViewState>?) {
                 assertEquals(
@@ -129,13 +130,14 @@ class InsertNewNoteTest {
 
         val newNote = noteFactory.createSingleNote(
             id = FORCE_NEW_NOTE_EXCEPTION,
-            title = UUID.randomUUID().toString()
+            title = UUID.randomUUID().toString(),
+            body = UUID.randomUUID().toString()
         )
 
         insertNewNote.insertNewNote(
             id = newNote.id,
             title = newNote.title,
-            stateEvent = InsertNewNoteEvent(newNote.title, "")
+            stateEvent = InsertNewNoteEvent(newNote.title)
         ).collect(object: FlowCollector<DataState<NoteListViewState>?>{
             override suspend fun emit(value: DataState<NoteListViewState>?) {
                 assert(
