@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity(),
         stateMessageCallback: StateMessageCallback
     ) {
         // TODO("Not yet implemented")
+        printLogD("MainActivity", "response: ${response}")
     }
 
 }
