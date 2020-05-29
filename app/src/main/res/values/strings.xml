@@ -39,5 +39,6 @@
     <string name="filter_title_or_date">Filter by title or date</string>
     <string name="filter_asc_desc">Ascending or descending order</string>
     <string name="text_Apply">Apply</string>
+    <string name="text_enter_password">Enter password</string>
 
 </resources>
