@@ -2,6 +2,8 @@ package com.codingwithmitch.cleannotes.business.domain.state
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.codingwithmitch.cleannotes.util.EspressoIdlingResource
+import com.codingwithmitch.cleannotes.util.printLogD
 
 /**
  * - Keeps track of active StateEvents in DataChannelManager
@@ -22,27 +24,31 @@ class StateEventManager {
     }
 
     fun clearActiveStateEventCounter(){
+        printLogD("DCM", "Clear active state events")
+        EspressoIdlingResource.clear()
         activeStateEvents.clear()
         syncNumActiveStateEvents()
     }
 
     fun addStateEvent(stateEvent: StateEvent){
+        EspressoIdlingResource.increment()
         activeStateEvents.put(stateEvent.eventName(), stateEvent)
         syncNumActiveStateEvents()
     }
 
     fun removeStateEvent(stateEvent: StateEvent?){
+        printLogD("DCM sem", "remove state event: ${stateEvent?.eventName()}")
+        stateEvent?.let {
+            EspressoIdlingResource.decrement()
+        }
         activeStateEvents.remove(stateEvent?.eventName())
         syncNumActiveStateEvents()
     }
 
     fun isStateEventActive(stateEvent: StateEvent): Boolean{
-        for(eventName in activeStateEvents.keys){
-            if(stateEvent.eventName().equals(eventName)){
-                return true
-            }
-        }
-        return false
+        printLogD("DCM sem", "is state event active? " +
+                "${activeStateEvents.containsKey(stateEvent.eventName())}")
+        return activeStateEvents.containsKey(stateEvent.eventName())
     }
 
     private fun syncNumActiveStateEvents(){
@@ -55,4 +61,10 @@ class StateEventManager {
         _shouldDisplayProgressBar.value = shouldDisplayProgressBar
     }
 }
+
+
+
+
+
+
 

@@ -15,7 +15,8 @@ import javax.inject.Singleton
 @Component(
     modules = [
         TestModule::class,
-        AppModule::class
+        AppModule::class,
+        TestNoteFragmentFactoryModule::class
     ]
 )
 interface TestAppComponent: AppComponent {
