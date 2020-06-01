@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity(),
             is AreYouSureDialog -> {
 
                 response.message?.let {
-                    areYouSureDialog(
+                    dialogInView = areYouSureDialog(
                         message = it,
                         callback = response.uiComponentType.callback,
                         stateMessageCallback = stateMessageCallback
