@@ -6,6 +6,10 @@ Android example with Clean Architecture by layer.
 
 In the future I will make another course on Dynamic Feature Modules.
 
+# Running this app
+
+To run this app you will need to create a firebase project and hook it up with the project. I password protected the login of mine so you won't be able to get into the app.
+
 # Credits
 1. https://proandroiddev.com/gradle-dependency-management-with-kotlin-94eed4df9a28
 2. https://proandroiddev.com/intro-to-app-modularization-42411e4c421e
