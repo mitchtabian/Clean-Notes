@@ -1,6 +1,8 @@
-# Clean-Notes
+# [Clean Architecture](https://codingwithmitch.com/courses/android-clean-architecture/)
 
 Android example with Clean Architecture by layer.
+
+**Watch the course here:** [Clean Architecture](https://codingwithmitch.com/courses/android-clean-architecture/)
 
 **NOTE** I got rid of dynamic feature modules because you cannot write tests currently. See bug: [google issue tracker](https://issuetracker.google.com/issues/145191501).
 
