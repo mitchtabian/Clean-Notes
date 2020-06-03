@@ -8,6 +8,8 @@ Android example with Clean Architecture by layer.
 
 In the future I will make another course on Dynamic Feature Modules.
 
+![logo](https://codingwithmitch.s3.amazonaws.com/static/courses/21/clean_architecture_diagrams.png)
+
 # Running this app
 
 To run this app you will need to create a firebase project and hook it up with the project. I password protected the login of mine so you won't be able to get into the app.
