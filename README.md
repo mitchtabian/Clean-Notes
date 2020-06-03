@@ -14,7 +14,7 @@ To run this app you will need to create a firebase project and hook it up with t
 1. cd into /tests/
 2. type in terminal: `run_tests.sh`
 This will run all the unit tests and instrumentation tests. It will also start the firebase emulator to simulate firestore db.
-
+**The test results** are in `/app/build/reports/`.
 
 # Credits
 1. https://proandroiddev.com/gradle-dependency-management-with-kotlin-94eed4df9a28
