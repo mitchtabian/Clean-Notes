@@ -1,11 +1,24 @@
-# Clean-Notes
-**Work in progress**
+# [Clean Architecture](https://codingwithmitch.com/courses/android-clean-architecture/)
 
 Android example with Clean Architecture by layer.
 
+**Watch the course here:** [Clean Architecture](https://codingwithmitch.com/courses/android-clean-architecture/)
+
 **NOTE** I got rid of dynamic feature modules because you cannot write tests currently. See bug: [google issue tracker](https://issuetracker.google.com/issues/145191501).
 
-After this course I will make another course on Dynamic Feature Modules.
+In the future I will make another course on Dynamic Feature Modules.
+
+![logo](https://codingwithmitch.s3.amazonaws.com/static/courses/21/clean_architecture_diagrams.png)
+
+# Running this app
+
+To run this app you will need to create a firebase project and hook it up with the project. I password protected the login of mine so you won't be able to get into the app.
+
+# Running the Tests
+1. cd into /tests/
+2. type in terminal: `run_tests.sh`
+This will run all the unit tests and instrumentation tests. It will also start the firebase emulator to simulate firestore db.
+**The test results** are in `/app/build/reports/`.
 
 # Credits
 1. https://proandroiddev.com/gradle-dependency-management-with-kotlin-94eed4df9a28
