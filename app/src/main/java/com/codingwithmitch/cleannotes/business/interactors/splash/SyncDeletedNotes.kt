@@ -31,6 +31,7 @@ class SyncDeletedNotes(
             stateEvent = null
         ){
             override suspend fun handleSuccess(resultObj: List<Note>): DataState<List<Note>>? {
+                printLogD("syncDeletedNotes", "deleted notes: ${resultObj.size}")
                 return DataState.data(
                     response = null,
                     data = resultObj,
@@ -40,6 +41,7 @@ class SyncDeletedNotes(
         }
 
         val notes = response.getResult()?.data?: ArrayList()
+        printLogD("syncDeletedNotes", "notes: ${notes.size}")
 
         val cacheResult = safeCacheCall(IO){
             noteCacheDataSource.deleteNotes(notes)
@@ -50,7 +52,7 @@ class SyncDeletedNotes(
             stateEvent = null
         ){
             override suspend fun handleSuccess(resultObj: Int): DataState<Int>? {
-                printLogD("SyncNotes",
+                printLogD("syncDeletedNotes",
                     "num deleted notes: ${resultObj}")
                 return DataState.data(
                     response = null,

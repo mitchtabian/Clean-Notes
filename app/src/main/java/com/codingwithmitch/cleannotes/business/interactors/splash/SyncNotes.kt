@@ -10,6 +10,7 @@ import com.codingwithmitch.cleannotes.business.domain.util.DateUtil
 import com.codingwithmitch.cleannotes.business.data.util.safeApiCall
 import com.codingwithmitch.cleannotes.business.data.util.safeCacheCall
 import com.codingwithmitch.cleannotes.util.printLogD
+import com.google.firebase.Timestamp
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 
@@ -110,8 +111,8 @@ class SyncNotes(
         cachedNote: Note,
         networkNote: Note
     ){
-        val cacheUpdatedAt = cachedNote.updated_at
-        val networkUpdatedAt = networkNote.updated_at
+        val cacheUpdatedAt = dateUtil.convertStringDateToFirebaseTimestamp(cachedNote.updated_at)
+        val networkUpdatedAt = dateUtil.convertStringDateToFirebaseTimestamp(networkNote.updated_at)
 
         // update cache (network has newest data)
         if(networkUpdatedAt > cacheUpdatedAt){

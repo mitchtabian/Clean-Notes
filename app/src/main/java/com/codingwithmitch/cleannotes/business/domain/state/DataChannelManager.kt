@@ -47,7 +47,6 @@ abstract class DataChannelManager<ViewState> {
                     }
                 }
                 .launchIn(getChannelScope())
-
         }
     }
 

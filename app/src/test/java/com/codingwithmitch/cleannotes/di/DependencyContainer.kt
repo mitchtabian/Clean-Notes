@@ -39,14 +39,19 @@ class DependencyContainer {
                 noteDataFactory.produceListOfNotes()
             )
         }
+        val noteList = noteDataFactory.produceListOfNotes()
         noteFactory = NoteFactory(dateUtil)
         noteNetworkDataSource = FakeNoteNetworkDataSourceImpl(
-            notesData = notesData,
+            notesData = noteDataFactory.produceHashMapOfNotes(
+                noteList
+            ),
             deletedNotesData = HashMap(),
             dateUtil = dateUtil
         )
         noteCacheDataSource = FakeNoteCacheDataSourceImpl(
-            notesData = notesData,
+            notesData = noteDataFactory.produceHashMapOfNotes(
+                noteList
+            ),
             dateUtil = dateUtil
         )
     }
