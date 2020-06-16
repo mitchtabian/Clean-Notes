@@ -33,21 +33,22 @@ abstract class DataChannelManager<ViewState> {
             printLogD("DCM", "launching job: ${stateEvent.eventName()}")
             addStateEvent(stateEvent)
             jobFunction
-                .onEach{ dataState ->
-                    withContext(Main){
-                        dataState?.data?.let { data ->
-                            handleNewData(data)
-                        }
-                        dataState?.stateMessage?.let { stateMessage ->
-                            handleNewStateMessage(stateMessage)
-                        }
-                        dataState?.stateEvent?.let { stateEvent ->
-                            removeStateEvent(stateEvent)
+                .onEach { dataState ->
+                    dataState?.let { dState ->
+                        withContext(Main){
+                            dataState.data?.let { data ->
+                                handleNewData(data)
+                            }
+                            dataState.stateMessage?.let { stateMessage ->
+                                handleNewStateMessage(stateMessage)
+                            }
+                            dataState.stateEvent?.let { stateEvent ->
+                                removeStateEvent(stateEvent)
+                            }
                         }
                     }
                 }
                 .launchIn(getChannelScope())
-
         }
     }
 
