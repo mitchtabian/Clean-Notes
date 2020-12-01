@@ -43,11 +43,16 @@ import com.codingwithmitch.cleannotes.util.TodoCallback
 import com.codingwithmitch.cleannotes.util.printLogD
 import kotlinx.android.synthetic.main.fragment_note_list.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.NonCancellable.cancel
+import kotlinx.coroutines.flow.*
+import java.lang.Exception
 import javax.inject.Inject
 
 
 const val NOTE_LIST_STATE_BUNDLE_KEY = "com.codingwithmitch.cleannotes.notes.framework.presentation.notelist.state"
+
 
 @FlowPreview
 @ExperimentalCoroutinesApi
@@ -86,6 +91,7 @@ constructor(
         arguments?.clear()
     }
 
+    @InternalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

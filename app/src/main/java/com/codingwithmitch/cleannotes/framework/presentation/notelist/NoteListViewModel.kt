@@ -40,7 +40,6 @@ constructor(
     sharedPreferences: SharedPreferences
 ): BaseViewModel<NoteListViewState>(){
 
-
     val noteListInteractionManager =
         NoteListInteractionManager()
 
