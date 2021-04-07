@@ -114,4 +114,6 @@ dependencies {
     debugImplementation AndroidTestDependencies.fragment_testing
     kaptAndroidTest  AnnotationProcessing.dagger_compiler
 
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
+
 }

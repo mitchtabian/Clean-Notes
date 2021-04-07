@@ -57,9 +57,11 @@ abstract class DataChannelManager<ViewState> {
         if(isJobAlreadyActive(stateEvent)){
             return false
         }
-        // if a dialog is showing, do not allow new StateEvents
+        // Check the top of the stack, if a dialog is showing, do not allow new StateEvents
         if(!isMessageStackEmpty()){
-            return false
+            if(messageStack[0].response.uiComponentType == UIComponentType.Dialog()){
+                return false
+            }
         }
         return true
     }
