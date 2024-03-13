@@ -31,3 +31,4 @@ This will run all the unit tests and instrumentation tests. It will also start t
 8. https://proandroiddev.com/navigation-with-dynamic-feature-modules-48ee7645488
 9. https://medium.com/androiddevelopers/patterns-for-accessing-code-from-dynamic-feature-modules-7e5dca6f9123
 10. https://hackernoon.com/android-components-architecture-in-a-modular-word-d0k32i6
+This project is tested with BrowserStack
